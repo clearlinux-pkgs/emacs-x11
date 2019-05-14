@@ -6,7 +6,7 @@
 #
 Name     : emacs-x11
 Version  : 26.2
-Release  : 29
+Release  : 30
 URL      : https://mirrors.kernel.org/gnu/emacs/emacs-26.2.tar.xz
 Source0  : https://mirrors.kernel.org/gnu/emacs/emacs-26.2.tar.xz
 Source99 : https://mirrors.kernel.org/gnu/emacs/emacs-26.2.tar.xz.sig
@@ -27,11 +27,13 @@ BuildRequires : libXfixes-dev
 BuildRequires : libXinerama-dev
 BuildRequires : libXrandr-dev
 BuildRequires : libjpeg-turbo-dev
+BuildRequires : llvm
 BuildRequires : ncurses-dev
 BuildRequires : pkgconfig(dbus-1)
 BuildRequires : pkgconfig(gtk+-2.0)
 BuildRequires : pkgconfig(libxml-2.0)
 BuildRequires : pkgconfig(sm)
+BuildRequires : systemd-dev
 BuildRequires : texinfo
 BuildRequires : valgrind
 
@@ -113,13 +115,13 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1555096996
+export SOURCE_DATE_EPOCH=1557873595
 export LDFLAGS="${LDFLAGS} -fno-lto"
 %configure --disable-static --without-m17n-flt --without-libotf --without-xaw3d  --with-xpm=no --with-gif=no --with-tiff=no
 make  %{?_smp_mflags}
 
 %install
-export SOURCE_DATE_EPOCH=1555096996
+export SOURCE_DATE_EPOCH=1557873595
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/emacs-x11
 cp COPYING %{buildroot}/usr/share/package-licenses/emacs-x11/COPYING
