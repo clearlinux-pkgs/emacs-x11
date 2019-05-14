@@ -1,0 +1,2 @@
+cp %{buildroot}/usr/bin/emacs %{buildroot}/usr/bin/emacs-x11
+sed -i 's/Exec=emacs/Exec=emacs-x11/' %{buildroot}/usr/share/applications/emacs.desktop

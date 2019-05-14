@@ -1,0 +1,42 @@
+Configure miss: xcrun
+Configure miss: whether the compiler is clang
+Configure miss: setfattr
+Configure miss: paxctl
+Configure miss: whether addresses are sanitized
+Configure miss: machine/soundcard.h
+Configure miss: soundcard.h
+Configure miss: mmsystem.h
+Configure miss: _oss_ioctl in -lossaudio
+Configure miss: coff.h
+Configure miss: malloc/malloc.h
+Configure miss: struct ifreq.ifr_addr.sa_len
+Configure miss: whether malloc is Doug Lea style
+Configure miss: main in -lXbsd
+Configure miss: whether X on GNU/Linux needs -b to link
+Configure miss: RSVG
+Configure miss: IMAGEMAGICK
+Configure miss: GTK
+Configure miss: gtk_window_set_has_resize_grip
+Configure miss: lgetfilecon in -lselinux
+Configure miss: LIBSYSTEMD
+Configure miss: library containing cmsCreateTransform
+Configure miss: gpm.h usability
+Configure miss: gpm.h presence
+Configure miss: gpm.h
+Configure miss: maillock in -lmail
+Configure miss: maillock in -llockfile
+Configure miss: liblockfile.so
+Configure miss: maillock.h usability
+Configure miss: maillock.h presence
+Configure miss: maillock.h
+Configure miss: st_dm_mode in struct stat
+Configure miss: whether strmode is declared
+Configure miss: acl_delete_fd_np
+Configure miss: acl_delete_file_np
+Configure miss: acl_copy_ext_native
+Configure miss: acl_create_entry_np
+Configure miss: acl_to_short_text
+Configure miss: acl_free_text
+Configure miss: ACL_TYPE_EXTENDED
+Configure miss: sig2str
+Configure miss: timezone_t

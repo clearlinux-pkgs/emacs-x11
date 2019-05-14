@@ -1,0 +1,14 @@
+#
+# This file contains additional build requirements that did not get picked up
+# automatically. One name per line, no whitespace.
+#
+acl-dev
+alsa-lib-dev
+gtk+-dev
+libXfixes-dev
+libXinerama-dev
+libXrandr-dev
+libjpeg-turbo-dev
+ncurses-dev
+texinfo
+gnutls-dev

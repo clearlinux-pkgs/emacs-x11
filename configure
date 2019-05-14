@@ -1,0 +1,1 @@
+--without-m17n-flt --without-libotf --without-xaw3d  --with-xpm=no --with-gif=no --with-tiff=no
