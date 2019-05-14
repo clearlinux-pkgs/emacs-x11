@@ -18,8 +18,7 @@ Configure miss: main in -lXbsd
 Configure miss: whether X on GNU/Linux needs -b to link
 Configure miss: RSVG
 Configure miss: IMAGEMAGICK
-Configure miss: GTK
-Configure miss: gtk_window_set_has_resize_grip
+Configure miss: whether GTK_TYPE_FILE_SELECTION is declared
 Configure miss: lgetfilecon in -lselinux
 Configure miss: library containing cmsCreateTransform
 Configure miss: gpm.h usability
