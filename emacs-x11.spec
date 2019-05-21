@@ -6,7 +6,7 @@
 #
 Name     : emacs-x11
 Version  : 26.2
-Release  : 31
+Release  : 32
 URL      : https://mirrors.kernel.org/gnu/emacs/emacs-26.2.tar.xz
 Source0  : https://mirrors.kernel.org/gnu/emacs/emacs-26.2.tar.xz
 Source99 : https://mirrors.kernel.org/gnu/emacs/emacs-26.2.tar.xz.sig
@@ -115,13 +115,14 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1557873922
+export SOURCE_DATE_EPOCH=1558474854
+export GCC_IGNORE_WERROR=1
 export LDFLAGS="${LDFLAGS} -fno-lto"
 %configure --disable-static --without-m17n-flt --without-libotf --without-xaw3d  --with-xpm=no --with-gif=no --with-tiff=no
 make  %{?_smp_mflags}
 
 %install
-export SOURCE_DATE_EPOCH=1557873922
+export SOURCE_DATE_EPOCH=1558474854
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/emacs-x11
 cp COPYING %{buildroot}/usr/share/package-licenses/emacs-x11/COPYING
@@ -138,6 +139,7 @@ cp src/COPYING %{buildroot}/usr/share/package-licenses/emacs-x11/src_COPYING
 ## install_append content
 cp %{buildroot}/usr/bin/emacs %{buildroot}/usr/bin/emacs-x11
 sed -i 's/Exec=emacs/Exec=emacs-x11/' %{buildroot}/usr/share/applications/emacs.desktop
+ln -s emacs-x11 %{buildroot}/usr/bin/xemacs
 ## install_append end
 
 %files
@@ -153,6 +155,7 @@ sed -i 's/Exec=emacs/Exec=emacs-x11/' %{buildroot}/usr/share/applications/emacs.
 %exclude /usr/bin/emacsclient
 %exclude /usr/bin/etags
 /usr/bin/emacs-x11
+/usr/bin/xemacs
 
 %files data
 %defattr(-,root,root,-)
