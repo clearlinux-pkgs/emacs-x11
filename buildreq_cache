@@ -1,4 +1,5 @@
 26.2
 llvm
+pkgconfig(xpm)
 systemd-dev
 valgrind
