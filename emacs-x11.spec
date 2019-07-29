@@ -6,28 +6,29 @@
 #
 Name     : emacs-x11
 Version  : 26.2
-Release  : 33
+Release  : 34
 URL      : https://mirrors.kernel.org/gnu/emacs/emacs-26.2.tar.xz
 Source0  : https://mirrors.kernel.org/gnu/emacs/emacs-26.2.tar.xz
-Source99 : https://mirrors.kernel.org/gnu/emacs/emacs-26.2.tar.xz.sig
+Source1 : https://mirrors.kernel.org/gnu/emacs/emacs-26.2.tar.xz.sig
 Summary  : No detailed summary available
 Group    : Development/Tools
 License  : GPL-3.0
 Requires: emacs-x11-bin = %{version}-%{release}
 Requires: emacs-x11-data = %{version}-%{release}
-Requires: emacs-x11-libexec = %{version}-%{release}
 Requires: emacs-x11-license = %{version}-%{release}
-Requires: emacs-x11-man = %{version}-%{release}
 Requires: emacs
+BuildRequires : ImageMagick-dev
 BuildRequires : acl-dev
 BuildRequires : alsa-lib-dev
 BuildRequires : emacs
 BuildRequires : gnutls-dev
+BuildRequires : gpm-dev
 BuildRequires : gtk3-dev
 BuildRequires : libXfixes-dev
 BuildRequires : libXinerama-dev
 BuildRequires : libXrandr-dev
 BuildRequires : libjpeg-turbo-dev
+BuildRequires : librsvg-dev
 BuildRequires : llvm
 BuildRequires : ncurses-dev
 BuildRequires : pkgconfig(dbus-1)
@@ -40,18 +41,14 @@ BuildRequires : texinfo
 BuildRequires : valgrind
 
 %description
-eterm-color.ti is a terminfo source file.  eterm-color is a compiled
-version produced by the terminfo compiler (tic).  The compiled files
-are binary, and depend on the version of tic, but they seem to be
-system-independent and backwardly compatible.  So there should be no
-need to recompile the distributed binary version.  If it is
-necessary, use:
+See the end of the file for license conditions.
+This directory tree holds version 26.2 of GNU Emacs, the extensible,
+customizable, self-documenting real-time display editor.
 
 %package bin
 Summary: bin components for the emacs-x11 package.
 Group: Binaries
 Requires: emacs-x11-data = %{version}-%{release}
-Requires: emacs-x11-libexec = %{version}-%{release}
 Requires: emacs-x11-license = %{version}-%{release}
 
 %description bin
@@ -66,51 +63,12 @@ Group: Data
 data components for the emacs-x11 package.
 
 
-%package dev
-Summary: dev components for the emacs-x11 package.
-Group: Development
-Requires: emacs-x11-bin = %{version}-%{release}
-Requires: emacs-x11-data = %{version}-%{release}
-Provides: emacs-x11-devel = %{version}-%{release}
-Requires: emacs-x11 = %{version}-%{release}
-Requires: emacs-x11 = %{version}-%{release}
-
-%description dev
-dev components for the emacs-x11 package.
-
-
-%package doc
-Summary: doc components for the emacs-x11 package.
-Group: Documentation
-Requires: emacs-x11-man = %{version}-%{release}
-
-%description doc
-doc components for the emacs-x11 package.
-
-
-%package libexec
-Summary: libexec components for the emacs-x11 package.
-Group: Default
-Requires: emacs-x11-license = %{version}-%{release}
-
-%description libexec
-libexec components for the emacs-x11 package.
-
-
 %package license
 Summary: license components for the emacs-x11 package.
 Group: Default
 
 %description license
 license components for the emacs-x11 package.
-
-
-%package man
-Summary: man components for the emacs-x11 package.
-Group: Default
-
-%description man
-man components for the emacs-x11 package.
 
 
 %prep
@@ -120,8 +78,9 @@ man components for the emacs-x11 package.
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
-export LANG=C
-export SOURCE_DATE_EPOCH=1558514545
+export LANG=C.UTF-8
+export SOURCE_DATE_EPOCH=1564440069
+export GCC_IGNORE_WERROR=1
 export CFLAGS="$CFLAGS -fno-lto "
 export FCFLAGS="$CFLAGS -fno-lto "
 export FFLAGS="$CFLAGS -fno-lto "
@@ -130,7 +89,7 @@ export CXXFLAGS="$CXXFLAGS -fno-lto "
 make  %{?_smp_mflags}
 
 %install
-export SOURCE_DATE_EPOCH=1558514545
+export SOURCE_DATE_EPOCH=1564440069
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/emacs-x11
 cp COPYING %{buildroot}/usr/share/package-licenses/emacs-x11/COPYING
@@ -144,4007 +103,4249 @@ cp msdos/COPYING %{buildroot}/usr/share/package-licenses/emacs-x11/msdos_COPYING
 cp nt/COPYING %{buildroot}/usr/share/package-licenses/emacs-x11/nt_COPYING
 cp src/COPYING %{buildroot}/usr/share/package-licenses/emacs-x11/src_COPYING
 %make_install
+## Remove excluded files
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/AUTHORS
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/CALC-NEWS
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/CENSORSHIP
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/CONTRIBUTE
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/COPYING
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/DEBUG
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/DEVEL.HUMOR
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/DISTRIB
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/DOC
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/ERC-NEWS
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/ETAGS.EBNF
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/ETAGS.README
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/FTP
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/GNU
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/GNUS-NEWS
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/HELLO
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/JOKES
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/LINUX-GNU
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/MACHINES
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/MH-E-NEWS
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/MORE.STUFF
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/NEWS
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/NEWS.1-17
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/NEWS.18
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/NEWS.19
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/NEWS.20
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/NEWS.21
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/NEWS.22
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/NEWS.23
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/NEXTSTEP
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/NXML-NEWS
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/ORDERS
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/ORG-NEWS
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/PROBLEMS
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/README
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/TERMS
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/THE-GNU-PROJECT
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/TODO
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/WHY-FREE
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/8859-10.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/8859-11.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/8859-13.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/8859-14.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/8859-15.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/8859-16.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/8859-2.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/8859-3.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/8859-4.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/8859-5.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/8859-6.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/8859-7.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/8859-8.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/8859-9.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/ALTERNATIVNYJ.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/BIG5-1.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/BIG5-2.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/BIG5-HKSCS.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/BIG5.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/CNS-1.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/CNS-2.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/CNS-3.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/CNS-4.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/CNS-5.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/CNS-6.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/CNS-7.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/CNS-F.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/CP10007.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/CP1125.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/CP1250.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/CP1251.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/CP1252.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/CP1253.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/CP1254.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/CP1255.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/CP1256.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/CP1257.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/CP1258.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/CP720.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/CP737.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/CP775.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/CP858.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/CP932-2BYTE.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/CP949-2BYTE.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/EBCDICUK.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/EBCDICUS.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/GB180302.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/GB180304.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/GB2312.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/GBK.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/HP-ROMAN8.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/IBM037.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/IBM038.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/IBM1004.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/IBM1026.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/IBM1047.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/IBM256.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/IBM273.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/IBM274.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/IBM275.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/IBM277.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/IBM278.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/IBM280.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/IBM281.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/IBM284.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/IBM285.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/IBM290.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/IBM297.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/IBM420.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/IBM423.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/IBM424.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/IBM437.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/IBM500.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/IBM850.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/IBM851.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/IBM852.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/IBM855.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/IBM856.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/IBM857.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/IBM860.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/IBM861.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/IBM862.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/IBM863.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/IBM864.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/IBM865.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/IBM866.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/IBM868.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/IBM869.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/IBM870.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/IBM871.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/IBM874.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/IBM875.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/IBM880.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/IBM891.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/IBM903.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/IBM904.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/IBM905.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/IBM918.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/JISC6226.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/JISX0201.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/JISX0208.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/JISX0212.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/JISX2131.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/JISX2132.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/JISX213A.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/JOHAB.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/KA-ACADEMY.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/KA-PS.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/KOI-8.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/KOI8-R.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/KOI8-T.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/KOI8-U.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/KSC5601.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/KSC5636.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/MACINTOSH.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/MIK.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/MULE-ethiopic.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/MULE-ipa.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/MULE-is13194.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/MULE-lviscii.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/MULE-sisheng.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/MULE-tibetan.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/MULE-uviscii.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/NEXTSTEP.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/PTCP154.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/README
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/TIS-620.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/VISCII.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/VSCII-2.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/VSCII.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/stdenc.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/charsets/symbol.map
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/compilation.txt
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/e/README
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/e/eterm-color
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/e/eterm-color.ti
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/edt-user.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/emacs-buffer.gdb
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/emacs.appdata.xml
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/emacs.desktop
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/emacs.icon
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/enriched.txt
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/forms/README
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/forms/forms-d2.dat
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/forms/forms-d2.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/forms/forms-pass.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/future-bug
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/gnus-tut.txt
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/gnus/gnus-setup.ast
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/gnus/news-server.ast
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/grep.txt
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/README
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/attach.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/attach.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/back-arrow.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/back-arrow.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/bookmark_add.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/bookmark_add.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/cancel.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/cancel.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/checked.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/close.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/close.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/connect.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/contact.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/contact.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/copy.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/copy.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/custom/README
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/custom/down-pushed.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/custom/down.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/custom/right-pushed.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/custom/right.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/cut.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/cut.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/data-save.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/data-save.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/delete.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/delete.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/describe.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/diropen.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/diropen.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/disconnect.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/exit.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/exit.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/ezimage/README
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/ezimage/bits.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/ezimage/bitsbang.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/ezimage/box-minus.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/ezimage/box-plus.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/ezimage/box.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/ezimage/checkmark.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/ezimage/dir-minus.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/ezimage/dir-plus.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/ezimage/dir.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/ezimage/doc-minus.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/ezimage/doc-plus.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/ezimage/doc.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/ezimage/info.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/ezimage/key.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/ezimage/label.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/ezimage/lock.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/ezimage/mail.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/ezimage/page-minus.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/ezimage/page-plus.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/ezimage/page.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/ezimage/tag-gt.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/ezimage/tag-minus.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/ezimage/tag-plus.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/ezimage/tag-type.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/ezimage/tag-v.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/ezimage/tag.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/ezimage/unlock.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/fwd-arrow.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/fwd-arrow.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gnus.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gnus/README
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gnus/catchup.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gnus/catchup.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gnus/cu-exit.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gnus/cu-exit.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gnus/describe-group.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gnus/describe-group.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gnus/exit-gnus.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gnus/exit-gnus.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gnus/exit-summ.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gnus/exit-summ.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gnus/followup.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gnus/followup.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gnus/fuwo.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gnus/fuwo.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gnus/get-news.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gnus/get-news.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gnus/gnntg.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gnus/gnntg.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gnus/gnus-pointer.xbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gnus/gnus-pointer.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gnus/gnus.png
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gnus/gnus.svg
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gnus/gnus.xbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gnus/gnus.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gnus/important.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gnus/kill-group.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gnus/kill-group.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gnus/mail-reply.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gnus/mail-reply.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gnus/mail-send.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gnus/next-ur.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gnus/next-ur.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gnus/post.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gnus/post.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gnus/prev-ur.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gnus/prev-ur.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gnus/preview.xbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gnus/preview.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gnus/receipt.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gnus/reply-wo.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gnus/reply-wo.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gnus/reply.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gnus/reply.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gnus/rot13.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gnus/rot13.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gnus/save-aif.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gnus/save-aif.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gnus/save-art.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gnus/save-art.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gnus/subscribe.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gnus/subscribe.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gnus/toggle-subscription.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gnus/unimportant.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gnus/unsubscribe.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gnus/unsubscribe.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gnus/uu-decode.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gnus/uu-decode.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gnus/uu-post.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gnus/uu-post.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gud/README
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gud/all.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gud/break.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gud/break.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gud/cont.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gud/cont.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gud/down.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gud/down.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gud/finish.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gud/finish.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gud/go.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gud/go.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gud/next.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gud/next.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gud/nexti.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gud/nexti.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gud/pp.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gud/pp.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gud/print.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gud/print.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gud/pstar.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gud/pstar.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gud/rcont.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gud/recstart.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gud/recstop.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gud/remove.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gud/remove.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gud/rfinish.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gud/rnext.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gud/rnexti.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gud/rstep.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gud/rstepi.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gud/run.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gud/run.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gud/step.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gud/step.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gud/stepi.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gud/stepi.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gud/stop.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gud/stop.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gud/thread.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gud/until.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gud/until.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gud/up.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gud/up.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gud/watch.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gud/watch.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/help.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/help.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/home.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/home.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/icons/README
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/icons/allout-widgets/dark-bg/closed.png
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/icons/allout-widgets/dark-bg/closed.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/icons/allout-widgets/dark-bg/empty.png
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/icons/allout-widgets/dark-bg/empty.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/icons/allout-widgets/dark-bg/end-connector.png
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/icons/allout-widgets/dark-bg/end-connector.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/icons/allout-widgets/dark-bg/extender-connector.png
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/icons/allout-widgets/dark-bg/extender-connector.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/icons/allout-widgets/dark-bg/leaf.png
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/icons/allout-widgets/dark-bg/leaf.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/icons/allout-widgets/dark-bg/locked-encrypted.png
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/icons/allout-widgets/dark-bg/locked-encrypted.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/icons/allout-widgets/dark-bg/mid-connector.png
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/icons/allout-widgets/dark-bg/mid-connector.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/icons/allout-widgets/dark-bg/opened.png
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/icons/allout-widgets/dark-bg/opened.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/icons/allout-widgets/dark-bg/skip-descender.png
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/icons/allout-widgets/dark-bg/skip-descender.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/icons/allout-widgets/dark-bg/through-descender.png
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/icons/allout-widgets/dark-bg/through-descender.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/icons/allout-widgets/dark-bg/unlocked-encrypted.png
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/icons/allout-widgets/dark-bg/unlocked-encrypted.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/icons/allout-widgets/light-bg/closed.png
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/icons/allout-widgets/light-bg/closed.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/icons/allout-widgets/light-bg/empty.png
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/icons/allout-widgets/light-bg/empty.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/icons/allout-widgets/light-bg/end-connector.png
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/icons/allout-widgets/light-bg/end-connector.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/icons/allout-widgets/light-bg/extender-connector.png
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/icons/allout-widgets/light-bg/extender-connector.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/icons/allout-widgets/light-bg/leaf.png
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/icons/allout-widgets/light-bg/leaf.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/icons/allout-widgets/light-bg/locked-encrypted.png
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/icons/allout-widgets/light-bg/locked-encrypted.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/icons/allout-widgets/light-bg/mid-connector.png
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/icons/allout-widgets/light-bg/mid-connector.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/icons/allout-widgets/light-bg/opened.png
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/icons/allout-widgets/light-bg/opened.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/icons/allout-widgets/light-bg/skip-descender.png
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/icons/allout-widgets/light-bg/skip-descender.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/icons/allout-widgets/light-bg/through-descender.png
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/icons/allout-widgets/light-bg/through-descender.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/icons/allout-widgets/light-bg/unlocked-encrypted.png
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/icons/allout-widgets/light-bg/unlocked-encrypted.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/icons/hicolor/128x128/apps/emacs.png
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/icons/hicolor/16x16/apps/emacs.png
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/icons/hicolor/16x16/apps/emacs22.png
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/icons/hicolor/24x24/apps/emacs.png
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/icons/hicolor/24x24/apps/emacs22.png
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/icons/hicolor/32x32/apps/emacs.png
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/icons/hicolor/32x32/apps/emacs22.png
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/icons/hicolor/48x48/apps/emacs.png
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/icons/hicolor/48x48/apps/emacs22.png
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/icons/hicolor/scalable/apps/emacs.svg
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/icons/hicolor/scalable/mimetypes/emacs-document.svg
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/index.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/index.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/info.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/info.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/jump-to.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/jump-to.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/left-arrow.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/left-arrow.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/letter.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/letter.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/lock-broken.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/lock-ok.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/lock.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/low-color/README
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/low-color/back-arrow.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/low-color/copy.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/low-color/cut.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/low-color/fwd-arrow.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/low-color/help.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/low-color/home.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/low-color/index.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/low-color/jump-to.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/low-color/left-arrow.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/low-color/new.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/low-color/next-node.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/low-color/open.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/low-color/paste.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/low-color/preferences.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/low-color/prev-node.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/low-color/print.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/low-color/right-arrow.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/low-color/save.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/low-color/saveas.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/low-color/search.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/low-color/spell.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/low-color/undo.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/low-color/up-arrow.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/low-color/up-node.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/mail/README
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/mail/compose.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/mail/compose.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/mail/copy.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/mail/flag-for-followup.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/mail/flag-for-followup.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/mail/forward.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/mail/inbox.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/mail/inbox.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/mail/move.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/mail/move.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/mail/not-spam.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/mail/outbox.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/mail/preview.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/mail/repack.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/mail/repack.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/mail/reply-all.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/mail/reply-all.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/mail/reply-from.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/mail/reply-from.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/mail/reply-to.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/mail/reply-to.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/mail/reply.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/mail/reply.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/mail/save-draft.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/mail/save.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/mail/send.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/mail/send.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/mail/spam.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/mh-logo.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/mpc/README
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/mpc/add.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/mpc/ffwd.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/mpc/next.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/mpc/pause.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/mpc/play.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/mpc/prev.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/mpc/rewind.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/mpc/stop.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/new.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/new.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/newsticker/README
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/newsticker/browse-url.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/newsticker/get-all.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/newsticker/mark-immortal.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/newsticker/mark-read.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/newsticker/narrow.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/newsticker/next-feed.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/newsticker/next-item.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/newsticker/prev-feed.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/newsticker/prev-item.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/newsticker/update.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/next-node.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/next-node.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/next-page.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/next-page.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/open.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/open.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/paste.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/paste.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/preferences.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/preferences.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/prev-node.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/prev-node.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/print.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/print.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/redo.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/refresh.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/refresh.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/right-arrow.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/right-arrow.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/save.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/save.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/saveas.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/saveas.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/search-replace.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/search-replace.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/search.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/search.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/separator.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/show.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/show.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/smilies/README
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/smilies/blink.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/smilies/blink.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/smilies/braindamaged.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/smilies/cry.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/smilies/dead.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/smilies/evil.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/smilies/forced.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/smilies/frown.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/smilies/frown.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/smilies/grayscale/README
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/smilies/grayscale/blink.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/smilies/grayscale/braindamaged.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/smilies/grayscale/cry.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/smilies/grayscale/dead.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/smilies/grayscale/evil.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/smilies/grayscale/forced.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/smilies/grayscale/frown.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/smilies/grayscale/grin.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/smilies/grayscale/indifferent.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/smilies/grayscale/reverse-smile.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/smilies/grayscale/sad.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/smilies/grayscale/smile.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/smilies/grayscale/wry.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/smilies/grin.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/smilies/indifferent.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/smilies/medium/README
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/smilies/medium/blink.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/smilies/medium/braindamaged.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/smilies/medium/cry.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/smilies/medium/dead.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/smilies/medium/evil.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/smilies/medium/forced.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/smilies/medium/frown.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/smilies/medium/grin.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/smilies/medium/indifferent.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/smilies/medium/reverse-smile.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/smilies/medium/sad.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/smilies/medium/smile.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/smilies/medium/wry.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/smilies/sad.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/smilies/sad.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/smilies/smile.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/smilies/smile.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/smilies/wry.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/smilies/wry.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/sort-ascending.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/sort-column-ascending.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/sort-criteria.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/sort-descending.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/sort-row-ascending.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/spell.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/spell.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/splash.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/splash.png
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/splash.svg
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/splash.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/tree-widget/default/README
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/tree-widget/default/close.png
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/tree-widget/default/close.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/tree-widget/default/empty.png
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/tree-widget/default/empty.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/tree-widget/default/end-guide.png
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/tree-widget/default/end-guide.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/tree-widget/default/guide.png
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/tree-widget/default/guide.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/tree-widget/default/handle.png
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/tree-widget/default/handle.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/tree-widget/default/leaf.png
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/tree-widget/default/leaf.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/tree-widget/default/no-guide.png
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/tree-widget/default/no-guide.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/tree-widget/default/no-handle.png
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/tree-widget/default/no-handle.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/tree-widget/default/open.png
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/tree-widget/default/open.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/tree-widget/folder/README
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/tree-widget/folder/close.png
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/tree-widget/folder/close.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/tree-widget/folder/empty.png
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/tree-widget/folder/empty.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/tree-widget/folder/end-guide.png
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/tree-widget/folder/end-guide.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/tree-widget/folder/guide.png
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/tree-widget/folder/guide.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/tree-widget/folder/handle.png
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/tree-widget/folder/handle.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/tree-widget/folder/leaf.png
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/tree-widget/folder/leaf.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/tree-widget/folder/no-guide.png
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/tree-widget/folder/no-guide.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/tree-widget/folder/no-handle.png
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/tree-widget/folder/no-handle.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/tree-widget/folder/open.png
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/tree-widget/folder/open.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/unchecked.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/undo.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/undo.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/up-arrow.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/up-arrow.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/up-node.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/up-node.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/zoom-in.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/zoom-out.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/zoom-out.xpm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/00000-0007F.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/00080-000FF.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/00100-0017F.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/00180-0024F.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/00250-002AF.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/002B0-002FF.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/00300-0036F.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/00370-003FF.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/00400-004FF.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/00500-0052F.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/00530-0058F.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/00590-005FF.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/00600-006FF.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/00700-0074F.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/00780-007BF.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/00900-0097F.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/00980-009FF.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/00A00-00A7F.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/00A80-00AFF.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/00B00-00B7F.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/00B80-00BFF.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/00C00-00C7F.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/00C80-00CFF.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/00D00-00D7F.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/00D80-00DFF.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/00E00-00E7F.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/00E80-00EFF.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/00F00-00FFF.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/01000-0109F.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/010A0-010FF.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/01100-011FF.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/01200-0137F.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/013A0-013FF.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/01400-0167F.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/01680-0169F.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/016A0-016FF.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/01700-0171F.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/01720-0173F.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/01740-0175F.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/01760-0177F.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/01780-017FF.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/01800-018AF.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/01E00-01EFF.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/01F00-01FFF.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/02000-0206F.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/02070-0209F.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/020A0-020CF.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/020D0-020FF.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/02100-0214F.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/02150-0218F.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/02190-021FF.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/02200-022FF.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/02300-023FF.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/02400-0243F.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/02440-0245F.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/02460-024FF.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/02500-0257F.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/02580-0259F.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/025A0-025FF.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/02600-026FF.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/02700-027BF.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/027C0-027EF.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/027F0-027FF.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/02800-028FF.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/02900-0297F.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/02980-029FF.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/02A00-02AFF.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/02E80-02EFF.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/02F00-02FDF.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/02FF0-02FFF.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/03000-0303F.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/03040-0309F.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/030A0-030FF.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/03100-0312F.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/03130-0318F.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/03190-0319F.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/031A0-031BF.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/031F0-031FF.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/03200-032FF.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/03300-033FF.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/03400-04DBF.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/0A000-0A48F.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/0A490-0A4CF.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/0FB00-0FB4F.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/0FB50-0FDFF.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/0FE00-0FE0F.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/0FE20-0FE2F.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/0FE30-0FE4F.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/0FE50-0FE6F.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/0FE70-0FEFF.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/0FF00-0FFEF.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/0FFF0-0FFFF.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/10300-1032F.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/10330-1034F.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/10400-1044F.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/1D000-1D0FF.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/1D100-1D1FF.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/1D400-1D7FF.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/E0000-E007F.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/README
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/test-invalid.xml
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/nxml/test-valid.xml
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/org/OrgOdtContentTemplate.xml
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/org/OrgOdtStyles.xml
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/org/README
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/package-keyring.gpg
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/ps-prin0.ps
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/ps-prin1.ps
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/publicsuffix.txt
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/refcards/Makefile
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/refcards/README
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/refcards/calccard.pdf
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/refcards/calccard.tex
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/refcards/cs-dired-ref.pdf
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/refcards/cs-dired-ref.tex
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/refcards/cs-refcard.pdf
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/refcards/cs-refcard.tex
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/refcards/cs-survival.pdf
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/refcards/cs-survival.tex
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/refcards/de-refcard.pdf
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/refcards/de-refcard.tex
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/refcards/dired-ref.pdf
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/refcards/dired-ref.tex
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/refcards/emacsver.tex
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/refcards/fr-dired-ref.pdf
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/refcards/fr-dired-ref.tex
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/refcards/fr-refcard.pdf
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/refcards/fr-refcard.tex
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/refcards/fr-survival.pdf
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/refcards/fr-survival.tex
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/refcards/gnus-booklet.pdf
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/refcards/gnus-logo.eps
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/refcards/gnus-logo.pdf
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/refcards/gnus-refcard.pdf
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/refcards/gnus-refcard.tex
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/refcards/orgcard.pdf
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/refcards/orgcard.tex
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/refcards/pdflayout.sty
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/refcards/pl-refcard.pdf
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/refcards/pl-refcard.tex
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/refcards/pt-br-refcard.pdf
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/refcards/pt-br-refcard.tex
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/refcards/refcard.pdf
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/refcards/refcard.tex
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/refcards/ru-refcard.pdf
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/refcards/ru-refcard.tex
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/refcards/sk-dired-ref.pdf
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/refcards/sk-dired-ref.tex
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/refcards/sk-refcard.pdf
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/refcards/sk-refcard.tex
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/refcards/sk-survival.pdf
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/refcards/sk-survival.tex
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/refcards/survival.pdf
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/refcards/survival.tex
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/refcards/vipcard.pdf
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/refcards/vipcard.tex
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/refcards/viperCard.pdf
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/refcards/viperCard.tex
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/rgb.txt
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/schema/README
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/schema/calstbl.rnc
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/schema/dbcalstbl.rnc
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/schema/dbhier.rnc
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/schema/dbnotn.rnc
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/schema/dbpool.rnc
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/schema/dbstart.rnc
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/schema/docbook.rnc
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/schema/locate.rnc
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/schema/rdfxml.rnc
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/schema/relaxng.rnc
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/schema/schemas.xml
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/schema/xhtml-applet.rnc
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/schema/xhtml-attribs.rnc
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/schema/xhtml-base.rnc
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/schema/xhtml-bdo.rnc
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/schema/xhtml-bform.rnc
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/schema/xhtml-btable.rnc
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/schema/xhtml-csismap.rnc
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/schema/xhtml-datatypes.rnc
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/schema/xhtml-edit.rnc
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/schema/xhtml-events.rnc
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/schema/xhtml-form.rnc
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/schema/xhtml-frames.rnc
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/schema/xhtml-hypertext.rnc
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/schema/xhtml-iframe.rnc
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/schema/xhtml-image.rnc
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/schema/xhtml-inlstyle.rnc
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/schema/xhtml-legacy.rnc
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/schema/xhtml-link.rnc
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/schema/xhtml-lst.rnc
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/schema/xhtml-meta.rnc
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/schema/xhtml-nameident.rnc
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/schema/xhtml-object.rnc
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/schema/xhtml-param.rnc
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/schema/xhtml-pres.rnc
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/schema/xhtml-ruby.rnc
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/schema/xhtml-script.rnc
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/schema/xhtml-ssismap.rnc
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/schema/xhtml-struct.rnc
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/schema/xhtml-table.rnc
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/schema/xhtml-text.rnc
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/schema/xhtml-tgt.rnc
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/schema/xhtml-xstyle.rnc
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/schema/xhtml.rnc
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/schema/xslt.rnc
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/ses-example.ses
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/spook.lines
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/srecode/c.srt
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/srecode/cpp.srt
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/srecode/default.srt
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/srecode/doc-cpp.srt
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/srecode/doc-default.srt
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/srecode/doc-java.srt
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/srecode/ede-autoconf.srt
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/srecode/ede-make.srt
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/srecode/el.srt
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/srecode/getset-cpp.srt
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/srecode/java.srt
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/srecode/make.srt
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/srecode/template.srt
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/srecode/test.srt
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/srecode/texi.srt
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/srecode/wisent.srt
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/themes/adwaita-theme.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/themes/deeper-blue-theme.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/themes/dichromacy-theme.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/themes/leuven-theme.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/themes/light-blue-theme.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/themes/manoj-dark-theme.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/themes/misterioso-theme.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/themes/tango-dark-theme.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/themes/tango-theme.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/themes/tsdh-dark-theme.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/themes/tsdh-light-theme.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/themes/wheatgrass-theme.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/themes/whiteboard-theme.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/themes/wombat-theme.el
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/tutorials/TUTORIAL
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/tutorials/TUTORIAL.bg
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/tutorials/TUTORIAL.cn
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/tutorials/TUTORIAL.cs
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/tutorials/TUTORIAL.de
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/tutorials/TUTORIAL.eo
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/tutorials/TUTORIAL.es
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/tutorials/TUTORIAL.fr
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/tutorials/TUTORIAL.he
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/tutorials/TUTORIAL.it
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/tutorials/TUTORIAL.ja
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/tutorials/TUTORIAL.ko
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/tutorials/TUTORIAL.nl
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/tutorials/TUTORIAL.pl
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/tutorials/TUTORIAL.pt_BR
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/tutorials/TUTORIAL.ro
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/tutorials/TUTORIAL.ru
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/tutorials/TUTORIAL.sk
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/tutorials/TUTORIAL.sl
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/tutorials/TUTORIAL.sv
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/tutorials/TUTORIAL.th
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/tutorials/TUTORIAL.translators
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/tutorials/TUTORIAL.zh
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/yow.lines
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/COPYING
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/README
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/abbrev.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/abbrev.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/align.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/align.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/allout-widgets.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/allout-widgets.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/allout.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/allout.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/ansi-color.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/ansi-color.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/apropos.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/apropos.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/arc-mode.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/arc-mode.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/array.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/array.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/autoarg.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/autoarg.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/autoinsert.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/autoinsert.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/autorevert.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/autorevert.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/avoid.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/avoid.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/battery.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/battery.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/bindings.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/bindings.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/bookmark.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/bookmark.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/bs.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/bs.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/buff-menu.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/buff-menu.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/button.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/button.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-aent.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-aent.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-alg.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-alg.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-arith.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-arith.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-bin.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-bin.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-comb.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-comb.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-cplx.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-cplx.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-embed.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-embed.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-ext.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-ext.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-fin.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-fin.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-forms.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-forms.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-frac.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-frac.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-funcs.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-funcs.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-graph.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-graph.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-help.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-help.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-incom.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-incom.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-keypd.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-keypd.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-lang.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-lang.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-loaddefs.el
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-macs.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-macs.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-map.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-map.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-math.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-math.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-menu.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-menu.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-misc.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-misc.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-mode.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-mode.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-mtx.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-mtx.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-nlfit.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-nlfit.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-poly.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-poly.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-prog.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-prog.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-rewr.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-rewr.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-rules.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-rules.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-sel.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-sel.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-stat.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-stat.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-store.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-store.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-stuff.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-stuff.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-trail.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-trail.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-undo.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-undo.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-units.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-units.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-vec.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-vec.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-yank.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc-yank.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calc.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calcalg2.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calcalg2.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calcalg3.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calcalg3.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calccomp.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calccomp.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calcsel2.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calc/calcsel2.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calculator.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calculator.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calendar/appt.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calendar/appt.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calendar/cal-bahai.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calendar/cal-bahai.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calendar/cal-china.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calendar/cal-china.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calendar/cal-coptic.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calendar/cal-coptic.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calendar/cal-dst.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calendar/cal-dst.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calendar/cal-french.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calendar/cal-french.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calendar/cal-hebrew.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calendar/cal-hebrew.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calendar/cal-html.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calendar/cal-html.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calendar/cal-islam.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calendar/cal-islam.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calendar/cal-iso.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calendar/cal-iso.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calendar/cal-julian.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calendar/cal-julian.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calendar/cal-loaddefs.el
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calendar/cal-mayan.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calendar/cal-mayan.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calendar/cal-menu.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calendar/cal-menu.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calendar/cal-move.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calendar/cal-move.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calendar/cal-persia.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calendar/cal-persia.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calendar/cal-tex.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calendar/cal-tex.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calendar/cal-x.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calendar/cal-x.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calendar/calendar.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calendar/calendar.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calendar/diary-lib.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calendar/diary-lib.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calendar/diary-loaddefs.el
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calendar/hol-loaddefs.el
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calendar/holidays.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calendar/holidays.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calendar/icalendar.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calendar/icalendar.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calendar/lunar.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calendar/lunar.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calendar/parse-time.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calendar/parse-time.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calendar/solar.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calendar/solar.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calendar/time-date.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calendar/time-date.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calendar/timeclock.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calendar/timeclock.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calendar/todo-mode.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/calendar/todo-mode.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/case-table.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/case-table.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cdl.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cdl.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/cedet-cscope.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/cedet-cscope.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/cedet-files.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/cedet-files.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/cedet-global.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/cedet-global.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/cedet-idutils.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/cedet-idutils.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/cedet.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/cedet.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/data-debug.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/data-debug.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/auto.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/auto.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/autoconf-edit.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/autoconf-edit.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/base.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/base.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/cpp-root.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/cpp-root.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/custom.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/custom.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/dired.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/dired.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/emacs.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/emacs.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/files.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/files.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/generic.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/generic.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/linux.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/linux.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/loaddefs.el
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/locate.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/locate.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/make.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/make.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/makefile-edit.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/makefile-edit.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/pconf.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/pconf.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/pmake.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/pmake.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/proj-archive.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/proj-archive.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/proj-aux.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/proj-aux.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/proj-comp.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/proj-comp.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/proj-elisp.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/proj-elisp.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/proj-info.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/proj-info.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/proj-misc.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/proj-misc.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/proj-obj.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/proj-obj.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/proj-prog.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/proj-prog.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/proj-scheme.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/proj-scheme.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/proj-shared.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/proj-shared.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/proj.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/proj.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/project-am.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/project-am.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/shell.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/shell.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/simple.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/simple.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/source.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/source.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/speedbar.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/speedbar.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/srecode.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/srecode.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/system.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/system.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/util.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/util.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/inversion.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/inversion.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/mode-local.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/mode-local.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/pulse.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/pulse.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/analyze.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/analyze.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/analyze/complete.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/analyze/complete.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/analyze/debug.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/analyze/debug.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/analyze/fcn.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/analyze/fcn.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/analyze/refs.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/analyze/refs.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/bovine.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/bovine.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/bovine/c-by.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/bovine/c-by.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/bovine/c.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/bovine/c.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/bovine/debug.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/bovine/debug.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/bovine/el.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/bovine/el.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/bovine/gcc.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/bovine/gcc.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/bovine/grammar.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/bovine/grammar.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/bovine/make-by.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/bovine/make-by.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/bovine/make.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/bovine/make.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/bovine/scm-by.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/bovine/scm-by.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/bovine/scm.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/bovine/scm.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/chart.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/chart.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/complete.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/complete.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/ctxt.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/ctxt.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/db-debug.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/db-debug.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/db-ebrowse.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/db-ebrowse.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/db-el.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/db-el.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/db-file.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/db-file.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/db-find.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/db-find.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/db-global.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/db-global.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/db-javascript.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/db-javascript.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/db-mode.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/db-mode.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/db-ref.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/db-ref.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/db-typecache.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/db-typecache.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/db.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/db.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/debug.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/debug.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/decorate.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/decorate.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/decorate/include.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/decorate/include.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/decorate/mode.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/decorate/mode.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/dep.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/dep.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/doc.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/doc.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/ede-grammar.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/ede-grammar.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/edit.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/edit.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/find.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/find.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/format.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/format.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/fw.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/fw.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/grammar-wy.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/grammar-wy.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/grammar.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/grammar.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/html.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/html.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/ia-sb.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/ia-sb.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/ia.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/ia.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/idle.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/idle.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/imenu.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/imenu.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/java.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/java.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/lex-spp.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/lex-spp.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/lex.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/lex.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/loaddefs.el
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/mru-bookmark.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/mru-bookmark.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/sb.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/sb.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/scope.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/scope.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/senator.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/senator.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/sort.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/sort.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/symref.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/symref.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/symref/cscope.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/symref/cscope.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/symref/filter.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/symref/filter.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/symref/global.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/symref/global.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/symref/grep.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/symref/grep.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/symref/idutils.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/symref/idutils.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/symref/list.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/symref/list.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/tag-file.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/tag-file.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/tag-ls.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/tag-ls.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/tag-write.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/tag-write.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/tag.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/tag.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/texi.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/texi.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/util-modes.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/util-modes.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/util.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/util.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/wisent.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/wisent.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/wisent/comp.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/wisent/comp.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/wisent/grammar.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/wisent/grammar.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/wisent/java-tags.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/wisent/java-tags.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/wisent/javascript.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/wisent/javascript.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/wisent/javat-wy.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/wisent/javat-wy.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/wisent/js-wy.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/wisent/js-wy.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/wisent/python-wy.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/wisent/python-wy.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/wisent/python.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/wisent/python.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/wisent/wisent.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/semantic/wisent/wisent.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/srecode.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/srecode.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/srecode/args.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/srecode/args.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/srecode/compile.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/srecode/compile.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/srecode/cpp.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/srecode/cpp.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/srecode/ctxt.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/srecode/ctxt.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/srecode/dictionary.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/srecode/dictionary.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/srecode/document.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/srecode/document.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/srecode/el.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/srecode/el.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/srecode/expandproto.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/srecode/expandproto.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/srecode/extract.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/srecode/extract.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/srecode/fields.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/srecode/fields.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/srecode/filters.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/srecode/filters.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/srecode/find.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/srecode/find.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/srecode/getset.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/srecode/getset.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/srecode/insert.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/srecode/insert.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/srecode/java.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/srecode/java.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/srecode/loaddefs.el
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/srecode/map.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/srecode/map.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/srecode/mode.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/srecode/mode.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/srecode/semantic.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/srecode/semantic.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/srecode/srt-mode.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/srecode/srt-mode.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/srecode/srt-wy.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/srecode/srt-wy.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/srecode/srt.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/srecode/srt.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/srecode/table.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/srecode/table.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/srecode/template.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/srecode/template.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/srecode/texi.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/srecode/texi.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/chistory.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/chistory.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cmuscheme.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cmuscheme.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/color.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/color.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/comint.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/comint.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/completion.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/completion.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/composite.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/composite.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cus-dep.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cus-dep.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cus-edit.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cus-edit.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cus-face.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cus-face.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cus-load.el
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cus-start.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cus-start.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cus-theme.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cus-theme.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/custom.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/custom.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/dabbrev.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/dabbrev.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/delim-col.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/delim-col.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/delsel.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/delsel.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/descr-text.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/descr-text.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/desktop.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/desktop.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/dframe.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/dframe.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/dired-aux.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/dired-aux.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/dired-x.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/dired-x.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/dired.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/dired.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/dirtrack.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/dirtrack.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/disp-table.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/disp-table.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/dnd.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/dnd.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/doc-view.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/doc-view.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/dos-fns.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/dos-fns.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/dos-vars.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/dos-vars.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/dos-w32.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/dos-w32.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/double.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/double.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/dynamic-setting.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/dynamic-setting.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/ebuff-menu.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/ebuff-menu.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/echistory.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/echistory.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/edmacro.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/edmacro.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/ehelp.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/ehelp.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/elec-pair.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/elec-pair.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/electric.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/electric.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/elide-head.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/elide-head.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/advice.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/advice.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/authors.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/authors.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/autoload.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/autoload.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/avl-tree.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/avl-tree.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/backquote.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/backquote.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/benchmark.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/benchmark.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/bindat.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/bindat.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/byte-opt.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/byte-opt.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/byte-run.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/byte-run.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/bytecomp.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/bytecomp.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/cconv.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/cconv.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/chart.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/chart.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/check-declare.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/check-declare.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/checkdoc.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/checkdoc.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/cl-extra.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/cl-extra.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/cl-indent.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/cl-indent.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/cl-lib.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/cl-lib.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/cl-loaddefs.el
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/cl-macs.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/cl-macs.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/cl-seq.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/cl-seq.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/cl.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/cl.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/copyright.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/copyright.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/crm.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/crm.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/debug.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/debug.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/derived.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/derived.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/disass.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/disass.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/easy-mmode.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/easy-mmode.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/easymenu.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/easymenu.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/edebug.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/edebug.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/eieio-base.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/eieio-base.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/eieio-core.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/eieio-core.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/eieio-custom.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/eieio-custom.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/eieio-datadebug.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/eieio-datadebug.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/eieio-opt.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/eieio-opt.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/eieio-speedbar.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/eieio-speedbar.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/eieio.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/eieio.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/eldoc.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/eldoc.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/elint.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/elint.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/elp.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/elp.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/ert-x.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/ert-x.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/ert.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/ert.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/ewoc.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/ewoc.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/find-func.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/find-func.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/float-sup.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/float-sup.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/generic.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/generic.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/gulp.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/gulp.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/gv.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/gv.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/helper.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/helper.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/lisp-mnt.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/lisp-mnt.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/lisp-mode.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/lisp-mode.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/lisp.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/lisp.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/macroexp.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/macroexp.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/map-ynp.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/map-ynp.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/nadvice.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/nadvice.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/package-x.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/package-x.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/package.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/package.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/pcase.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/pcase.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/pp.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/pp.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/re-builder.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/re-builder.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/regexp-opt.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/regexp-opt.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/regi.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/regi.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/ring.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/ring.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/rx.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/rx.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/shadow.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/shadow.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/smie.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/smie.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/subr-x.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/subr-x.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/syntax.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/syntax.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/tabulated-list.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/tabulated-list.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/tcover-ses.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/tcover-ses.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/tcover-unsafep.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/tcover-unsafep.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/testcover.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/testcover.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/timer.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/timer.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/tq.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/tq.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/trace.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/trace.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/unsafep.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/unsafep.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/warnings.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/warnings.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lock.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lock.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emulation/cua-base.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emulation/cua-base.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emulation/cua-gmrk.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emulation/cua-gmrk.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emulation/cua-rect.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emulation/cua-rect.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emulation/edt-lk201.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emulation/edt-lk201.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emulation/edt-mapper.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emulation/edt-mapper.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emulation/edt-pc.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emulation/edt-pc.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emulation/edt-vt100.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emulation/edt-vt100.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emulation/edt.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emulation/edt.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emulation/keypad.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emulation/keypad.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emulation/viper-cmd.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emulation/viper-cmd.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emulation/viper-ex.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emulation/viper-ex.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emulation/viper-init.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emulation/viper-init.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emulation/viper-keym.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emulation/viper-keym.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emulation/viper-macs.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emulation/viper-macs.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emulation/viper-mous.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emulation/viper-mous.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emulation/viper-util.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emulation/viper-util.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emulation/viper.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emulation/viper.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/env.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/env.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/epa-dired.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/epa-dired.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/epa-file.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/epa-file.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/epa-hook.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/epa-hook.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/epa-mail.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/epa-mail.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/epa.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/epa.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/epg-config.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/epg-config.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/epg.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/epg.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/erc/erc-autoaway.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/erc/erc-autoaway.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/erc/erc-backend.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/erc/erc-backend.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/erc/erc-button.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/erc/erc-button.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/erc/erc-capab.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/erc/erc-capab.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/erc/erc-compat.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/erc/erc-compat.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/erc/erc-dcc.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/erc/erc-dcc.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/erc/erc-desktop-notifications.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/erc/erc-desktop-notifications.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/erc/erc-ezbounce.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/erc/erc-ezbounce.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/erc/erc-fill.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/erc/erc-fill.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/erc/erc-goodies.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/erc/erc-goodies.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/erc/erc-ibuffer.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/erc/erc-ibuffer.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/erc/erc-identd.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/erc/erc-identd.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/erc/erc-imenu.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/erc/erc-imenu.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/erc/erc-join.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/erc/erc-join.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/erc/erc-lang.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/erc/erc-lang.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/erc/erc-list.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/erc/erc-list.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/erc/erc-log.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/erc/erc-log.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/erc/erc-match.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/erc/erc-match.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/erc/erc-menu.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/erc/erc-menu.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/erc/erc-netsplit.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/erc/erc-netsplit.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/erc/erc-networks.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/erc/erc-networks.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/erc/erc-notify.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/erc/erc-notify.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/erc/erc-page.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/erc/erc-page.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/erc/erc-pcomplete.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/erc/erc-pcomplete.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/erc/erc-replace.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/erc/erc-replace.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/erc/erc-ring.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/erc/erc-ring.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/erc/erc-services.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/erc/erc-services.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/erc/erc-sound.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/erc/erc-sound.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/erc/erc-speedbar.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/erc/erc-speedbar.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/erc/erc-spelling.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/erc/erc-spelling.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/erc/erc-stamp.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/erc/erc-stamp.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/erc/erc-track.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/erc/erc-track.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/erc/erc-truncate.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/erc/erc-truncate.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/erc/erc-xdcc.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/erc/erc-xdcc.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/erc/erc.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/erc/erc.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/eshell/em-alias.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/eshell/em-alias.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/eshell/em-banner.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/eshell/em-banner.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/eshell/em-basic.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/eshell/em-basic.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/eshell/em-cmpl.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/eshell/em-cmpl.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/eshell/em-dirs.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/eshell/em-dirs.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/eshell/em-glob.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/eshell/em-glob.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/eshell/em-hist.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/eshell/em-hist.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/eshell/em-ls.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/eshell/em-ls.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/eshell/em-pred.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/eshell/em-pred.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/eshell/em-prompt.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/eshell/em-prompt.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/eshell/em-rebind.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/eshell/em-rebind.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/eshell/em-script.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/eshell/em-script.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/eshell/em-smart.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/eshell/em-smart.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/eshell/em-term.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/eshell/em-term.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/eshell/em-tramp.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/eshell/em-tramp.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/eshell/em-unix.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/eshell/em-unix.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/eshell/em-xtra.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/eshell/em-xtra.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/eshell/esh-arg.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/eshell/esh-arg.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/eshell/esh-cmd.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/eshell/esh-cmd.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/eshell/esh-ext.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/eshell/esh-ext.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/eshell/esh-groups.el
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/eshell/esh-io.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/eshell/esh-io.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/eshell/esh-mode.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/eshell/esh-mode.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/eshell/esh-module.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/eshell/esh-module.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/eshell/esh-opt.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/eshell/esh-opt.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/eshell/esh-proc.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/eshell/esh-proc.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/eshell/esh-util.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/eshell/esh-util.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/eshell/esh-var.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/eshell/esh-var.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/eshell/eshell.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/eshell/eshell.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/expand.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/expand.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/ezimage.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/ezimage.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/face-remap.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/face-remap.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/facemenu.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/facemenu.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/faces.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/faces.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/ffap.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/ffap.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/filecache.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/filecache.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/filenotify.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/filenotify.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/files-x.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/files-x.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/files.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/files.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/filesets.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/filesets.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/find-cmd.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/find-cmd.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/find-dired.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/find-dired.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/find-file.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/find-file.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/find-lisp.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/find-lisp.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/finder-inf.el
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/finder.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/finder.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/flow-ctrl.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/flow-ctrl.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/foldout.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/foldout.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/follow.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/follow.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/font-core.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/font-core.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/font-lock.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/font-lock.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/format-spec.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/format-spec.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/format.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/format.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/forms.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/forms.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/frame.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/frame.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/frameset.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/frameset.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/fringe.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/fringe.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/generic-x.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/generic-x.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/.dir-locals.el
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/auth-source.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/auth-source.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/canlock.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/canlock.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/compface.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/compface.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/deuglify.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/deuglify.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/ecomplete.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/ecomplete.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/flow-fill.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/flow-fill.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gmm-utils.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gmm-utils.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-agent.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-agent.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-art.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-art.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-async.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-async.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-bcklg.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-bcklg.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-bookmark.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-bookmark.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-cache.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-cache.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-cite.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-cite.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-cus.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-cus.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-delay.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-delay.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-demon.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-demon.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-diary.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-diary.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-dired.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-dired.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-draft.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-draft.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-dup.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-dup.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-eform.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-eform.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-ems.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-ems.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-fun.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-fun.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-gravatar.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-gravatar.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-group.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-group.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-html.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-html.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-icalendar.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-icalendar.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-int.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-int.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-kill.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-kill.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-logic.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-logic.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-mh.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-mh.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-ml.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-ml.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-mlspl.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-mlspl.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-msg.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-msg.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-notifications.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-notifications.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-picon.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-picon.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-range.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-range.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-registry.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-registry.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-salt.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-salt.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-score.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-score.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-setup.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-setup.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-sieve.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-sieve.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-spec.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-spec.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-srvr.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-srvr.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-start.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-start.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-sum.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-sum.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-sync.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-sync.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-topic.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-topic.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-undo.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-undo.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-util.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-util.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-uu.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-uu.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-vm.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-vm.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-win.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-win.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gravatar.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gravatar.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gssapi.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gssapi.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/html2text.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/html2text.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/ietf-drums.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/ietf-drums.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/legacy-gnus-agent.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/legacy-gnus-agent.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/mail-parse.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/mail-parse.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/mail-prsvr.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/mail-prsvr.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/mail-source.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/mail-source.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/mailcap.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/mailcap.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/message.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/message.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/messcompat.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/messcompat.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/mm-archive.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/mm-archive.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/mm-bodies.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/mm-bodies.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/mm-decode.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/mm-decode.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/mm-encode.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/mm-encode.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/mm-extern.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/mm-extern.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/mm-partial.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/mm-partial.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/mm-url.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/mm-url.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/mm-util.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/mm-util.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/mm-uu.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/mm-uu.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/mm-view.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/mm-view.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/mml-sec.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/mml-sec.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/mml-smime.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/mml-smime.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/mml.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/mml.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/mml1991.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/mml1991.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/mml2015.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/mml2015.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/nnagent.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/nnagent.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/nnbabyl.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/nnbabyl.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/nndiary.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/nndiary.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/nndir.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/nndir.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/nndoc.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/nndoc.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/nndraft.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/nndraft.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/nneething.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/nneething.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/nnfolder.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/nnfolder.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/nngateway.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/nngateway.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/nnheader.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/nnheader.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/nnimap.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/nnimap.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/nnir.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/nnir.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/nnmail.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/nnmail.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/nnmaildir.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/nnmaildir.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/nnmairix.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/nnmairix.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/nnmbox.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/nnmbox.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/nnmh.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/nnmh.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/nnml.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/nnml.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/nnnil.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/nnnil.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/nnoo.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/nnoo.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/nnregistry.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/nnregistry.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/nnrss.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/nnrss.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/nnspool.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/nnspool.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/nntp.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/nntp.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/nnvirtual.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/nnvirtual.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/nnweb.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/nnweb.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/plstore.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/plstore.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/pop3.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/pop3.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/qp.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/qp.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/registry.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/registry.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/rfc1843.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/rfc1843.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/rfc2045.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/rfc2045.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/rfc2047.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/rfc2047.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/rfc2104.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/rfc2104.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/rfc2231.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/rfc2231.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/rtree.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/rtree.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/score-mode.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/score-mode.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/sieve-manage.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/sieve-manage.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/sieve-mode.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/sieve-mode.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/sieve.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/sieve.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/smiley.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/smiley.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/smime.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/smime.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/spam-report.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/spam-report.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/spam-stat.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/spam-stat.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/spam-wash.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/spam-wash.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/spam.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/spam.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/starttls.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/starttls.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/utf7.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/utf7.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/yenc.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/yenc.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gs.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gs.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/help-at-pt.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/help-at-pt.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/help-fns.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/help-fns.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/help-macro.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/help-macro.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/help-mode.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/help-mode.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/help.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/help.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/hex-util.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/hex-util.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/hexl.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/hexl.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/hfy-cmap.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/hfy-cmap.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/hi-lock.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/hi-lock.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/hilit-chg.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/hilit-chg.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/hippie-exp.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/hippie-exp.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/hl-line.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/hl-line.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/htmlfontify.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/htmlfontify.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/ibuf-ext.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/ibuf-ext.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/ibuf-macs.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/ibuf-macs.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/ibuffer.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/ibuffer.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/icomplete.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/icomplete.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/ido.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/ido.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/ielm.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/ielm.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/iimage.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/iimage.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/image-dired.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/image-dired.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/image-file.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/image-file.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/image-mode.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/image-mode.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/image.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/image.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/imenu.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/imenu.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/indent.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/indent.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/info-look.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/info-look.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/info-xref.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/info-xref.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/info.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/info.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/informat.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/informat.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/README
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/ccl.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/ccl.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/characters.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/characters.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/charprop.el
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/cp51932.el
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/eucjp-ms.el
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/fontset.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/fontset.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/isearch-x.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/isearch-x.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/iso-ascii.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/iso-ascii.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/iso-cvt.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/iso-cvt.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/iso-transl.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/iso-transl.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/ja-dic-cnv.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/ja-dic-cnv.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/ja-dic-utl.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/ja-dic-utl.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/kinsoku.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/kinsoku.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/kkc.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/kkc.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/latexenc.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/latexenc.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/latin1-disp.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/latin1-disp.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/mule-cmds.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/mule-cmds.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/mule-conf.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/mule-conf.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/mule-diag.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/mule-diag.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/mule-util.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/mule-util.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/mule.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/mule.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/ogonek.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/ogonek.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/quail.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/quail.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/robin.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/robin.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/titdic-cnv.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/titdic-cnv.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/ucs-normalize.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/ucs-normalize.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/uni-bidi.el
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/uni-brackets.el
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/uni-category.el
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/uni-combining.el
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/uni-comment.el
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/uni-decimal.el
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/uni-decomposition.el
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/uni-digit.el
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/uni-lowercase.el
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/uni-mirrored.el
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/uni-name.el
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/uni-numeric.el
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/uni-old-name.el
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/uni-titlecase.el
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/uni-uppercase.el
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/utf-7.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/utf-7.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/isearch.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/isearch.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/isearchb.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/isearchb.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/jit-lock.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/jit-lock.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/jka-cmpr-hook.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/jka-cmpr-hook.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/jka-compr.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/jka-compr.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/json.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/json.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/kermit.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/kermit.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/kmacro.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/kmacro.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/burmese.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/burmese.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/cham.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/cham.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/china-util.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/china-util.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/chinese.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/chinese.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/cyril-util.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/cyril-util.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/cyrillic.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/cyrillic.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/czech.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/czech.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/english.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/english.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/ethio-util.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/ethio-util.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/ethiopic.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/ethiopic.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/european.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/european.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/georgian.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/georgian.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/greek.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/greek.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/hanja-util.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/hanja-util.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/hebrew.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/hebrew.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/ind-util.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/ind-util.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/indian.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/indian.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/japan-util.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/japan-util.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/japanese.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/japanese.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/khmer.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/khmer.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/korea-util.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/korea-util.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/korean.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/korean.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/lao-util.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/lao-util.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/lao.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/lao.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/misc-lang.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/misc-lang.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/romanian.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/romanian.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/sinhala.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/sinhala.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/slovak.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/slovak.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/tai-viet.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/tai-viet.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/thai-util.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/thai-util.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/thai-word.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/thai-word.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/thai.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/thai.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/tibet-util.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/tibet-util.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/tibetan.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/tibetan.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/tv-util.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/tv-util.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/utf-8-lang.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/utf-8-lang.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/viet-util.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/viet-util.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/vietnamese.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/language/vietnamese.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/ldefs-boot.el
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/ja-dic/ja-dic.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/ja-dic/ja-dic.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/leim-list.el
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/4Corner.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/4Corner.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/ARRAY30.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/ARRAY30.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/CCDOSPY.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/CCDOSPY.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/CTLau-b5.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/CTLau-b5.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/CTLau.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/CTLau.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/ECDICT.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/ECDICT.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/ETZY.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/ETZY.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/PY-b5.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/PY-b5.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/PY.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/PY.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/Punct-b5.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/Punct-b5.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/Punct.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/Punct.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/QJ-b5.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/QJ-b5.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/QJ.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/QJ.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/SW.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/SW.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/TONEPY.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/TONEPY.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/ZIRANMA.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/ZIRANMA.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/ZOZY.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/ZOZY.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/arabic.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/arabic.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/croatian.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/croatian.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/cyril-jis.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/cyril-jis.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/cyrillic.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/cyrillic.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/czech.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/czech.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/ethiopic.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/ethiopic.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/georgian.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/georgian.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/greek.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/greek.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/hangul.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/hangul.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/hanja-jis.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/hanja-jis.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/hanja.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/hanja.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/hanja3.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/hanja3.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/hebrew.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/hebrew.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/indian.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/indian.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/ipa-praat.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/ipa-praat.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/ipa.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/ipa.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/japanese.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/japanese.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/lao.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/lao.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/latin-alt.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/latin-alt.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/latin-ltx.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/latin-ltx.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/latin-post.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/latin-post.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/latin-pre.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/latin-pre.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/lrt.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/lrt.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/persian.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/persian.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/py-punct.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/py-punct.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/pypunct-b5.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/pypunct-b5.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/quick-b5.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/quick-b5.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/quick-cns.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/quick-cns.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/rfc1345.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/rfc1345.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/sgml-input.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/sgml-input.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/sisheng.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/sisheng.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/slovak.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/slovak.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/symbol-ksc.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/symbol-ksc.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/thai.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/thai.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/tibetan.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/tibetan.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/tsang-b5.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/tsang-b5.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/tsang-cns.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/tsang-cns.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/uni-input.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/uni-input.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/viqr.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/viqr.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/vntelex.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/vntelex.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/vnvni.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/vnvni.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/welsh.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/welsh.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/linum.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/linum.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/loaddefs.el
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/loadhist.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/loadhist.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/loadup.el
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/locate.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/locate.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/lpr.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/lpr.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/ls-lisp.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/ls-lisp.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/macros.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/macros.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/binhex.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/binhex.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/blessmail.el
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/emacsbug.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/emacsbug.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/feedmail.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/feedmail.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/footnote.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/footnote.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/hashcash.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/hashcash.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/mail-extr.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/mail-extr.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/mail-hist.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/mail-hist.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/mail-utils.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/mail-utils.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/mailabbrev.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/mailabbrev.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/mailalias.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/mailalias.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/mailclient.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/mailclient.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/mailheader.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/mailheader.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/metamail.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/metamail.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/mspools.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/mspools.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/reporter.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/reporter.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/rfc2368.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/rfc2368.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/rfc822.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/rfc822.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/rmail-spam-filter.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/rmail-spam-filter.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/rmail.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/rmail.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/rmailedit.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/rmailedit.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/rmailkwd.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/rmailkwd.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/rmailmm.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/rmailmm.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/rmailmsc.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/rmailmsc.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/rmailout.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/rmailout.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/rmailsort.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/rmailsort.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/rmailsum.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/rmailsum.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/sendmail.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/sendmail.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/smtpmail.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/smtpmail.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/supercite.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/supercite.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/uce.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/uce.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/undigest.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/undigest.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/unrmail.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/unrmail.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/uudecode.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/uudecode.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/makesum.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/makesum.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/man.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/man.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/master.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/master.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mb-depth.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mb-depth.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/md4.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/md4.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/menu-bar.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/menu-bar.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mh-e/mh-acros.el
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mh-e/mh-alias.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mh-e/mh-alias.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mh-e/mh-buffers.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mh-e/mh-buffers.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mh-e/mh-comp.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mh-e/mh-comp.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mh-e/mh-compat.el
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mh-e/mh-e.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mh-e/mh-e.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mh-e/mh-folder.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mh-e/mh-folder.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mh-e/mh-funcs.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mh-e/mh-funcs.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mh-e/mh-gnus.el
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mh-e/mh-identity.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mh-e/mh-identity.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mh-e/mh-inc.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mh-e/mh-inc.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mh-e/mh-junk.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mh-e/mh-junk.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mh-e/mh-letter.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mh-e/mh-letter.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mh-e/mh-limit.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mh-e/mh-limit.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mh-e/mh-loaddefs.el
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mh-e/mh-mime.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mh-e/mh-mime.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mh-e/mh-print.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mh-e/mh-print.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mh-e/mh-scan.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mh-e/mh-scan.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mh-e/mh-search.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mh-e/mh-search.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mh-e/mh-seq.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mh-e/mh-seq.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mh-e/mh-show.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mh-e/mh-show.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mh-e/mh-speed.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mh-e/mh-speed.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mh-e/mh-thread.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mh-e/mh-thread.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mh-e/mh-tool-bar.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mh-e/mh-tool-bar.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mh-e/mh-utils.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mh-e/mh-utils.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mh-e/mh-xface.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mh-e/mh-xface.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/midnight.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/midnight.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/minibuf-eldef.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/minibuf-eldef.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/minibuffer.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/minibuffer.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/misc.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/misc.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/misearch.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/misearch.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mouse-copy.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mouse-copy.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mouse-drag.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mouse-drag.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mouse.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mouse.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mpc.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mpc.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/msb.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/msb.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mwheel.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mwheel.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/ange-ftp.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/ange-ftp.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/browse-url.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/browse-url.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/dbus.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/dbus.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/dig.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/dig.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/dns.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/dns.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/eudc-bob.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/eudc-bob.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/eudc-export.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/eudc-export.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/eudc-hotlist.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/eudc-hotlist.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/eudc-vars.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/eudc-vars.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/eudc.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/eudc.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/eudcb-bbdb.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/eudcb-bbdb.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/eudcb-ldap.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/eudcb-ldap.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/eudcb-mab.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/eudcb-mab.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/eudcb-ph.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/eudcb-ph.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/eww.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/eww.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/gnutls.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/gnutls.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/goto-addr.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/goto-addr.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/hmac-def.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/hmac-def.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/hmac-md5.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/hmac-md5.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/imap.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/imap.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/ldap.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/ldap.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/mairix.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/mairix.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/net-utils.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/net-utils.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/netrc.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/netrc.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/network-stream.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/network-stream.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/newst-backend.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/newst-backend.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/newst-plainview.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/newst-plainview.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/newst-reader.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/newst-reader.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/newst-ticker.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/newst-ticker.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/newst-treeview.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/newst-treeview.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/newsticker.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/newsticker.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/ntlm.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/ntlm.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/quickurl.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/quickurl.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/rcirc.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/rcirc.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/rlogin.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/rlogin.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/sasl-cram.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/sasl-cram.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/sasl-digest.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/sasl-digest.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/sasl-ntlm.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/sasl-ntlm.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/sasl.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/sasl.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/secrets.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/secrets.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/shr-color.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/shr-color.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/shr.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/shr.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/snmp-mode.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/snmp-mode.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/soap-client.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/soap-client.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/soap-inspect.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/soap-inspect.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/socks.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/socks.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/telnet.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/telnet.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/tls.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/tls.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/tramp-adb.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/tramp-adb.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/tramp-cache.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/tramp-cache.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/tramp-cmds.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/tramp-cmds.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/tramp-compat.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/tramp-compat.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/tramp-ftp.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/tramp-ftp.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/tramp-gvfs.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/tramp-gvfs.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/tramp-gw.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/tramp-gw.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/tramp-loaddefs.el
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/tramp-sh.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/tramp-sh.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/tramp-smb.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/tramp-smb.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/tramp-uu.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/tramp-uu.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/tramp.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/tramp.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/trampver.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/trampver.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/webjump.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/webjump.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/zeroconf.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/zeroconf.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/newcomment.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/newcomment.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/notifications.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/notifications.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/novice.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/novice.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/nxml/nxml-enc.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/nxml/nxml-enc.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/nxml/nxml-glyph.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/nxml/nxml-glyph.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/nxml/nxml-maint.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/nxml/nxml-maint.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/nxml/nxml-mode.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/nxml/nxml-mode.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/nxml/nxml-ns.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/nxml/nxml-ns.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/nxml/nxml-outln.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/nxml/nxml-outln.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/nxml/nxml-parse.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/nxml/nxml-parse.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/nxml/nxml-rap.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/nxml/nxml-rap.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/nxml/nxml-uchnm.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/nxml/nxml-uchnm.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/nxml/nxml-util.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/nxml/nxml-util.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/nxml/rng-cmpct.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/nxml/rng-cmpct.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/nxml/rng-dt.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/nxml/rng-dt.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/nxml/rng-loc.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/nxml/rng-loc.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/nxml/rng-maint.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/nxml/rng-maint.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/nxml/rng-match.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/nxml/rng-match.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/nxml/rng-nxml.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/nxml/rng-nxml.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/nxml/rng-parse.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/nxml/rng-parse.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/nxml/rng-pttrn.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/nxml/rng-pttrn.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/nxml/rng-uri.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/nxml/rng-uri.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/nxml/rng-util.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/nxml/rng-util.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/nxml/rng-valid.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/nxml/rng-valid.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/nxml/rng-xsd.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/nxml/rng-xsd.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/nxml/xmltok.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/nxml/xmltok.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/nxml/xsd-regexp.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/nxml/xsd-regexp.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/abbrevlist.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/abbrevlist.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/assoc.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/assoc.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/awk-mode.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/awk-mode.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/bruce.el
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/cc-compat.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/cc-compat.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/cl-compat.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/cl-compat.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/complete.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/complete.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/crisp.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/crisp.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/cust-print.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/cust-print.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/erc-hecomplete.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/erc-hecomplete.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/fast-lock.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/fast-lock.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/iso-acc.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/iso-acc.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/iso-insert.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/iso-insert.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/iso-swed.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/iso-swed.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/iswitchb.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/iswitchb.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/keyswap.el
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/lazy-lock.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/lazy-lock.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/ledit.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/ledit.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/levents.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/levents.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/lmenu.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/lmenu.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/longlines.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/longlines.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/lucid.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/lucid.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/mailpost.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/mailpost.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/meese.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/meese.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/mouse-sel.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/mouse-sel.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/old-emacs-lock.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/old-emacs-lock.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/old-whitespace.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/old-whitespace.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/options.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/options.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/otodo-mode.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/otodo-mode.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/patcomp.el
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/pc-mode.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/pc-mode.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/pc-select.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/pc-select.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/pgg-def.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/pgg-def.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/pgg-gpg.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/pgg-gpg.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/pgg-parse.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/pgg-parse.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/pgg-pgp.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/pgg-pgp.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/pgg-pgp5.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/pgg-pgp5.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/pgg.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/pgg.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/rcompile.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/rcompile.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/resume.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/resume.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/s-region.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/s-region.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/scribe.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/scribe.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/spell.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/spell.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/sregex.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/sregex.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/sup-mouse.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/sup-mouse.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/swedish.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/swedish.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/sym-comp.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/sym-comp.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/terminal.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/terminal.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/tpu-edt.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/tpu-edt.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/tpu-extras.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/tpu-extras.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/tpu-mapper.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/tpu-mapper.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/vc-mcvs.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/vc-mcvs.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/vi.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/vi.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/vip.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/vip.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/ws-mode.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/ws-mode.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/xesam.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/xesam.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/yow.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/yow.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-C.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-C.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-R.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-R.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-asymptote.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-asymptote.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-awk.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-awk.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-calc.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-calc.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-clojure.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-clojure.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-comint.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-comint.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-core.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-core.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-css.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-css.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-ditaa.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-ditaa.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-dot.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-dot.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-emacs-lisp.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-emacs-lisp.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-eval.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-eval.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-exp.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-exp.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-fortran.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-fortran.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-gnuplot.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-gnuplot.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-haskell.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-haskell.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-io.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-io.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-java.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-java.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-js.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-js.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-keys.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-keys.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-latex.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-latex.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-ledger.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-ledger.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-lilypond.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-lilypond.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-lisp.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-lisp.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-lob.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-lob.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-makefile.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-makefile.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-matlab.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-matlab.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-maxima.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-maxima.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-mscgen.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-mscgen.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-ocaml.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-ocaml.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-octave.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-octave.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-org.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-org.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-perl.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-perl.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-picolisp.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-picolisp.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-plantuml.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-plantuml.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-python.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-python.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-ref.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-ref.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-ruby.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-ruby.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-sass.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-sass.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-scala.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-scala.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-scheme.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-scheme.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-screen.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-screen.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-sh.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-sh.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-shen.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-shen.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-sql.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-sql.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-sqlite.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-sqlite.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-table.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-table.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-tangle.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-tangle.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-agenda.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-agenda.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-archive.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-archive.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-attach.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-attach.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-bbdb.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-bbdb.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-bibtex.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-bibtex.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-capture.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-capture.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-clock.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-clock.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-colview.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-colview.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-compat.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-compat.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-crypt.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-crypt.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-ctags.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-ctags.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-datetree.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-datetree.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-docview.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-docview.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-element.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-element.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-entities.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-entities.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-eshell.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-eshell.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-faces.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-faces.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-feed.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-feed.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-footnote.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-footnote.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-gnus.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-gnus.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-habit.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-habit.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-id.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-id.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-indent.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-indent.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-info.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-info.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-inlinetask.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-inlinetask.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-install.el
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-irc.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-irc.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-list.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-list.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-loaddefs.el
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-macro.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-macro.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-macs.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-macs.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-mhe.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-mhe.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-mobile.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-mobile.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-mouse.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-mouse.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-pcomplete.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-pcomplete.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-plot.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-plot.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-protocol.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-protocol.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-rmail.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-rmail.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-src.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-src.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-table.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-table.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-timer.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-timer.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-version.el
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-w3m.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-w3m.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ox-ascii.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ox-ascii.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ox-beamer.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ox-beamer.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ox-html.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ox-html.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ox-icalendar.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ox-icalendar.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ox-latex.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ox-latex.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ox-man.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ox-man.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ox-md.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ox-md.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ox-odt.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ox-odt.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ox-org.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ox-org.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ox-publish.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ox-publish.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ox-texinfo.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ox-texinfo.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ox.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ox.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/outline.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/outline.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/paren.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/paren.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/password-cache.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/password-cache.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/pcmpl-cvs.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/pcmpl-cvs.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/pcmpl-gnu.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/pcmpl-gnu.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/pcmpl-linux.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/pcmpl-linux.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/pcmpl-rpm.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/pcmpl-rpm.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/pcmpl-unix.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/pcmpl-unix.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/pcmpl-x.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/pcmpl-x.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/pcomplete.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/pcomplete.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/play/5x5.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/play/5x5.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/play/animate.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/play/animate.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/play/blackbox.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/play/blackbox.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/play/bubbles.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/play/bubbles.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/play/cookie1.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/play/cookie1.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/play/decipher.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/play/decipher.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/play/dissociate.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/play/dissociate.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/play/doctor.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/play/doctor.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/play/dunnet.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/play/dunnet.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/play/fortune.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/play/fortune.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/play/gamegrid.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/play/gamegrid.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/play/gametree.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/play/gametree.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/play/gomoku.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/play/gomoku.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/play/handwrite.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/play/handwrite.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/play/hanoi.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/play/hanoi.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/play/landmark.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/play/landmark.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/play/life.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/play/life.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/play/morse.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/play/morse.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/play/mpuz.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/play/mpuz.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/play/pong.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/play/pong.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/play/snake.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/play/snake.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/play/solitaire.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/play/solitaire.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/play/spook.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/play/spook.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/play/studly.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/play/studly.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/play/tetris.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/play/tetris.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/play/zone.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/play/zone.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/printing.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/printing.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/proced.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/proced.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/profiler.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/profiler.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/ada-mode.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/ada-mode.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/ada-prj.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/ada-prj.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/ada-stmt.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/ada-stmt.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/ada-xref.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/ada-xref.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/antlr-mode.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/antlr-mode.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/asm-mode.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/asm-mode.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/autoconf.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/autoconf.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/bat-mode.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/bat-mode.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/bug-reference.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/bug-reference.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/cap-words.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/cap-words.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/cc-align.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/cc-align.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/cc-awk.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/cc-awk.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/cc-bytecomp.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/cc-bytecomp.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/cc-cmds.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/cc-cmds.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/cc-defs.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/cc-defs.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/cc-engine.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/cc-engine.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/cc-fonts.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/cc-fonts.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/cc-guess.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/cc-guess.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/cc-langs.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/cc-langs.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/cc-menus.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/cc-menus.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/cc-mode.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/cc-mode.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/cc-styles.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/cc-styles.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/cc-vars.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/cc-vars.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/cfengine.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/cfengine.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/cmacexp.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/cmacexp.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/compile.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/compile.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/cperl-mode.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/cperl-mode.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/cpp.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/cpp.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/cwarn.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/cwarn.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/dcl-mode.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/dcl-mode.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/ebnf-abn.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/ebnf-abn.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/ebnf-bnf.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/ebnf-bnf.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/ebnf-dtd.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/ebnf-dtd.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/ebnf-ebx.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/ebnf-ebx.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/ebnf-iso.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/ebnf-iso.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/ebnf-otz.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/ebnf-otz.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/ebnf-yac.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/ebnf-yac.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/ebnf2ps.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/ebnf2ps.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/ebrowse.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/ebrowse.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/etags.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/etags.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/executable.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/executable.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/f90.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/f90.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/flymake.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/flymake.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/fortran.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/fortran.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/gdb-mi.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/gdb-mi.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/glasses.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/glasses.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/grep.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/grep.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/gud.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/gud.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/hideif.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/hideif.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/hideshow.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/hideshow.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/icon.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/icon.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/idlw-complete-structtag.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/idlw-complete-structtag.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/idlw-help.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/idlw-help.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/idlw-shell.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/idlw-shell.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/idlw-toolbar.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/idlw-toolbar.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/idlwave.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/idlwave.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/inf-lisp.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/inf-lisp.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/js.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/js.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/ld-script.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/ld-script.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/m4-mode.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/m4-mode.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/make-mode.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/make-mode.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/mantemp.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/mantemp.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/meta-mode.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/meta-mode.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/mixal-mode.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/mixal-mode.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/modula2.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/modula2.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/octave.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/octave.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/opascal.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/opascal.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/pascal.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/pascal.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/perl-mode.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/perl-mode.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/prog-mode.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/prog-mode.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/prolog.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/prolog.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/ps-mode.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/ps-mode.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/python.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/python.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/ruby-mode.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/ruby-mode.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/scheme.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/scheme.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/sh-script.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/sh-script.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/simula.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/simula.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/sql.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/sql.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/subword.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/subword.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/tcl.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/tcl.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/vera-mode.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/vera-mode.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/verilog-mode.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/verilog-mode.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/vhdl-mode.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/vhdl-mode.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/which-func.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/which-func.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/xscheme.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/xscheme.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/ps-bdf.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/ps-bdf.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/ps-def.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/ps-def.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/ps-mule.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/ps-mule.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/ps-print.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/ps-print.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/ps-samp.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/ps-samp.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/recentf.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/recentf.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/rect.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/rect.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/register.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/register.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/repeat.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/repeat.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/replace.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/replace.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/reposition.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/reposition.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/reveal.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/reveal.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/rfn-eshadow.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/rfn-eshadow.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/rot13.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/rot13.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/ruler-mode.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/ruler-mode.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/savehist.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/savehist.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/saveplace.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/saveplace.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/sb-image.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/sb-image.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/scroll-all.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/scroll-all.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/scroll-bar.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/scroll-bar.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/scroll-lock.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/scroll-lock.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/select.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/select.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/server.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/server.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/ses.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/ses.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/shadowfile.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/shadowfile.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/shell.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/shell.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/simple.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/simple.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/skeleton.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/skeleton.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/sort.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/sort.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/soundex.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/soundex.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/speedbar.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/speedbar.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/startup.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/startup.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/strokes.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/strokes.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/subdirs.el
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/subr.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/subr.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/t-mouse.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/t-mouse.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/tabify.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/tabify.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/talk.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/talk.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/tar-mode.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/tar-mode.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/tempo.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/tempo.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term/AT386.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term/AT386.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term/README
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term/apollo.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term/apollo.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term/bobcat.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term/bobcat.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term/common-win.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term/common-win.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term/cygwin.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term/cygwin.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term/internal.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term/internal.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term/iris-ansi.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term/iris-ansi.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term/linux.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term/linux.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term/lk201.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term/lk201.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term/news.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term/news.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term/ns-win.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term/ns-win.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term/pc-win.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term/pc-win.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term/rxvt.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term/rxvt.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term/screen.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term/screen.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term/sun.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term/sun.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term/tty-colors.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term/tty-colors.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term/tvi970.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term/tvi970.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term/vt100.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term/vt100.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term/vt102.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term/vt102.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term/vt125.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term/vt125.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term/vt200.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term/vt200.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term/vt201.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term/vt201.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term/vt220.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term/vt220.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term/vt240.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term/vt240.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term/vt300.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term/vt300.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term/vt320.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term/vt320.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term/vt400.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term/vt400.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term/vt420.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term/vt420.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term/w32-win.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term/w32-win.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term/w32console.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term/w32console.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term/wyse50.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term/wyse50.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term/x-win.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term/x-win.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term/xterm.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term/xterm.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/artist.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/artist.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/bib-mode.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/bib-mode.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/bibtex-style.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/bibtex-style.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/bibtex.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/bibtex.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/conf-mode.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/conf-mode.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/css-mode.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/css-mode.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/dns-mode.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/dns-mode.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/enriched.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/enriched.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/fill.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/fill.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/flyspell.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/flyspell.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/ispell.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/ispell.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/makeinfo.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/makeinfo.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/nroff-mode.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/nroff-mode.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/page-ext.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/page-ext.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/page.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/page.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/paragraphs.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/paragraphs.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/picture.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/picture.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/po.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/po.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/refbib.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/refbib.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/refer.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/refer.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/refill.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/refill.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/reftex-auc.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/reftex-auc.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/reftex-cite.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/reftex-cite.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/reftex-dcr.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/reftex-dcr.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/reftex-global.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/reftex-global.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/reftex-index.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/reftex-index.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/reftex-parse.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/reftex-parse.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/reftex-ref.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/reftex-ref.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/reftex-sel.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/reftex-sel.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/reftex-toc.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/reftex-toc.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/reftex-vars.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/reftex-vars.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/reftex.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/reftex.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/remember.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/remember.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/rst.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/rst.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/sgml-mode.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/sgml-mode.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/table.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/table.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/tex-mode.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/tex-mode.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/texinfmt.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/texinfmt.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/texinfo.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/texinfo.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/texnfo-upd.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/texnfo-upd.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/text-mode.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/text-mode.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/tildify.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/tildify.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/two-column.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/two-column.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/underline.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/underline.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/thingatpt.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/thingatpt.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/thumbs.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/thumbs.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/time-stamp.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/time-stamp.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/time.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/time.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/timezone.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/timezone.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/tmm.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/tmm.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/tool-bar.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/tool-bar.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/tooltip.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/tooltip.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/tree-widget.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/tree-widget.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/tutorial.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/tutorial.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/type-break.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/type-break.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/uniquify.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/uniquify.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/url/url-about.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/url/url-about.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/url/url-auth.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/url/url-auth.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/url/url-cache.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/url/url-cache.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/url/url-cid.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/url/url-cid.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/url/url-cookie.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/url/url-cookie.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/url/url-dav.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/url/url-dav.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/url/url-dired.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/url/url-dired.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/url/url-domsuf.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/url/url-domsuf.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/url/url-expand.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/url/url-expand.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/url/url-file.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/url/url-file.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/url/url-ftp.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/url/url-ftp.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/url/url-future.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/url/url-future.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/url/url-gw.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/url/url-gw.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/url/url-handlers.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/url/url-handlers.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/url/url-history.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/url/url-history.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/url/url-http.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/url/url-http.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/url/url-imap.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/url/url-imap.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/url/url-irc.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/url/url-irc.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/url/url-ldap.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/url/url-ldap.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/url/url-mailto.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/url/url-mailto.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/url/url-methods.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/url/url-methods.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/url/url-misc.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/url/url-misc.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/url/url-news.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/url/url-news.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/url/url-nfs.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/url/url-nfs.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/url/url-ns.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/url/url-ns.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/url/url-parse.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/url/url-parse.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/url/url-privacy.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/url/url-privacy.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/url/url-proxy.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/url/url-proxy.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/url/url-queue.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/url/url-queue.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/url/url-util.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/url/url-util.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/url/url-vars.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/url/url-vars.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/url/url.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/url/url.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/userlock.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/userlock.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/add-log.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/add-log.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/compare-w.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/compare-w.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/cvs-status.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/cvs-status.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/diff-mode.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/diff-mode.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/diff.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/diff.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/ediff-diff.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/ediff-diff.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/ediff-help.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/ediff-help.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/ediff-hook.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/ediff-hook.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/ediff-init.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/ediff-init.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/ediff-merg.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/ediff-merg.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/ediff-mult.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/ediff-mult.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/ediff-ptch.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/ediff-ptch.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/ediff-util.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/ediff-util.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/ediff-vers.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/ediff-vers.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/ediff-wind.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/ediff-wind.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/ediff.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/ediff.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/emerge.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/emerge.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/log-edit.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/log-edit.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/log-view.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/log-view.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/pcvs-defs.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/pcvs-defs.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/pcvs-info.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/pcvs-info.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/pcvs-parse.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/pcvs-parse.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/pcvs-util.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/pcvs-util.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/pcvs.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/pcvs.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/smerge-mode.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/smerge-mode.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/vc-annotate.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/vc-annotate.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/vc-arch.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/vc-arch.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/vc-bzr.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/vc-bzr.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/vc-cvs.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/vc-cvs.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/vc-dav.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/vc-dav.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/vc-dir.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/vc-dir.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/vc-dispatcher.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/vc-dispatcher.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/vc-git.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/vc-git.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/vc-hg.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/vc-hg.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/vc-hooks.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/vc-hooks.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/vc-mtn.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/vc-mtn.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/vc-rcs.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/vc-rcs.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/vc-sccs.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/vc-sccs.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/vc-svn.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/vc-svn.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/vc.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/vc.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vcursor.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vcursor.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/version.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/version.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/view.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/view.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vt-control.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vt-control.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vt100-led.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vt100-led.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/w32-common-fns.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/w32-common-fns.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/w32-fns.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/w32-fns.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/w32-vars.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/w32-vars.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/wdired.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/wdired.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/whitespace.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/whitespace.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/wid-browse.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/wid-browse.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/wid-edit.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/wid-edit.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/widget.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/widget.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/windmove.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/windmove.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/window.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/window.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/winner.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/winner.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/woman.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/woman.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/x-dnd.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/x-dnd.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/xml.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/xml.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/xt-mouse.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/xt-mouse.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/site-lisp/subdirs.el
+rm -f %{buildroot}/usr/share/emacs/site-lisp/subdirs.el
+rm -f %{buildroot}/usr/share/icons/hicolor/128x128/apps/emacs.png
+rm -f %{buildroot}/usr/share/icons/hicolor/16x16/apps/emacs.png
+rm -f %{buildroot}/usr/share/icons/hicolor/24x24/apps/emacs.png
+rm -f %{buildroot}/usr/share/icons/hicolor/32x32/apps/emacs.png
+rm -f %{buildroot}/usr/share/icons/hicolor/48x48/apps/emacs.png
+rm -f %{buildroot}/usr/share/icons/hicolor/scalable/apps/emacs.svg
+rm -f %{buildroot}/usr/share/icons/hicolor/scalable/mimetypes/emacs-document.svg
+rm -f %{buildroot}/usr/bin/ctags
+rm -f %{buildroot}/usr/bin/ebrowse
+rm -f %{buildroot}/usr/bin/emacs-26.2
+rm -f %{buildroot}/usr/bin/emacsclient
+rm -f %{buildroot}/usr/bin/etags
+rm -f %{buildroot}/usr/bin/grep-changelog
+rm -f %{buildroot}/usr/libexec/emacs/26.2/x86_64-generic-linux-gnu/hexl
+rm -f %{buildroot}/usr/libexec/emacs/26.2/x86_64-generic-linux-gnu/movemail
+rm -f %{buildroot}/usr/libexec/emacs/26.2/x86_64-generic-linux-gnu/profile
+rm -f %{buildroot}/usr/libexec/emacs/26.2/x86_64-generic-linux-gnu/rcs2log
+rm -f %{buildroot}/usr/libexec/emacs/26.2/x86_64-generic-linux-gnu/update-game-score
+rm -f %{buildroot}/var/games/emacs/snake-scores
+rm -f %{buildroot}/var/games/emacs/tetris-scores
+rm -f %{buildroot}/usr/share/info/ada-mode.info.gz
+rm -f %{buildroot}/usr/share/info/auth.info.gz
+rm -f %{buildroot}/usr/share/info/autotype.info.gz
+rm -f %{buildroot}/usr/share/info/bovine.info.gz
+rm -f %{buildroot}/usr/share/info/calc.info.gz
+rm -f %{buildroot}/usr/share/info/ccmode.info.gz
+rm -f %{buildroot}/usr/share/info/cl.info.gz
+rm -f %{buildroot}/usr/share/info/dbus.info.gz
+rm -f %{buildroot}/usr/share/info/dired-x.info.gz
+rm -f %{buildroot}/usr/share/info/ebrowse.info.gz
+rm -f %{buildroot}/usr/share/info/ede.info.gz
+rm -f %{buildroot}/usr/share/info/ediff.info.gz
+rm -f %{buildroot}/usr/share/info/edt.info.gz
+rm -f %{buildroot}/usr/share/info/efaq.info.gz
+rm -f %{buildroot}/usr/share/info/eieio.info.gz
+rm -f %{buildroot}/usr/share/info/eintr.info.gz
+rm -f %{buildroot}/usr/share/info/elisp.info.gz
+rm -f %{buildroot}/usr/share/info/emacs-gnutls.info.gz
+rm -f %{buildroot}/usr/share/info/emacs-mime.info.gz
+rm -f %{buildroot}/usr/share/info/emacs.info.gz
+rm -f %{buildroot}/usr/share/info/epa.info.gz
+rm -f %{buildroot}/usr/share/info/erc.info.gz
+rm -f %{buildroot}/usr/share/info/ert.info.gz
+rm -f %{buildroot}/usr/share/info/eshell.info.gz
+rm -f %{buildroot}/usr/share/info/eudc.info.gz
+rm -f %{buildroot}/usr/share/info/eww.info.gz
+rm -f %{buildroot}/usr/share/info/flymake.info.gz
+rm -f %{buildroot}/usr/share/info/forms.info.gz
+rm -f %{buildroot}/usr/share/info/gnus.info.gz
+rm -f %{buildroot}/usr/share/info/htmlfontify.info.gz
+rm -f %{buildroot}/usr/share/info/idlwave.info.gz
+rm -f %{buildroot}/usr/share/info/ido.info.gz
+rm -f %{buildroot}/usr/share/info/info.info.gz
+rm -f %{buildroot}/usr/share/info/mairix-el.info.gz
+rm -f %{buildroot}/usr/share/info/message.info.gz
+rm -f %{buildroot}/usr/share/info/mh-e.info.gz
+rm -f %{buildroot}/usr/share/info/newsticker.info.gz
+rm -f %{buildroot}/usr/share/info/nxml-mode.info.gz
+rm -f %{buildroot}/usr/share/info/octave-mode.info.gz
+rm -f %{buildroot}/usr/share/info/org.info.gz
+rm -f %{buildroot}/usr/share/info/pcl-cvs.info.gz
+rm -f %{buildroot}/usr/share/info/pgg.info.gz
+rm -f %{buildroot}/usr/share/info/rcirc.info.gz
+rm -f %{buildroot}/usr/share/info/reftex.info.gz
+rm -f %{buildroot}/usr/share/info/remember.info.gz
+rm -f %{buildroot}/usr/share/info/sasl.info.gz
+rm -f %{buildroot}/usr/share/info/sc.info.gz
+rm -f %{buildroot}/usr/share/info/semantic.info.gz
+rm -f %{buildroot}/usr/share/info/ses.info.gz
+rm -f %{buildroot}/usr/share/info/sieve.info.gz
+rm -f %{buildroot}/usr/share/info/smtpmail.info.gz
+rm -f %{buildroot}/usr/share/info/speedbar.info.gz
+rm -f %{buildroot}/usr/share/info/srecode.info.gz
+rm -f %{buildroot}/usr/share/info/todo-mode.info.gz
+rm -f %{buildroot}/usr/share/info/tramp.info.gz
+rm -f %{buildroot}/usr/share/info/url.info.gz
+rm -f %{buildroot}/usr/share/info/vip.info.gz
+rm -f %{buildroot}/usr/share/info/viper.info.gz
+rm -f %{buildroot}/usr/share/info/widget.info.gz
+rm -f %{buildroot}/usr/share/info/wisent.info.gz
+rm -f %{buildroot}/usr/share/info/woman.info.gz
+rm -f %{buildroot}/usr/share/man/man1/ctags.1.gz
+rm -f %{buildroot}/usr/share/man/man1/ebrowse.1.gz
+rm -f %{buildroot}/usr/share/man/man1/emacs.1.gz
+rm -f %{buildroot}/usr/share/man/man1/emacsclient.1.gz
+rm -f %{buildroot}/usr/share/man/man1/etags.1.gz
+rm -f %{buildroot}/usr/share/man/man1/grep-changelog.1.gz
+rm -f %{buildroot}/usr/share/appdata/emacs.appdata.xml
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/HISTORY
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/NEWS.24
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/connect.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/custom/down-pushed.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/custom/down.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/custom/right-pushed.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/custom/right.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/describe.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/disconnect.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/ezimage/bits.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/ezimage/bitsbang.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/ezimage/box-minus.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/ezimage/box-plus.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/ezimage/box.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/ezimage/checkmark.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/ezimage/dir-minus.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/ezimage/dir-plus.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/ezimage/dir.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/ezimage/doc-minus.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/ezimage/doc-plus.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/ezimage/doc.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/ezimage/info.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/ezimage/key.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/ezimage/label.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/ezimage/lock.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/ezimage/mail.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/ezimage/page-minus.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/ezimage/page-plus.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/ezimage/page.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/ezimage/tag-gt.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/ezimage/tag-minus.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/ezimage/tag-plus.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/ezimage/tag-type.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/ezimage/tag-v.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/ezimage/tag.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/ezimage/unlock.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gnus/important.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gnus/mail-send.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gnus/receipt.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gnus/toggle-subscription.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gnus/unimportant.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gud/all.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gud/rcont.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gud/recstart.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gud/recstop.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gud/rfinish.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gud/rnext.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gud/rnexti.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gud/rstep.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gud/rstepi.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/gud/thread.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/icons/hicolor/128x128/apps/emacs23.png
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/icons/hicolor/16x16/apps/emacs23.png
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/icons/hicolor/24x24/apps/emacs23.png
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/icons/hicolor/32x32/apps/emacs23.png
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/icons/hicolor/48x48/apps/emacs23.png
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/icons/hicolor/scalable/apps/emacs23.svg
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/icons/hicolor/scalable/mimetypes/emacs-document23.svg
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/lock-broken.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/lock-ok.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/lock.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/mail/copy.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/mail/forward.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/mail/not-spam.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/mail/outbox.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/mail/preview.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/mail/save-draft.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/mh-logo.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/mpc/add.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/mpc/ffwd.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/mpc/next.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/mpc/pause.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/mpc/play.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/mpc/prev.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/mpc/rewind.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/mpc/stop.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/newsticker/rss-feed.png
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/newsticker/rss-feed.svg
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/redo.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/separator.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/smilies/braindamaged.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/smilies/cry.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/smilies/dead.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/smilies/evil.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/smilies/forced.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/smilies/grin.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/smilies/indifferent.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/sort-ascending.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/sort-column-ascending.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/sort-criteria.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/sort-descending.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/sort-row-ascending.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/unchecked.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/images/zoom-in.pbm
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/publicsuffix.txt.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/refcards/emacsver.tex.in
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/config.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/config.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/detect.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/cedet/ede/detect.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/char-fold.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/char-fold.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/dom.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/dom.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/cl-generic.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/cl-generic.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/cl-preloaded.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/cl-preloaded.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/cursor-sensor.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/cursor-sensor.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/eieio-compat.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/eieio-compat.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/generator.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/generator.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/inline.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/inline.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/let-alist.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/let-alist.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/map.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/map.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/seq.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/seq.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/thunk.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/thunk.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-cloud.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-cloud.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/charscript.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/charscript.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/cp51932.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/cp51932.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/eucjp-ms.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/eucjp-ms.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/programmer-dvorak.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/programmer-dvorak.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/tamil-dvorak.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/leim/quail/tamil-dvorak.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/nsm.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/nsm.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/pinentry.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/pinentry.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/rfc2104.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/rfc2104.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/sasl-scram-rfc.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/sasl-scram-rfc.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obarray.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obarray.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/bruce.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/bruce.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/eudcb-ph.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/eudcb-ph.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/gulp.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/gulp.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/keyswap.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/keyswap.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/landmark.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/landmark.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/patcomp.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/patcomp.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/vc-arch.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/vc-arch.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/elisp-mode.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/elisp-mode.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/project.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/project.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/xref.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/xref.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/url/url-tramp.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/url/url-tramp.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/vc-filewise.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/vc-filewise.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/vc-src.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/vc/vc-src.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/xwidget.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/xwidget.elc
+rm -f %{buildroot}/usr/share/icons/hicolor/scalable/mimetypes/emacs-document23.svg
+rm -f %{buildroot}/usr/share/info/vhdl-mode.info.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/NEWS.25
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/emacs.service
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/schema/od-manifest-schema-v1.2-os.rnc
+rm -f %{buildroot}/usr/share/emacs/26.2/etc/schema/od-schema-v1.2-os.rnc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/auth-source-pass.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/auth-source-pass.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/auth-source.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/auth-source.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/dired-loaddefs.el
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/display-line-numbers.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/display-line-numbers.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/ecomplete.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/ecomplete.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/cl-print.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/cl-print.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/eieio-loaddefs.el
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/radix-tree.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/radix-tree.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/rmc.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/rmc.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/timer-list.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/emacs-lisp/timer-list.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-rfc1843.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/gnus/gnus-rfc1843.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/htmlfontify-loaddefs.el
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/ibuffer-loaddefs.el
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/image/compface.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/image/compface.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/image/gravatar.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/image/gravatar.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/rfc1843.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/rfc1843.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/uni-special-lowercase.el
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/uni-special-titlecase.el
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/uni-special-uppercase.el
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/utf7.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/international/utf7.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/flow-fill.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/flow-fill.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/ietf-drums.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/ietf-drums.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/mail-parse.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/mail-parse.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/mail-prsvr.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/mail-prsvr.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/qp.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/qp.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/rfc2045.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/rfc2045.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/rfc2047.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/rfc2047.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/rfc2231.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/rfc2231.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/rmail-loaddefs.el
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/yenc.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mail/yenc.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mh-e/mh-compat.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mh-e/mh-compat.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mh-e/mh-gnus.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/mh-e/mh-gnus.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/mailcap.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/mailcap.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/pop3.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/pop3.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/puny.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/puny.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/sieve-manage.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/sieve-manage.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/sieve-mode.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/sieve-mode.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/sieve.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/sieve.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/starttls.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/net/starttls.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/gs.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/gs.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/html2text.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/html2text.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/obsolete/messcompat.el
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-J.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-J.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-abc.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-abc.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-coq.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-coq.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-ebnf.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-ebnf.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-forth.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-forth.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-groovy.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-groovy.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-hledger.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-hledger.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-lua.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-lua.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-processing.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-processing.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-sed.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-sed.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-shell.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-shell.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-stan.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-stan.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-vala.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/ob-vala.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-duration.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-duration.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-eww.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-eww.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-lint.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/org/org-lint.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/pixel-scroll.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/pixel-scroll.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/plstore.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/plstore.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/flymake-proc.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/progmodes/flymake-proc.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/ps-print-loaddefs.el
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/registry.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/registry.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/rtree.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/rtree.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/svg.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/svg.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term/konsole.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term/konsole.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term/tmux.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/term/tmux.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/less-css-mode.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/less-css-mode.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/mhtml-mode.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/mhtml-mode.elc
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/textmodes/reftex-loaddefs.el
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/xdg.el.gz
+rm -f %{buildroot}/usr/share/emacs/26.2/lisp/xdg.elc
+rm -f %{buildroot}/usr/lib64/systemd/user/emacs.service
+rm -f %{buildroot}/usr/include/emacs-module.h
+rm -f %{buildroot}/usr/share/metainfo/emacs.appdata.xml
 ## install_append content
-cp %{buildroot}/usr/bin/emacs %{buildroot}/usr/bin/emacs-x11
+mv %{buildroot}/usr/bin/emacs %{buildroot}/usr/bin/emacs-x11
 sed -i 's/Exec=emacs/Exec=emacs-x11/' %{buildroot}/usr/share/applications/emacs.desktop
 ln -s emacs-x11 %{buildroot}/usr/bin/xemacs
 ## install_append end
 
 %files
 %defattr(-,root,root,-)
-%exclude /usr/lib64/systemd/user/emacs.service
 
 %files bin
 %defattr(-,root,root,-)
-%exclude /usr/bin/ctags
-%exclude /usr/bin/ebrowse
-%exclude /usr/bin/emacs
-%exclude /usr/bin/emacs-26.2
-%exclude /usr/bin/emacsclient
-%exclude /usr/bin/etags
 /usr/bin/emacs-x11
 /usr/bin/xemacs
 
 %files data
 %defattr(-,root,root,-)
-%exclude /usr/share/emacs/26.2/etc/AUTHORS
-%exclude /usr/share/emacs/26.2/etc/CALC-NEWS
-%exclude /usr/share/emacs/26.2/etc/CENSORSHIP
-%exclude /usr/share/emacs/26.2/etc/COPYING
-%exclude /usr/share/emacs/26.2/etc/DEBUG
-%exclude /usr/share/emacs/26.2/etc/DEVEL.HUMOR
-%exclude /usr/share/emacs/26.2/etc/DISTRIB
-%exclude /usr/share/emacs/26.2/etc/DOC
-%exclude /usr/share/emacs/26.2/etc/ERC-NEWS
-%exclude /usr/share/emacs/26.2/etc/ETAGS.EBNF
-%exclude /usr/share/emacs/26.2/etc/ETAGS.README
-%exclude /usr/share/emacs/26.2/etc/FTP
-%exclude /usr/share/emacs/26.2/etc/GNU
-%exclude /usr/share/emacs/26.2/etc/GNUS-NEWS
-%exclude /usr/share/emacs/26.2/etc/HELLO
-%exclude /usr/share/emacs/26.2/etc/HISTORY
-%exclude /usr/share/emacs/26.2/etc/JOKES
-%exclude /usr/share/emacs/26.2/etc/LINUX-GNU
-%exclude /usr/share/emacs/26.2/etc/MACHINES
-%exclude /usr/share/emacs/26.2/etc/MH-E-NEWS
-%exclude /usr/share/emacs/26.2/etc/MORE.STUFF
-%exclude /usr/share/emacs/26.2/etc/NEWS
-%exclude /usr/share/emacs/26.2/etc/NEWS.1-17
-%exclude /usr/share/emacs/26.2/etc/NEWS.18
-%exclude /usr/share/emacs/26.2/etc/NEWS.19
-%exclude /usr/share/emacs/26.2/etc/NEWS.20
-%exclude /usr/share/emacs/26.2/etc/NEWS.21
-%exclude /usr/share/emacs/26.2/etc/NEWS.22
-%exclude /usr/share/emacs/26.2/etc/NEWS.23
-%exclude /usr/share/emacs/26.2/etc/NEWS.24
-%exclude /usr/share/emacs/26.2/etc/NEWS.25
-%exclude /usr/share/emacs/26.2/etc/NEXTSTEP
-%exclude /usr/share/emacs/26.2/etc/NXML-NEWS
-%exclude /usr/share/emacs/26.2/etc/ORDERS
-%exclude /usr/share/emacs/26.2/etc/ORG-NEWS
-%exclude /usr/share/emacs/26.2/etc/PROBLEMS
-%exclude /usr/share/emacs/26.2/etc/README
-%exclude /usr/share/emacs/26.2/etc/TERMS
-%exclude /usr/share/emacs/26.2/etc/THE-GNU-PROJECT
-%exclude /usr/share/emacs/26.2/etc/TODO
-%exclude /usr/share/emacs/26.2/etc/WHY-FREE
-%exclude /usr/share/emacs/26.2/etc/charsets/8859-10.map
-%exclude /usr/share/emacs/26.2/etc/charsets/8859-11.map
-%exclude /usr/share/emacs/26.2/etc/charsets/8859-13.map
-%exclude /usr/share/emacs/26.2/etc/charsets/8859-14.map
-%exclude /usr/share/emacs/26.2/etc/charsets/8859-15.map
-%exclude /usr/share/emacs/26.2/etc/charsets/8859-16.map
-%exclude /usr/share/emacs/26.2/etc/charsets/8859-2.map
-%exclude /usr/share/emacs/26.2/etc/charsets/8859-3.map
-%exclude /usr/share/emacs/26.2/etc/charsets/8859-4.map
-%exclude /usr/share/emacs/26.2/etc/charsets/8859-5.map
-%exclude /usr/share/emacs/26.2/etc/charsets/8859-6.map
-%exclude /usr/share/emacs/26.2/etc/charsets/8859-7.map
-%exclude /usr/share/emacs/26.2/etc/charsets/8859-8.map
-%exclude /usr/share/emacs/26.2/etc/charsets/8859-9.map
-%exclude /usr/share/emacs/26.2/etc/charsets/ALTERNATIVNYJ.map
-%exclude /usr/share/emacs/26.2/etc/charsets/BIG5-1.map
-%exclude /usr/share/emacs/26.2/etc/charsets/BIG5-2.map
-%exclude /usr/share/emacs/26.2/etc/charsets/BIG5-HKSCS.map
-%exclude /usr/share/emacs/26.2/etc/charsets/BIG5.map
-%exclude /usr/share/emacs/26.2/etc/charsets/CNS-1.map
-%exclude /usr/share/emacs/26.2/etc/charsets/CNS-2.map
-%exclude /usr/share/emacs/26.2/etc/charsets/CNS-3.map
-%exclude /usr/share/emacs/26.2/etc/charsets/CNS-4.map
-%exclude /usr/share/emacs/26.2/etc/charsets/CNS-5.map
-%exclude /usr/share/emacs/26.2/etc/charsets/CNS-6.map
-%exclude /usr/share/emacs/26.2/etc/charsets/CNS-7.map
-%exclude /usr/share/emacs/26.2/etc/charsets/CNS-F.map
-%exclude /usr/share/emacs/26.2/etc/charsets/CP10007.map
-%exclude /usr/share/emacs/26.2/etc/charsets/CP1125.map
-%exclude /usr/share/emacs/26.2/etc/charsets/CP1250.map
-%exclude /usr/share/emacs/26.2/etc/charsets/CP1251.map
-%exclude /usr/share/emacs/26.2/etc/charsets/CP1252.map
-%exclude /usr/share/emacs/26.2/etc/charsets/CP1253.map
-%exclude /usr/share/emacs/26.2/etc/charsets/CP1254.map
-%exclude /usr/share/emacs/26.2/etc/charsets/CP1255.map
-%exclude /usr/share/emacs/26.2/etc/charsets/CP1256.map
-%exclude /usr/share/emacs/26.2/etc/charsets/CP1257.map
-%exclude /usr/share/emacs/26.2/etc/charsets/CP1258.map
-%exclude /usr/share/emacs/26.2/etc/charsets/CP720.map
-%exclude /usr/share/emacs/26.2/etc/charsets/CP737.map
-%exclude /usr/share/emacs/26.2/etc/charsets/CP775.map
-%exclude /usr/share/emacs/26.2/etc/charsets/CP858.map
-%exclude /usr/share/emacs/26.2/etc/charsets/CP932-2BYTE.map
-%exclude /usr/share/emacs/26.2/etc/charsets/CP949-2BYTE.map
-%exclude /usr/share/emacs/26.2/etc/charsets/EBCDICUK.map
-%exclude /usr/share/emacs/26.2/etc/charsets/EBCDICUS.map
-%exclude /usr/share/emacs/26.2/etc/charsets/GB180302.map
-%exclude /usr/share/emacs/26.2/etc/charsets/GB180304.map
-%exclude /usr/share/emacs/26.2/etc/charsets/GB2312.map
-%exclude /usr/share/emacs/26.2/etc/charsets/GBK.map
-%exclude /usr/share/emacs/26.2/etc/charsets/HP-ROMAN8.map
-%exclude /usr/share/emacs/26.2/etc/charsets/IBM037.map
-%exclude /usr/share/emacs/26.2/etc/charsets/IBM038.map
-%exclude /usr/share/emacs/26.2/etc/charsets/IBM1004.map
-%exclude /usr/share/emacs/26.2/etc/charsets/IBM1026.map
-%exclude /usr/share/emacs/26.2/etc/charsets/IBM1047.map
-%exclude /usr/share/emacs/26.2/etc/charsets/IBM256.map
-%exclude /usr/share/emacs/26.2/etc/charsets/IBM273.map
-%exclude /usr/share/emacs/26.2/etc/charsets/IBM274.map
-%exclude /usr/share/emacs/26.2/etc/charsets/IBM275.map
-%exclude /usr/share/emacs/26.2/etc/charsets/IBM277.map
-%exclude /usr/share/emacs/26.2/etc/charsets/IBM278.map
-%exclude /usr/share/emacs/26.2/etc/charsets/IBM280.map
-%exclude /usr/share/emacs/26.2/etc/charsets/IBM281.map
-%exclude /usr/share/emacs/26.2/etc/charsets/IBM284.map
-%exclude /usr/share/emacs/26.2/etc/charsets/IBM285.map
-%exclude /usr/share/emacs/26.2/etc/charsets/IBM290.map
-%exclude /usr/share/emacs/26.2/etc/charsets/IBM297.map
-%exclude /usr/share/emacs/26.2/etc/charsets/IBM420.map
-%exclude /usr/share/emacs/26.2/etc/charsets/IBM423.map
-%exclude /usr/share/emacs/26.2/etc/charsets/IBM424.map
-%exclude /usr/share/emacs/26.2/etc/charsets/IBM437.map
-%exclude /usr/share/emacs/26.2/etc/charsets/IBM500.map
-%exclude /usr/share/emacs/26.2/etc/charsets/IBM850.map
-%exclude /usr/share/emacs/26.2/etc/charsets/IBM851.map
-%exclude /usr/share/emacs/26.2/etc/charsets/IBM852.map
-%exclude /usr/share/emacs/26.2/etc/charsets/IBM855.map
-%exclude /usr/share/emacs/26.2/etc/charsets/IBM856.map
-%exclude /usr/share/emacs/26.2/etc/charsets/IBM857.map
-%exclude /usr/share/emacs/26.2/etc/charsets/IBM860.map
-%exclude /usr/share/emacs/26.2/etc/charsets/IBM861.map
-%exclude /usr/share/emacs/26.2/etc/charsets/IBM862.map
-%exclude /usr/share/emacs/26.2/etc/charsets/IBM863.map
-%exclude /usr/share/emacs/26.2/etc/charsets/IBM864.map
-%exclude /usr/share/emacs/26.2/etc/charsets/IBM865.map
-%exclude /usr/share/emacs/26.2/etc/charsets/IBM866.map
-%exclude /usr/share/emacs/26.2/etc/charsets/IBM868.map
-%exclude /usr/share/emacs/26.2/etc/charsets/IBM869.map
-%exclude /usr/share/emacs/26.2/etc/charsets/IBM870.map
-%exclude /usr/share/emacs/26.2/etc/charsets/IBM871.map
-%exclude /usr/share/emacs/26.2/etc/charsets/IBM874.map
-%exclude /usr/share/emacs/26.2/etc/charsets/IBM875.map
-%exclude /usr/share/emacs/26.2/etc/charsets/IBM880.map
-%exclude /usr/share/emacs/26.2/etc/charsets/IBM891.map
-%exclude /usr/share/emacs/26.2/etc/charsets/IBM903.map
-%exclude /usr/share/emacs/26.2/etc/charsets/IBM904.map
-%exclude /usr/share/emacs/26.2/etc/charsets/IBM905.map
-%exclude /usr/share/emacs/26.2/etc/charsets/IBM918.map
-%exclude /usr/share/emacs/26.2/etc/charsets/JISC6226.map
-%exclude /usr/share/emacs/26.2/etc/charsets/JISX0201.map
-%exclude /usr/share/emacs/26.2/etc/charsets/JISX0208.map
-%exclude /usr/share/emacs/26.2/etc/charsets/JISX0212.map
-%exclude /usr/share/emacs/26.2/etc/charsets/JISX2131.map
-%exclude /usr/share/emacs/26.2/etc/charsets/JISX2132.map
-%exclude /usr/share/emacs/26.2/etc/charsets/JISX213A.map
-%exclude /usr/share/emacs/26.2/etc/charsets/JOHAB.map
-%exclude /usr/share/emacs/26.2/etc/charsets/KA-ACADEMY.map
-%exclude /usr/share/emacs/26.2/etc/charsets/KA-PS.map
-%exclude /usr/share/emacs/26.2/etc/charsets/KOI-8.map
-%exclude /usr/share/emacs/26.2/etc/charsets/KOI8-R.map
-%exclude /usr/share/emacs/26.2/etc/charsets/KOI8-T.map
-%exclude /usr/share/emacs/26.2/etc/charsets/KOI8-U.map
-%exclude /usr/share/emacs/26.2/etc/charsets/KSC5601.map
-%exclude /usr/share/emacs/26.2/etc/charsets/KSC5636.map
-%exclude /usr/share/emacs/26.2/etc/charsets/MACINTOSH.map
-%exclude /usr/share/emacs/26.2/etc/charsets/MIK.map
-%exclude /usr/share/emacs/26.2/etc/charsets/MULE-ethiopic.map
-%exclude /usr/share/emacs/26.2/etc/charsets/MULE-ipa.map
-%exclude /usr/share/emacs/26.2/etc/charsets/MULE-is13194.map
-%exclude /usr/share/emacs/26.2/etc/charsets/MULE-lviscii.map
-%exclude /usr/share/emacs/26.2/etc/charsets/MULE-sisheng.map
-%exclude /usr/share/emacs/26.2/etc/charsets/MULE-tibetan.map
-%exclude /usr/share/emacs/26.2/etc/charsets/MULE-uviscii.map
-%exclude /usr/share/emacs/26.2/etc/charsets/NEXTSTEP.map
-%exclude /usr/share/emacs/26.2/etc/charsets/PTCP154.map
-%exclude /usr/share/emacs/26.2/etc/charsets/README
-%exclude /usr/share/emacs/26.2/etc/charsets/TIS-620.map
-%exclude /usr/share/emacs/26.2/etc/charsets/VISCII.map
-%exclude /usr/share/emacs/26.2/etc/charsets/VSCII-2.map
-%exclude /usr/share/emacs/26.2/etc/charsets/VSCII.map
-%exclude /usr/share/emacs/26.2/etc/charsets/stdenc.map
-%exclude /usr/share/emacs/26.2/etc/charsets/symbol.map
-%exclude /usr/share/emacs/26.2/etc/compilation.txt
-%exclude /usr/share/emacs/26.2/etc/e/README
-%exclude /usr/share/emacs/26.2/etc/e/eterm-color
-%exclude /usr/share/emacs/26.2/etc/e/eterm-color.ti
-%exclude /usr/share/emacs/26.2/etc/edt-user.el
-%exclude /usr/share/emacs/26.2/etc/emacs-buffer.gdb
-%exclude /usr/share/emacs/26.2/etc/emacs.appdata.xml
-%exclude /usr/share/emacs/26.2/etc/emacs.desktop
-%exclude /usr/share/emacs/26.2/etc/emacs.icon
-%exclude /usr/share/emacs/26.2/etc/emacs.service
-%exclude /usr/share/emacs/26.2/etc/enriched.txt
-%exclude /usr/share/emacs/26.2/etc/forms/README
-%exclude /usr/share/emacs/26.2/etc/forms/forms-d2.dat
-%exclude /usr/share/emacs/26.2/etc/forms/forms-d2.el
-%exclude /usr/share/emacs/26.2/etc/forms/forms-pass.el
-%exclude /usr/share/emacs/26.2/etc/future-bug
-%exclude /usr/share/emacs/26.2/etc/gnus-tut.txt
-%exclude /usr/share/emacs/26.2/etc/gnus/gnus-setup.ast
-%exclude /usr/share/emacs/26.2/etc/gnus/news-server.ast
-%exclude /usr/share/emacs/26.2/etc/grep.txt
-%exclude /usr/share/emacs/26.2/etc/images/README
-%exclude /usr/share/emacs/26.2/etc/images/attach.pbm
-%exclude /usr/share/emacs/26.2/etc/images/attach.xpm
-%exclude /usr/share/emacs/26.2/etc/images/back-arrow.pbm
-%exclude /usr/share/emacs/26.2/etc/images/back-arrow.xpm
-%exclude /usr/share/emacs/26.2/etc/images/bookmark_add.pbm
-%exclude /usr/share/emacs/26.2/etc/images/bookmark_add.xpm
-%exclude /usr/share/emacs/26.2/etc/images/cancel.pbm
-%exclude /usr/share/emacs/26.2/etc/images/cancel.xpm
-%exclude /usr/share/emacs/26.2/etc/images/checked.xpm
-%exclude /usr/share/emacs/26.2/etc/images/close.pbm
-%exclude /usr/share/emacs/26.2/etc/images/close.xpm
-%exclude /usr/share/emacs/26.2/etc/images/connect.pbm
-%exclude /usr/share/emacs/26.2/etc/images/connect.xpm
-%exclude /usr/share/emacs/26.2/etc/images/contact.pbm
-%exclude /usr/share/emacs/26.2/etc/images/contact.xpm
-%exclude /usr/share/emacs/26.2/etc/images/copy.pbm
-%exclude /usr/share/emacs/26.2/etc/images/copy.xpm
-%exclude /usr/share/emacs/26.2/etc/images/custom/README
-%exclude /usr/share/emacs/26.2/etc/images/custom/down-pushed.pbm
-%exclude /usr/share/emacs/26.2/etc/images/custom/down-pushed.xpm
-%exclude /usr/share/emacs/26.2/etc/images/custom/down.pbm
-%exclude /usr/share/emacs/26.2/etc/images/custom/down.xpm
-%exclude /usr/share/emacs/26.2/etc/images/custom/right-pushed.pbm
-%exclude /usr/share/emacs/26.2/etc/images/custom/right-pushed.xpm
-%exclude /usr/share/emacs/26.2/etc/images/custom/right.pbm
-%exclude /usr/share/emacs/26.2/etc/images/custom/right.xpm
-%exclude /usr/share/emacs/26.2/etc/images/cut.pbm
-%exclude /usr/share/emacs/26.2/etc/images/cut.xpm
-%exclude /usr/share/emacs/26.2/etc/images/data-save.pbm
-%exclude /usr/share/emacs/26.2/etc/images/data-save.xpm
-%exclude /usr/share/emacs/26.2/etc/images/delete.pbm
-%exclude /usr/share/emacs/26.2/etc/images/delete.xpm
-%exclude /usr/share/emacs/26.2/etc/images/describe.pbm
-%exclude /usr/share/emacs/26.2/etc/images/describe.xpm
-%exclude /usr/share/emacs/26.2/etc/images/diropen.pbm
-%exclude /usr/share/emacs/26.2/etc/images/diropen.xpm
-%exclude /usr/share/emacs/26.2/etc/images/disconnect.pbm
-%exclude /usr/share/emacs/26.2/etc/images/disconnect.xpm
-%exclude /usr/share/emacs/26.2/etc/images/exit.pbm
-%exclude /usr/share/emacs/26.2/etc/images/exit.xpm
-%exclude /usr/share/emacs/26.2/etc/images/ezimage/README
-%exclude /usr/share/emacs/26.2/etc/images/ezimage/bits.pbm
-%exclude /usr/share/emacs/26.2/etc/images/ezimage/bits.xpm
-%exclude /usr/share/emacs/26.2/etc/images/ezimage/bitsbang.pbm
-%exclude /usr/share/emacs/26.2/etc/images/ezimage/bitsbang.xpm
-%exclude /usr/share/emacs/26.2/etc/images/ezimage/box-minus.pbm
-%exclude /usr/share/emacs/26.2/etc/images/ezimage/box-minus.xpm
-%exclude /usr/share/emacs/26.2/etc/images/ezimage/box-plus.pbm
-%exclude /usr/share/emacs/26.2/etc/images/ezimage/box-plus.xpm
-%exclude /usr/share/emacs/26.2/etc/images/ezimage/box.pbm
-%exclude /usr/share/emacs/26.2/etc/images/ezimage/box.xpm
-%exclude /usr/share/emacs/26.2/etc/images/ezimage/checkmark.pbm
-%exclude /usr/share/emacs/26.2/etc/images/ezimage/checkmark.xpm
-%exclude /usr/share/emacs/26.2/etc/images/ezimage/dir-minus.pbm
-%exclude /usr/share/emacs/26.2/etc/images/ezimage/dir-minus.xpm
-%exclude /usr/share/emacs/26.2/etc/images/ezimage/dir-plus.pbm
-%exclude /usr/share/emacs/26.2/etc/images/ezimage/dir-plus.xpm
-%exclude /usr/share/emacs/26.2/etc/images/ezimage/dir.pbm
-%exclude /usr/share/emacs/26.2/etc/images/ezimage/dir.xpm
-%exclude /usr/share/emacs/26.2/etc/images/ezimage/doc-minus.pbm
-%exclude /usr/share/emacs/26.2/etc/images/ezimage/doc-minus.xpm
-%exclude /usr/share/emacs/26.2/etc/images/ezimage/doc-plus.pbm
-%exclude /usr/share/emacs/26.2/etc/images/ezimage/doc-plus.xpm
-%exclude /usr/share/emacs/26.2/etc/images/ezimage/doc.pbm
-%exclude /usr/share/emacs/26.2/etc/images/ezimage/doc.xpm
-%exclude /usr/share/emacs/26.2/etc/images/ezimage/info.pbm
-%exclude /usr/share/emacs/26.2/etc/images/ezimage/info.xpm
-%exclude /usr/share/emacs/26.2/etc/images/ezimage/key.pbm
-%exclude /usr/share/emacs/26.2/etc/images/ezimage/key.xpm
-%exclude /usr/share/emacs/26.2/etc/images/ezimage/label.pbm
-%exclude /usr/share/emacs/26.2/etc/images/ezimage/label.xpm
-%exclude /usr/share/emacs/26.2/etc/images/ezimage/lock.pbm
-%exclude /usr/share/emacs/26.2/etc/images/ezimage/lock.xpm
-%exclude /usr/share/emacs/26.2/etc/images/ezimage/mail.pbm
-%exclude /usr/share/emacs/26.2/etc/images/ezimage/mail.xpm
-%exclude /usr/share/emacs/26.2/etc/images/ezimage/page-minus.pbm
-%exclude /usr/share/emacs/26.2/etc/images/ezimage/page-minus.xpm
-%exclude /usr/share/emacs/26.2/etc/images/ezimage/page-plus.pbm
-%exclude /usr/share/emacs/26.2/etc/images/ezimage/page-plus.xpm
-%exclude /usr/share/emacs/26.2/etc/images/ezimage/page.pbm
-%exclude /usr/share/emacs/26.2/etc/images/ezimage/page.xpm
-%exclude /usr/share/emacs/26.2/etc/images/ezimage/tag-gt.pbm
-%exclude /usr/share/emacs/26.2/etc/images/ezimage/tag-gt.xpm
-%exclude /usr/share/emacs/26.2/etc/images/ezimage/tag-minus.pbm
-%exclude /usr/share/emacs/26.2/etc/images/ezimage/tag-minus.xpm
-%exclude /usr/share/emacs/26.2/etc/images/ezimage/tag-plus.pbm
-%exclude /usr/share/emacs/26.2/etc/images/ezimage/tag-plus.xpm
-%exclude /usr/share/emacs/26.2/etc/images/ezimage/tag-type.pbm
-%exclude /usr/share/emacs/26.2/etc/images/ezimage/tag-type.xpm
-%exclude /usr/share/emacs/26.2/etc/images/ezimage/tag-v.pbm
-%exclude /usr/share/emacs/26.2/etc/images/ezimage/tag-v.xpm
-%exclude /usr/share/emacs/26.2/etc/images/ezimage/tag.pbm
-%exclude /usr/share/emacs/26.2/etc/images/ezimage/tag.xpm
-%exclude /usr/share/emacs/26.2/etc/images/ezimage/unlock.pbm
-%exclude /usr/share/emacs/26.2/etc/images/ezimage/unlock.xpm
-%exclude /usr/share/emacs/26.2/etc/images/fwd-arrow.pbm
-%exclude /usr/share/emacs/26.2/etc/images/fwd-arrow.xpm
-%exclude /usr/share/emacs/26.2/etc/images/gnus.pbm
-%exclude /usr/share/emacs/26.2/etc/images/gnus/README
-%exclude /usr/share/emacs/26.2/etc/images/gnus/catchup.pbm
-%exclude /usr/share/emacs/26.2/etc/images/gnus/catchup.xpm
-%exclude /usr/share/emacs/26.2/etc/images/gnus/cu-exit.pbm
-%exclude /usr/share/emacs/26.2/etc/images/gnus/cu-exit.xpm
-%exclude /usr/share/emacs/26.2/etc/images/gnus/describe-group.pbm
-%exclude /usr/share/emacs/26.2/etc/images/gnus/describe-group.xpm
-%exclude /usr/share/emacs/26.2/etc/images/gnus/exit-gnus.pbm
-%exclude /usr/share/emacs/26.2/etc/images/gnus/exit-gnus.xpm
-%exclude /usr/share/emacs/26.2/etc/images/gnus/exit-summ.pbm
-%exclude /usr/share/emacs/26.2/etc/images/gnus/exit-summ.xpm
-%exclude /usr/share/emacs/26.2/etc/images/gnus/followup.pbm
-%exclude /usr/share/emacs/26.2/etc/images/gnus/followup.xpm
-%exclude /usr/share/emacs/26.2/etc/images/gnus/fuwo.pbm
-%exclude /usr/share/emacs/26.2/etc/images/gnus/fuwo.xpm
-%exclude /usr/share/emacs/26.2/etc/images/gnus/get-news.pbm
-%exclude /usr/share/emacs/26.2/etc/images/gnus/get-news.xpm
-%exclude /usr/share/emacs/26.2/etc/images/gnus/gnntg.pbm
-%exclude /usr/share/emacs/26.2/etc/images/gnus/gnntg.xpm
-%exclude /usr/share/emacs/26.2/etc/images/gnus/gnus-pointer.xbm
-%exclude /usr/share/emacs/26.2/etc/images/gnus/gnus-pointer.xpm
-%exclude /usr/share/emacs/26.2/etc/images/gnus/gnus.png
-%exclude /usr/share/emacs/26.2/etc/images/gnus/gnus.svg
-%exclude /usr/share/emacs/26.2/etc/images/gnus/gnus.xbm
-%exclude /usr/share/emacs/26.2/etc/images/gnus/gnus.xpm
-%exclude /usr/share/emacs/26.2/etc/images/gnus/important.pbm
-%exclude /usr/share/emacs/26.2/etc/images/gnus/important.xpm
-%exclude /usr/share/emacs/26.2/etc/images/gnus/kill-group.pbm
-%exclude /usr/share/emacs/26.2/etc/images/gnus/kill-group.xpm
-%exclude /usr/share/emacs/26.2/etc/images/gnus/mail-reply.pbm
-%exclude /usr/share/emacs/26.2/etc/images/gnus/mail-reply.xpm
-%exclude /usr/share/emacs/26.2/etc/images/gnus/mail-send.pbm
-%exclude /usr/share/emacs/26.2/etc/images/gnus/mail-send.xpm
-%exclude /usr/share/emacs/26.2/etc/images/gnus/next-ur.pbm
-%exclude /usr/share/emacs/26.2/etc/images/gnus/next-ur.xpm
-%exclude /usr/share/emacs/26.2/etc/images/gnus/post.pbm
-%exclude /usr/share/emacs/26.2/etc/images/gnus/post.xpm
-%exclude /usr/share/emacs/26.2/etc/images/gnus/prev-ur.pbm
-%exclude /usr/share/emacs/26.2/etc/images/gnus/prev-ur.xpm
-%exclude /usr/share/emacs/26.2/etc/images/gnus/preview.xbm
-%exclude /usr/share/emacs/26.2/etc/images/gnus/preview.xpm
-%exclude /usr/share/emacs/26.2/etc/images/gnus/receipt.pbm
-%exclude /usr/share/emacs/26.2/etc/images/gnus/receipt.xpm
-%exclude /usr/share/emacs/26.2/etc/images/gnus/reply-wo.pbm
-%exclude /usr/share/emacs/26.2/etc/images/gnus/reply-wo.xpm
-%exclude /usr/share/emacs/26.2/etc/images/gnus/reply.pbm
-%exclude /usr/share/emacs/26.2/etc/images/gnus/reply.xpm
-%exclude /usr/share/emacs/26.2/etc/images/gnus/rot13.pbm
-%exclude /usr/share/emacs/26.2/etc/images/gnus/rot13.xpm
-%exclude /usr/share/emacs/26.2/etc/images/gnus/save-aif.pbm
-%exclude /usr/share/emacs/26.2/etc/images/gnus/save-aif.xpm
-%exclude /usr/share/emacs/26.2/etc/images/gnus/save-art.pbm
-%exclude /usr/share/emacs/26.2/etc/images/gnus/save-art.xpm
-%exclude /usr/share/emacs/26.2/etc/images/gnus/subscribe.pbm
-%exclude /usr/share/emacs/26.2/etc/images/gnus/subscribe.xpm
-%exclude /usr/share/emacs/26.2/etc/images/gnus/toggle-subscription.pbm
-%exclude /usr/share/emacs/26.2/etc/images/gnus/toggle-subscription.xpm
-%exclude /usr/share/emacs/26.2/etc/images/gnus/unimportant.pbm
-%exclude /usr/share/emacs/26.2/etc/images/gnus/unimportant.xpm
-%exclude /usr/share/emacs/26.2/etc/images/gnus/unsubscribe.pbm
-%exclude /usr/share/emacs/26.2/etc/images/gnus/unsubscribe.xpm
-%exclude /usr/share/emacs/26.2/etc/images/gnus/uu-decode.pbm
-%exclude /usr/share/emacs/26.2/etc/images/gnus/uu-decode.xpm
-%exclude /usr/share/emacs/26.2/etc/images/gnus/uu-post.pbm
-%exclude /usr/share/emacs/26.2/etc/images/gnus/uu-post.xpm
-%exclude /usr/share/emacs/26.2/etc/images/gud/README
-%exclude /usr/share/emacs/26.2/etc/images/gud/all.pbm
-%exclude /usr/share/emacs/26.2/etc/images/gud/all.xpm
-%exclude /usr/share/emacs/26.2/etc/images/gud/break.pbm
-%exclude /usr/share/emacs/26.2/etc/images/gud/break.xpm
-%exclude /usr/share/emacs/26.2/etc/images/gud/cont.pbm
-%exclude /usr/share/emacs/26.2/etc/images/gud/cont.xpm
-%exclude /usr/share/emacs/26.2/etc/images/gud/down.pbm
-%exclude /usr/share/emacs/26.2/etc/images/gud/down.xpm
-%exclude /usr/share/emacs/26.2/etc/images/gud/finish.pbm
-%exclude /usr/share/emacs/26.2/etc/images/gud/finish.xpm
-%exclude /usr/share/emacs/26.2/etc/images/gud/go.pbm
-%exclude /usr/share/emacs/26.2/etc/images/gud/go.xpm
-%exclude /usr/share/emacs/26.2/etc/images/gud/next.pbm
-%exclude /usr/share/emacs/26.2/etc/images/gud/next.xpm
-%exclude /usr/share/emacs/26.2/etc/images/gud/nexti.pbm
-%exclude /usr/share/emacs/26.2/etc/images/gud/nexti.xpm
-%exclude /usr/share/emacs/26.2/etc/images/gud/pp.pbm
-%exclude /usr/share/emacs/26.2/etc/images/gud/pp.xpm
-%exclude /usr/share/emacs/26.2/etc/images/gud/print.pbm
-%exclude /usr/share/emacs/26.2/etc/images/gud/print.xpm
-%exclude /usr/share/emacs/26.2/etc/images/gud/pstar.pbm
-%exclude /usr/share/emacs/26.2/etc/images/gud/pstar.xpm
-%exclude /usr/share/emacs/26.2/etc/images/gud/rcont.pbm
-%exclude /usr/share/emacs/26.2/etc/images/gud/rcont.xpm
-%exclude /usr/share/emacs/26.2/etc/images/gud/recstart.pbm
-%exclude /usr/share/emacs/26.2/etc/images/gud/recstart.xpm
-%exclude /usr/share/emacs/26.2/etc/images/gud/recstop.pbm
-%exclude /usr/share/emacs/26.2/etc/images/gud/recstop.xpm
-%exclude /usr/share/emacs/26.2/etc/images/gud/remove.pbm
-%exclude /usr/share/emacs/26.2/etc/images/gud/remove.xpm
-%exclude /usr/share/emacs/26.2/etc/images/gud/rfinish.pbm
-%exclude /usr/share/emacs/26.2/etc/images/gud/rfinish.xpm
-%exclude /usr/share/emacs/26.2/etc/images/gud/rnext.pbm
-%exclude /usr/share/emacs/26.2/etc/images/gud/rnext.xpm
-%exclude /usr/share/emacs/26.2/etc/images/gud/rnexti.pbm
-%exclude /usr/share/emacs/26.2/etc/images/gud/rnexti.xpm
-%exclude /usr/share/emacs/26.2/etc/images/gud/rstep.pbm
-%exclude /usr/share/emacs/26.2/etc/images/gud/rstep.xpm
-%exclude /usr/share/emacs/26.2/etc/images/gud/rstepi.pbm
-%exclude /usr/share/emacs/26.2/etc/images/gud/rstepi.xpm
-%exclude /usr/share/emacs/26.2/etc/images/gud/run.pbm
-%exclude /usr/share/emacs/26.2/etc/images/gud/run.xpm
-%exclude /usr/share/emacs/26.2/etc/images/gud/step.pbm
-%exclude /usr/share/emacs/26.2/etc/images/gud/step.xpm
-%exclude /usr/share/emacs/26.2/etc/images/gud/stepi.pbm
-%exclude /usr/share/emacs/26.2/etc/images/gud/stepi.xpm
-%exclude /usr/share/emacs/26.2/etc/images/gud/stop.pbm
-%exclude /usr/share/emacs/26.2/etc/images/gud/stop.xpm
-%exclude /usr/share/emacs/26.2/etc/images/gud/thread.pbm
-%exclude /usr/share/emacs/26.2/etc/images/gud/thread.xpm
-%exclude /usr/share/emacs/26.2/etc/images/gud/until.pbm
-%exclude /usr/share/emacs/26.2/etc/images/gud/until.xpm
-%exclude /usr/share/emacs/26.2/etc/images/gud/up.pbm
-%exclude /usr/share/emacs/26.2/etc/images/gud/up.xpm
-%exclude /usr/share/emacs/26.2/etc/images/gud/watch.pbm
-%exclude /usr/share/emacs/26.2/etc/images/gud/watch.xpm
-%exclude /usr/share/emacs/26.2/etc/images/help.pbm
-%exclude /usr/share/emacs/26.2/etc/images/help.xpm
-%exclude /usr/share/emacs/26.2/etc/images/home.pbm
-%exclude /usr/share/emacs/26.2/etc/images/home.xpm
-%exclude /usr/share/emacs/26.2/etc/images/icons/README
-%exclude /usr/share/emacs/26.2/etc/images/icons/allout-widgets/dark-bg/closed.png
-%exclude /usr/share/emacs/26.2/etc/images/icons/allout-widgets/dark-bg/closed.xpm
-%exclude /usr/share/emacs/26.2/etc/images/icons/allout-widgets/dark-bg/empty.png
-%exclude /usr/share/emacs/26.2/etc/images/icons/allout-widgets/dark-bg/empty.xpm
-%exclude /usr/share/emacs/26.2/etc/images/icons/allout-widgets/dark-bg/end-connector.png
-%exclude /usr/share/emacs/26.2/etc/images/icons/allout-widgets/dark-bg/end-connector.xpm
-%exclude /usr/share/emacs/26.2/etc/images/icons/allout-widgets/dark-bg/extender-connector.png
-%exclude /usr/share/emacs/26.2/etc/images/icons/allout-widgets/dark-bg/extender-connector.xpm
-%exclude /usr/share/emacs/26.2/etc/images/icons/allout-widgets/dark-bg/leaf.png
-%exclude /usr/share/emacs/26.2/etc/images/icons/allout-widgets/dark-bg/leaf.xpm
-%exclude /usr/share/emacs/26.2/etc/images/icons/allout-widgets/dark-bg/locked-encrypted.png
-%exclude /usr/share/emacs/26.2/etc/images/icons/allout-widgets/dark-bg/locked-encrypted.xpm
-%exclude /usr/share/emacs/26.2/etc/images/icons/allout-widgets/dark-bg/mid-connector.png
-%exclude /usr/share/emacs/26.2/etc/images/icons/allout-widgets/dark-bg/mid-connector.xpm
-%exclude /usr/share/emacs/26.2/etc/images/icons/allout-widgets/dark-bg/opened.png
-%exclude /usr/share/emacs/26.2/etc/images/icons/allout-widgets/dark-bg/opened.xpm
-%exclude /usr/share/emacs/26.2/etc/images/icons/allout-widgets/dark-bg/skip-descender.png
-%exclude /usr/share/emacs/26.2/etc/images/icons/allout-widgets/dark-bg/skip-descender.xpm
-%exclude /usr/share/emacs/26.2/etc/images/icons/allout-widgets/dark-bg/through-descender.png
-%exclude /usr/share/emacs/26.2/etc/images/icons/allout-widgets/dark-bg/through-descender.xpm
-%exclude /usr/share/emacs/26.2/etc/images/icons/allout-widgets/dark-bg/unlocked-encrypted.png
-%exclude /usr/share/emacs/26.2/etc/images/icons/allout-widgets/dark-bg/unlocked-encrypted.xpm
-%exclude /usr/share/emacs/26.2/etc/images/icons/allout-widgets/light-bg/closed.png
-%exclude /usr/share/emacs/26.2/etc/images/icons/allout-widgets/light-bg/closed.xpm
-%exclude /usr/share/emacs/26.2/etc/images/icons/allout-widgets/light-bg/empty.png
-%exclude /usr/share/emacs/26.2/etc/images/icons/allout-widgets/light-bg/empty.xpm
-%exclude /usr/share/emacs/26.2/etc/images/icons/allout-widgets/light-bg/end-connector.png
-%exclude /usr/share/emacs/26.2/etc/images/icons/allout-widgets/light-bg/end-connector.xpm
-%exclude /usr/share/emacs/26.2/etc/images/icons/allout-widgets/light-bg/extender-connector.png
-%exclude /usr/share/emacs/26.2/etc/images/icons/allout-widgets/light-bg/extender-connector.xpm
-%exclude /usr/share/emacs/26.2/etc/images/icons/allout-widgets/light-bg/leaf.png
-%exclude /usr/share/emacs/26.2/etc/images/icons/allout-widgets/light-bg/leaf.xpm
-%exclude /usr/share/emacs/26.2/etc/images/icons/allout-widgets/light-bg/locked-encrypted.png
-%exclude /usr/share/emacs/26.2/etc/images/icons/allout-widgets/light-bg/locked-encrypted.xpm
-%exclude /usr/share/emacs/26.2/etc/images/icons/allout-widgets/light-bg/mid-connector.png
-%exclude /usr/share/emacs/26.2/etc/images/icons/allout-widgets/light-bg/mid-connector.xpm
-%exclude /usr/share/emacs/26.2/etc/images/icons/allout-widgets/light-bg/opened.png
-%exclude /usr/share/emacs/26.2/etc/images/icons/allout-widgets/light-bg/opened.xpm
-%exclude /usr/share/emacs/26.2/etc/images/icons/allout-widgets/light-bg/skip-descender.png
-%exclude /usr/share/emacs/26.2/etc/images/icons/allout-widgets/light-bg/skip-descender.xpm
-%exclude /usr/share/emacs/26.2/etc/images/icons/allout-widgets/light-bg/through-descender.png
-%exclude /usr/share/emacs/26.2/etc/images/icons/allout-widgets/light-bg/through-descender.xpm
-%exclude /usr/share/emacs/26.2/etc/images/icons/allout-widgets/light-bg/unlocked-encrypted.png
-%exclude /usr/share/emacs/26.2/etc/images/icons/allout-widgets/light-bg/unlocked-encrypted.xpm
-%exclude /usr/share/emacs/26.2/etc/images/icons/hicolor/128x128/apps/emacs.png
-%exclude /usr/share/emacs/26.2/etc/images/icons/hicolor/128x128/apps/emacs23.png
-%exclude /usr/share/emacs/26.2/etc/images/icons/hicolor/16x16/apps/emacs.png
-%exclude /usr/share/emacs/26.2/etc/images/icons/hicolor/16x16/apps/emacs22.png
-%exclude /usr/share/emacs/26.2/etc/images/icons/hicolor/16x16/apps/emacs23.png
-%exclude /usr/share/emacs/26.2/etc/images/icons/hicolor/24x24/apps/emacs.png
-%exclude /usr/share/emacs/26.2/etc/images/icons/hicolor/24x24/apps/emacs22.png
-%exclude /usr/share/emacs/26.2/etc/images/icons/hicolor/24x24/apps/emacs23.png
-%exclude /usr/share/emacs/26.2/etc/images/icons/hicolor/32x32/apps/emacs.png
-%exclude /usr/share/emacs/26.2/etc/images/icons/hicolor/32x32/apps/emacs22.png
-%exclude /usr/share/emacs/26.2/etc/images/icons/hicolor/32x32/apps/emacs23.png
-%exclude /usr/share/emacs/26.2/etc/images/icons/hicolor/48x48/apps/emacs.png
-%exclude /usr/share/emacs/26.2/etc/images/icons/hicolor/48x48/apps/emacs22.png
-%exclude /usr/share/emacs/26.2/etc/images/icons/hicolor/48x48/apps/emacs23.png
-%exclude /usr/share/emacs/26.2/etc/images/icons/hicolor/scalable/apps/emacs.svg
-%exclude /usr/share/emacs/26.2/etc/images/icons/hicolor/scalable/apps/emacs23.svg
-%exclude /usr/share/emacs/26.2/etc/images/icons/hicolor/scalable/mimetypes/emacs-document.svg
-%exclude /usr/share/emacs/26.2/etc/images/icons/hicolor/scalable/mimetypes/emacs-document23.svg
-%exclude /usr/share/emacs/26.2/etc/images/index.pbm
-%exclude /usr/share/emacs/26.2/etc/images/index.xpm
-%exclude /usr/share/emacs/26.2/etc/images/info.pbm
-%exclude /usr/share/emacs/26.2/etc/images/info.xpm
-%exclude /usr/share/emacs/26.2/etc/images/jump-to.pbm
-%exclude /usr/share/emacs/26.2/etc/images/jump-to.xpm
-%exclude /usr/share/emacs/26.2/etc/images/left-arrow.pbm
-%exclude /usr/share/emacs/26.2/etc/images/left-arrow.xpm
-%exclude /usr/share/emacs/26.2/etc/images/letter.pbm
-%exclude /usr/share/emacs/26.2/etc/images/letter.xpm
-%exclude /usr/share/emacs/26.2/etc/images/lock-broken.pbm
-%exclude /usr/share/emacs/26.2/etc/images/lock-broken.xpm
-%exclude /usr/share/emacs/26.2/etc/images/lock-ok.pbm
-%exclude /usr/share/emacs/26.2/etc/images/lock-ok.xpm
-%exclude /usr/share/emacs/26.2/etc/images/lock.pbm
-%exclude /usr/share/emacs/26.2/etc/images/lock.xpm
-%exclude /usr/share/emacs/26.2/etc/images/low-color/README
-%exclude /usr/share/emacs/26.2/etc/images/low-color/back-arrow.xpm
-%exclude /usr/share/emacs/26.2/etc/images/low-color/copy.xpm
-%exclude /usr/share/emacs/26.2/etc/images/low-color/cut.xpm
-%exclude /usr/share/emacs/26.2/etc/images/low-color/fwd-arrow.xpm
-%exclude /usr/share/emacs/26.2/etc/images/low-color/help.xpm
-%exclude /usr/share/emacs/26.2/etc/images/low-color/home.xpm
-%exclude /usr/share/emacs/26.2/etc/images/low-color/index.xpm
-%exclude /usr/share/emacs/26.2/etc/images/low-color/jump-to.xpm
-%exclude /usr/share/emacs/26.2/etc/images/low-color/left-arrow.xpm
-%exclude /usr/share/emacs/26.2/etc/images/low-color/new.xpm
-%exclude /usr/share/emacs/26.2/etc/images/low-color/next-node.xpm
-%exclude /usr/share/emacs/26.2/etc/images/low-color/open.xpm
-%exclude /usr/share/emacs/26.2/etc/images/low-color/paste.xpm
-%exclude /usr/share/emacs/26.2/etc/images/low-color/preferences.xpm
-%exclude /usr/share/emacs/26.2/etc/images/low-color/prev-node.xpm
-%exclude /usr/share/emacs/26.2/etc/images/low-color/print.xpm
-%exclude /usr/share/emacs/26.2/etc/images/low-color/right-arrow.xpm
-%exclude /usr/share/emacs/26.2/etc/images/low-color/save.xpm
-%exclude /usr/share/emacs/26.2/etc/images/low-color/saveas.xpm
-%exclude /usr/share/emacs/26.2/etc/images/low-color/search.xpm
-%exclude /usr/share/emacs/26.2/etc/images/low-color/spell.xpm
-%exclude /usr/share/emacs/26.2/etc/images/low-color/undo.xpm
-%exclude /usr/share/emacs/26.2/etc/images/low-color/up-arrow.xpm
-%exclude /usr/share/emacs/26.2/etc/images/low-color/up-node.xpm
-%exclude /usr/share/emacs/26.2/etc/images/mail/README
-%exclude /usr/share/emacs/26.2/etc/images/mail/compose.pbm
-%exclude /usr/share/emacs/26.2/etc/images/mail/compose.xpm
-%exclude /usr/share/emacs/26.2/etc/images/mail/copy.pbm
-%exclude /usr/share/emacs/26.2/etc/images/mail/copy.xpm
-%exclude /usr/share/emacs/26.2/etc/images/mail/flag-for-followup.pbm
-%exclude /usr/share/emacs/26.2/etc/images/mail/flag-for-followup.xpm
-%exclude /usr/share/emacs/26.2/etc/images/mail/forward.pbm
-%exclude /usr/share/emacs/26.2/etc/images/mail/forward.xpm
-%exclude /usr/share/emacs/26.2/etc/images/mail/inbox.pbm
-%exclude /usr/share/emacs/26.2/etc/images/mail/inbox.xpm
-%exclude /usr/share/emacs/26.2/etc/images/mail/move.pbm
-%exclude /usr/share/emacs/26.2/etc/images/mail/move.xpm
-%exclude /usr/share/emacs/26.2/etc/images/mail/not-spam.pbm
-%exclude /usr/share/emacs/26.2/etc/images/mail/not-spam.xpm
-%exclude /usr/share/emacs/26.2/etc/images/mail/outbox.pbm
-%exclude /usr/share/emacs/26.2/etc/images/mail/outbox.xpm
-%exclude /usr/share/emacs/26.2/etc/images/mail/preview.pbm
-%exclude /usr/share/emacs/26.2/etc/images/mail/preview.xpm
-%exclude /usr/share/emacs/26.2/etc/images/mail/repack.pbm
-%exclude /usr/share/emacs/26.2/etc/images/mail/repack.xpm
-%exclude /usr/share/emacs/26.2/etc/images/mail/reply-all.pbm
-%exclude /usr/share/emacs/26.2/etc/images/mail/reply-all.xpm
-%exclude /usr/share/emacs/26.2/etc/images/mail/reply-from.pbm
-%exclude /usr/share/emacs/26.2/etc/images/mail/reply-from.xpm
-%exclude /usr/share/emacs/26.2/etc/images/mail/reply-to.pbm
-%exclude /usr/share/emacs/26.2/etc/images/mail/reply-to.xpm
-%exclude /usr/share/emacs/26.2/etc/images/mail/reply.pbm
-%exclude /usr/share/emacs/26.2/etc/images/mail/reply.xpm
-%exclude /usr/share/emacs/26.2/etc/images/mail/save-draft.pbm
-%exclude /usr/share/emacs/26.2/etc/images/mail/save-draft.xpm
-%exclude /usr/share/emacs/26.2/etc/images/mail/save.xpm
-%exclude /usr/share/emacs/26.2/etc/images/mail/send.pbm
-%exclude /usr/share/emacs/26.2/etc/images/mail/send.xpm
-%exclude /usr/share/emacs/26.2/etc/images/mail/spam.xpm
-%exclude /usr/share/emacs/26.2/etc/images/mh-logo.pbm
-%exclude /usr/share/emacs/26.2/etc/images/mh-logo.xpm
-%exclude /usr/share/emacs/26.2/etc/images/mpc/README
-%exclude /usr/share/emacs/26.2/etc/images/mpc/add.pbm
-%exclude /usr/share/emacs/26.2/etc/images/mpc/add.xpm
-%exclude /usr/share/emacs/26.2/etc/images/mpc/ffwd.pbm
-%exclude /usr/share/emacs/26.2/etc/images/mpc/ffwd.xpm
-%exclude /usr/share/emacs/26.2/etc/images/mpc/next.pbm
-%exclude /usr/share/emacs/26.2/etc/images/mpc/next.xpm
-%exclude /usr/share/emacs/26.2/etc/images/mpc/pause.pbm
-%exclude /usr/share/emacs/26.2/etc/images/mpc/pause.xpm
-%exclude /usr/share/emacs/26.2/etc/images/mpc/play.pbm
-%exclude /usr/share/emacs/26.2/etc/images/mpc/play.xpm
-%exclude /usr/share/emacs/26.2/etc/images/mpc/prev.pbm
-%exclude /usr/share/emacs/26.2/etc/images/mpc/prev.xpm
-%exclude /usr/share/emacs/26.2/etc/images/mpc/rewind.pbm
-%exclude /usr/share/emacs/26.2/etc/images/mpc/rewind.xpm
-%exclude /usr/share/emacs/26.2/etc/images/mpc/stop.pbm
-%exclude /usr/share/emacs/26.2/etc/images/mpc/stop.xpm
-%exclude /usr/share/emacs/26.2/etc/images/new.pbm
-%exclude /usr/share/emacs/26.2/etc/images/new.xpm
-%exclude /usr/share/emacs/26.2/etc/images/newsticker/README
-%exclude /usr/share/emacs/26.2/etc/images/newsticker/browse-url.xpm
-%exclude /usr/share/emacs/26.2/etc/images/newsticker/get-all.xpm
-%exclude /usr/share/emacs/26.2/etc/images/newsticker/mark-immortal.xpm
-%exclude /usr/share/emacs/26.2/etc/images/newsticker/mark-read.xpm
-%exclude /usr/share/emacs/26.2/etc/images/newsticker/narrow.xpm
-%exclude /usr/share/emacs/26.2/etc/images/newsticker/next-feed.xpm
-%exclude /usr/share/emacs/26.2/etc/images/newsticker/next-item.xpm
-%exclude /usr/share/emacs/26.2/etc/images/newsticker/prev-feed.xpm
-%exclude /usr/share/emacs/26.2/etc/images/newsticker/prev-item.xpm
-%exclude /usr/share/emacs/26.2/etc/images/newsticker/rss-feed.png
-%exclude /usr/share/emacs/26.2/etc/images/newsticker/rss-feed.svg
-%exclude /usr/share/emacs/26.2/etc/images/newsticker/update.xpm
-%exclude /usr/share/emacs/26.2/etc/images/next-node.pbm
-%exclude /usr/share/emacs/26.2/etc/images/next-node.xpm
-%exclude /usr/share/emacs/26.2/etc/images/next-page.pbm
-%exclude /usr/share/emacs/26.2/etc/images/next-page.xpm
-%exclude /usr/share/emacs/26.2/etc/images/open.pbm
-%exclude /usr/share/emacs/26.2/etc/images/open.xpm
-%exclude /usr/share/emacs/26.2/etc/images/paste.pbm
-%exclude /usr/share/emacs/26.2/etc/images/paste.xpm
-%exclude /usr/share/emacs/26.2/etc/images/preferences.pbm
-%exclude /usr/share/emacs/26.2/etc/images/preferences.xpm
-%exclude /usr/share/emacs/26.2/etc/images/prev-node.pbm
-%exclude /usr/share/emacs/26.2/etc/images/prev-node.xpm
-%exclude /usr/share/emacs/26.2/etc/images/print.pbm
-%exclude /usr/share/emacs/26.2/etc/images/print.xpm
-%exclude /usr/share/emacs/26.2/etc/images/redo.pbm
-%exclude /usr/share/emacs/26.2/etc/images/redo.xpm
-%exclude /usr/share/emacs/26.2/etc/images/refresh.pbm
-%exclude /usr/share/emacs/26.2/etc/images/refresh.xpm
-%exclude /usr/share/emacs/26.2/etc/images/right-arrow.pbm
-%exclude /usr/share/emacs/26.2/etc/images/right-arrow.xpm
-%exclude /usr/share/emacs/26.2/etc/images/save.pbm
-%exclude /usr/share/emacs/26.2/etc/images/save.xpm
-%exclude /usr/share/emacs/26.2/etc/images/saveas.pbm
-%exclude /usr/share/emacs/26.2/etc/images/saveas.xpm
-%exclude /usr/share/emacs/26.2/etc/images/search-replace.pbm
-%exclude /usr/share/emacs/26.2/etc/images/search-replace.xpm
-%exclude /usr/share/emacs/26.2/etc/images/search.pbm
-%exclude /usr/share/emacs/26.2/etc/images/search.xpm
-%exclude /usr/share/emacs/26.2/etc/images/separator.pbm
-%exclude /usr/share/emacs/26.2/etc/images/separator.xpm
-%exclude /usr/share/emacs/26.2/etc/images/show.pbm
-%exclude /usr/share/emacs/26.2/etc/images/show.xpm
-%exclude /usr/share/emacs/26.2/etc/images/smilies/README
-%exclude /usr/share/emacs/26.2/etc/images/smilies/blink.pbm
-%exclude /usr/share/emacs/26.2/etc/images/smilies/blink.xpm
-%exclude /usr/share/emacs/26.2/etc/images/smilies/braindamaged.pbm
-%exclude /usr/share/emacs/26.2/etc/images/smilies/braindamaged.xpm
-%exclude /usr/share/emacs/26.2/etc/images/smilies/cry.pbm
-%exclude /usr/share/emacs/26.2/etc/images/smilies/cry.xpm
-%exclude /usr/share/emacs/26.2/etc/images/smilies/dead.pbm
-%exclude /usr/share/emacs/26.2/etc/images/smilies/dead.xpm
-%exclude /usr/share/emacs/26.2/etc/images/smilies/evil.pbm
-%exclude /usr/share/emacs/26.2/etc/images/smilies/evil.xpm
-%exclude /usr/share/emacs/26.2/etc/images/smilies/forced.pbm
-%exclude /usr/share/emacs/26.2/etc/images/smilies/forced.xpm
-%exclude /usr/share/emacs/26.2/etc/images/smilies/frown.pbm
-%exclude /usr/share/emacs/26.2/etc/images/smilies/frown.xpm
-%exclude /usr/share/emacs/26.2/etc/images/smilies/grayscale/README
-%exclude /usr/share/emacs/26.2/etc/images/smilies/grayscale/blink.xpm
-%exclude /usr/share/emacs/26.2/etc/images/smilies/grayscale/braindamaged.xpm
-%exclude /usr/share/emacs/26.2/etc/images/smilies/grayscale/cry.xpm
-%exclude /usr/share/emacs/26.2/etc/images/smilies/grayscale/dead.xpm
-%exclude /usr/share/emacs/26.2/etc/images/smilies/grayscale/evil.xpm
-%exclude /usr/share/emacs/26.2/etc/images/smilies/grayscale/forced.xpm
-%exclude /usr/share/emacs/26.2/etc/images/smilies/grayscale/frown.xpm
-%exclude /usr/share/emacs/26.2/etc/images/smilies/grayscale/grin.xpm
-%exclude /usr/share/emacs/26.2/etc/images/smilies/grayscale/indifferent.xpm
-%exclude /usr/share/emacs/26.2/etc/images/smilies/grayscale/reverse-smile.xpm
-%exclude /usr/share/emacs/26.2/etc/images/smilies/grayscale/sad.xpm
-%exclude /usr/share/emacs/26.2/etc/images/smilies/grayscale/smile.xpm
-%exclude /usr/share/emacs/26.2/etc/images/smilies/grayscale/wry.xpm
-%exclude /usr/share/emacs/26.2/etc/images/smilies/grin.pbm
-%exclude /usr/share/emacs/26.2/etc/images/smilies/grin.xpm
-%exclude /usr/share/emacs/26.2/etc/images/smilies/indifferent.pbm
-%exclude /usr/share/emacs/26.2/etc/images/smilies/indifferent.xpm
-%exclude /usr/share/emacs/26.2/etc/images/smilies/medium/README
-%exclude /usr/share/emacs/26.2/etc/images/smilies/medium/blink.xpm
-%exclude /usr/share/emacs/26.2/etc/images/smilies/medium/braindamaged.xpm
-%exclude /usr/share/emacs/26.2/etc/images/smilies/medium/cry.xpm
-%exclude /usr/share/emacs/26.2/etc/images/smilies/medium/dead.xpm
-%exclude /usr/share/emacs/26.2/etc/images/smilies/medium/evil.xpm
-%exclude /usr/share/emacs/26.2/etc/images/smilies/medium/forced.xpm
-%exclude /usr/share/emacs/26.2/etc/images/smilies/medium/frown.xpm
-%exclude /usr/share/emacs/26.2/etc/images/smilies/medium/grin.xpm
-%exclude /usr/share/emacs/26.2/etc/images/smilies/medium/indifferent.xpm
-%exclude /usr/share/emacs/26.2/etc/images/smilies/medium/reverse-smile.xpm
-%exclude /usr/share/emacs/26.2/etc/images/smilies/medium/sad.xpm
-%exclude /usr/share/emacs/26.2/etc/images/smilies/medium/smile.xpm
-%exclude /usr/share/emacs/26.2/etc/images/smilies/medium/wry.xpm
-%exclude /usr/share/emacs/26.2/etc/images/smilies/sad.pbm
-%exclude /usr/share/emacs/26.2/etc/images/smilies/sad.xpm
-%exclude /usr/share/emacs/26.2/etc/images/smilies/smile.pbm
-%exclude /usr/share/emacs/26.2/etc/images/smilies/smile.xpm
-%exclude /usr/share/emacs/26.2/etc/images/smilies/wry.pbm
-%exclude /usr/share/emacs/26.2/etc/images/smilies/wry.xpm
-%exclude /usr/share/emacs/26.2/etc/images/sort-ascending.pbm
-%exclude /usr/share/emacs/26.2/etc/images/sort-ascending.xpm
-%exclude /usr/share/emacs/26.2/etc/images/sort-column-ascending.pbm
-%exclude /usr/share/emacs/26.2/etc/images/sort-column-ascending.xpm
-%exclude /usr/share/emacs/26.2/etc/images/sort-criteria.pbm
-%exclude /usr/share/emacs/26.2/etc/images/sort-criteria.xpm
-%exclude /usr/share/emacs/26.2/etc/images/sort-descending.pbm
-%exclude /usr/share/emacs/26.2/etc/images/sort-descending.xpm
-%exclude /usr/share/emacs/26.2/etc/images/sort-row-ascending.pbm
-%exclude /usr/share/emacs/26.2/etc/images/sort-row-ascending.xpm
-%exclude /usr/share/emacs/26.2/etc/images/spell.pbm
-%exclude /usr/share/emacs/26.2/etc/images/spell.xpm
-%exclude /usr/share/emacs/26.2/etc/images/splash.pbm
-%exclude /usr/share/emacs/26.2/etc/images/splash.png
-%exclude /usr/share/emacs/26.2/etc/images/splash.svg
-%exclude /usr/share/emacs/26.2/etc/images/splash.xpm
-%exclude /usr/share/emacs/26.2/etc/images/tree-widget/default/README
-%exclude /usr/share/emacs/26.2/etc/images/tree-widget/default/close.png
-%exclude /usr/share/emacs/26.2/etc/images/tree-widget/default/close.xpm
-%exclude /usr/share/emacs/26.2/etc/images/tree-widget/default/empty.png
-%exclude /usr/share/emacs/26.2/etc/images/tree-widget/default/empty.xpm
-%exclude /usr/share/emacs/26.2/etc/images/tree-widget/default/end-guide.png
-%exclude /usr/share/emacs/26.2/etc/images/tree-widget/default/end-guide.xpm
-%exclude /usr/share/emacs/26.2/etc/images/tree-widget/default/guide.png
-%exclude /usr/share/emacs/26.2/etc/images/tree-widget/default/guide.xpm
-%exclude /usr/share/emacs/26.2/etc/images/tree-widget/default/handle.png
-%exclude /usr/share/emacs/26.2/etc/images/tree-widget/default/handle.xpm
-%exclude /usr/share/emacs/26.2/etc/images/tree-widget/default/leaf.png
-%exclude /usr/share/emacs/26.2/etc/images/tree-widget/default/leaf.xpm
-%exclude /usr/share/emacs/26.2/etc/images/tree-widget/default/no-guide.png
-%exclude /usr/share/emacs/26.2/etc/images/tree-widget/default/no-guide.xpm
-%exclude /usr/share/emacs/26.2/etc/images/tree-widget/default/no-handle.png
-%exclude /usr/share/emacs/26.2/etc/images/tree-widget/default/no-handle.xpm
-%exclude /usr/share/emacs/26.2/etc/images/tree-widget/default/open.png
-%exclude /usr/share/emacs/26.2/etc/images/tree-widget/default/open.xpm
-%exclude /usr/share/emacs/26.2/etc/images/tree-widget/folder/README
-%exclude /usr/share/emacs/26.2/etc/images/tree-widget/folder/close.png
-%exclude /usr/share/emacs/26.2/etc/images/tree-widget/folder/close.xpm
-%exclude /usr/share/emacs/26.2/etc/images/tree-widget/folder/empty.png
-%exclude /usr/share/emacs/26.2/etc/images/tree-widget/folder/empty.xpm
-%exclude /usr/share/emacs/26.2/etc/images/tree-widget/folder/end-guide.png
-%exclude /usr/share/emacs/26.2/etc/images/tree-widget/folder/end-guide.xpm
-%exclude /usr/share/emacs/26.2/etc/images/tree-widget/folder/guide.png
-%exclude /usr/share/emacs/26.2/etc/images/tree-widget/folder/guide.xpm
-%exclude /usr/share/emacs/26.2/etc/images/tree-widget/folder/handle.png
-%exclude /usr/share/emacs/26.2/etc/images/tree-widget/folder/handle.xpm
-%exclude /usr/share/emacs/26.2/etc/images/tree-widget/folder/leaf.png
-%exclude /usr/share/emacs/26.2/etc/images/tree-widget/folder/leaf.xpm
-%exclude /usr/share/emacs/26.2/etc/images/tree-widget/folder/no-guide.png
-%exclude /usr/share/emacs/26.2/etc/images/tree-widget/folder/no-guide.xpm
-%exclude /usr/share/emacs/26.2/etc/images/tree-widget/folder/no-handle.png
-%exclude /usr/share/emacs/26.2/etc/images/tree-widget/folder/no-handle.xpm
-%exclude /usr/share/emacs/26.2/etc/images/tree-widget/folder/open.png
-%exclude /usr/share/emacs/26.2/etc/images/tree-widget/folder/open.xpm
-%exclude /usr/share/emacs/26.2/etc/images/unchecked.pbm
-%exclude /usr/share/emacs/26.2/etc/images/unchecked.xpm
-%exclude /usr/share/emacs/26.2/etc/images/undo.pbm
-%exclude /usr/share/emacs/26.2/etc/images/undo.xpm
-%exclude /usr/share/emacs/26.2/etc/images/up-arrow.pbm
-%exclude /usr/share/emacs/26.2/etc/images/up-arrow.xpm
-%exclude /usr/share/emacs/26.2/etc/images/up-node.pbm
-%exclude /usr/share/emacs/26.2/etc/images/up-node.xpm
-%exclude /usr/share/emacs/26.2/etc/images/zoom-in.pbm
-%exclude /usr/share/emacs/26.2/etc/images/zoom-in.xpm
-%exclude /usr/share/emacs/26.2/etc/images/zoom-out.pbm
-%exclude /usr/share/emacs/26.2/etc/images/zoom-out.xpm
-%exclude /usr/share/emacs/26.2/etc/nxml/README
-%exclude /usr/share/emacs/26.2/etc/nxml/test-invalid.xml
-%exclude /usr/share/emacs/26.2/etc/nxml/test-valid.xml
-%exclude /usr/share/emacs/26.2/etc/org/OrgOdtContentTemplate.xml
-%exclude /usr/share/emacs/26.2/etc/org/OrgOdtStyles.xml
-%exclude /usr/share/emacs/26.2/etc/org/README
-%exclude /usr/share/emacs/26.2/etc/package-keyring.gpg
-%exclude /usr/share/emacs/26.2/etc/ps-prin0.ps
-%exclude /usr/share/emacs/26.2/etc/ps-prin1.ps
-%exclude /usr/share/emacs/26.2/etc/publicsuffix.txt.gz
-%exclude /usr/share/emacs/26.2/etc/refcards/Makefile
-%exclude /usr/share/emacs/26.2/etc/refcards/README
-%exclude /usr/share/emacs/26.2/etc/refcards/calccard.pdf
-%exclude /usr/share/emacs/26.2/etc/refcards/calccard.tex
-%exclude /usr/share/emacs/26.2/etc/refcards/cs-dired-ref.pdf
-%exclude /usr/share/emacs/26.2/etc/refcards/cs-dired-ref.tex
-%exclude /usr/share/emacs/26.2/etc/refcards/cs-refcard.pdf
-%exclude /usr/share/emacs/26.2/etc/refcards/cs-refcard.tex
-%exclude /usr/share/emacs/26.2/etc/refcards/cs-survival.pdf
-%exclude /usr/share/emacs/26.2/etc/refcards/cs-survival.tex
-%exclude /usr/share/emacs/26.2/etc/refcards/de-refcard.pdf
-%exclude /usr/share/emacs/26.2/etc/refcards/de-refcard.tex
-%exclude /usr/share/emacs/26.2/etc/refcards/dired-ref.pdf
-%exclude /usr/share/emacs/26.2/etc/refcards/dired-ref.tex
-%exclude /usr/share/emacs/26.2/etc/refcards/emacsver.tex
-%exclude /usr/share/emacs/26.2/etc/refcards/fr-dired-ref.pdf
-%exclude /usr/share/emacs/26.2/etc/refcards/fr-dired-ref.tex
-%exclude /usr/share/emacs/26.2/etc/refcards/fr-refcard.pdf
-%exclude /usr/share/emacs/26.2/etc/refcards/fr-refcard.tex
-%exclude /usr/share/emacs/26.2/etc/refcards/fr-survival.pdf
-%exclude /usr/share/emacs/26.2/etc/refcards/fr-survival.tex
-%exclude /usr/share/emacs/26.2/etc/refcards/gnus-booklet.pdf
-%exclude /usr/share/emacs/26.2/etc/refcards/gnus-logo.eps
-%exclude /usr/share/emacs/26.2/etc/refcards/gnus-logo.pdf
-%exclude /usr/share/emacs/26.2/etc/refcards/gnus-refcard.pdf
-%exclude /usr/share/emacs/26.2/etc/refcards/gnus-refcard.tex
-%exclude /usr/share/emacs/26.2/etc/refcards/orgcard.pdf
-%exclude /usr/share/emacs/26.2/etc/refcards/orgcard.tex
-%exclude /usr/share/emacs/26.2/etc/refcards/pdflayout.sty
-%exclude /usr/share/emacs/26.2/etc/refcards/pl-refcard.pdf
-%exclude /usr/share/emacs/26.2/etc/refcards/pl-refcard.tex
-%exclude /usr/share/emacs/26.2/etc/refcards/pt-br-refcard.pdf
-%exclude /usr/share/emacs/26.2/etc/refcards/pt-br-refcard.tex
-%exclude /usr/share/emacs/26.2/etc/refcards/refcard.pdf
-%exclude /usr/share/emacs/26.2/etc/refcards/refcard.tex
-%exclude /usr/share/emacs/26.2/etc/refcards/ru-refcard.pdf
-%exclude /usr/share/emacs/26.2/etc/refcards/ru-refcard.tex
-%exclude /usr/share/emacs/26.2/etc/refcards/sk-dired-ref.pdf
-%exclude /usr/share/emacs/26.2/etc/refcards/sk-dired-ref.tex
-%exclude /usr/share/emacs/26.2/etc/refcards/sk-refcard.pdf
-%exclude /usr/share/emacs/26.2/etc/refcards/sk-refcard.tex
-%exclude /usr/share/emacs/26.2/etc/refcards/sk-survival.pdf
-%exclude /usr/share/emacs/26.2/etc/refcards/sk-survival.tex
-%exclude /usr/share/emacs/26.2/etc/refcards/survival.pdf
-%exclude /usr/share/emacs/26.2/etc/refcards/survival.tex
-%exclude /usr/share/emacs/26.2/etc/refcards/vipcard.pdf
-%exclude /usr/share/emacs/26.2/etc/refcards/vipcard.tex
-%exclude /usr/share/emacs/26.2/etc/refcards/viperCard.pdf
-%exclude /usr/share/emacs/26.2/etc/refcards/viperCard.tex
-%exclude /usr/share/emacs/26.2/etc/rgb.txt
-%exclude /usr/share/emacs/26.2/etc/schema/README
-%exclude /usr/share/emacs/26.2/etc/schema/calstbl.rnc
-%exclude /usr/share/emacs/26.2/etc/schema/dbcalstbl.rnc
-%exclude /usr/share/emacs/26.2/etc/schema/dbhier.rnc
-%exclude /usr/share/emacs/26.2/etc/schema/dbnotn.rnc
-%exclude /usr/share/emacs/26.2/etc/schema/dbpool.rnc
-%exclude /usr/share/emacs/26.2/etc/schema/dbstart.rnc
-%exclude /usr/share/emacs/26.2/etc/schema/docbook.rnc
-%exclude /usr/share/emacs/26.2/etc/schema/locate.rnc
-%exclude /usr/share/emacs/26.2/etc/schema/od-manifest-schema-v1.2-os.rnc
-%exclude /usr/share/emacs/26.2/etc/schema/od-schema-v1.2-os.rnc
-%exclude /usr/share/emacs/26.2/etc/schema/rdfxml.rnc
-%exclude /usr/share/emacs/26.2/etc/schema/relaxng.rnc
-%exclude /usr/share/emacs/26.2/etc/schema/schemas.xml
-%exclude /usr/share/emacs/26.2/etc/schema/xhtml-applet.rnc
-%exclude /usr/share/emacs/26.2/etc/schema/xhtml-attribs.rnc
-%exclude /usr/share/emacs/26.2/etc/schema/xhtml-base.rnc
-%exclude /usr/share/emacs/26.2/etc/schema/xhtml-bdo.rnc
-%exclude /usr/share/emacs/26.2/etc/schema/xhtml-bform.rnc
-%exclude /usr/share/emacs/26.2/etc/schema/xhtml-btable.rnc
-%exclude /usr/share/emacs/26.2/etc/schema/xhtml-csismap.rnc
-%exclude /usr/share/emacs/26.2/etc/schema/xhtml-datatypes.rnc
-%exclude /usr/share/emacs/26.2/etc/schema/xhtml-edit.rnc
-%exclude /usr/share/emacs/26.2/etc/schema/xhtml-events.rnc
-%exclude /usr/share/emacs/26.2/etc/schema/xhtml-form.rnc
-%exclude /usr/share/emacs/26.2/etc/schema/xhtml-frames.rnc
-%exclude /usr/share/emacs/26.2/etc/schema/xhtml-hypertext.rnc
-%exclude /usr/share/emacs/26.2/etc/schema/xhtml-iframe.rnc
-%exclude /usr/share/emacs/26.2/etc/schema/xhtml-image.rnc
-%exclude /usr/share/emacs/26.2/etc/schema/xhtml-inlstyle.rnc
-%exclude /usr/share/emacs/26.2/etc/schema/xhtml-legacy.rnc
-%exclude /usr/share/emacs/26.2/etc/schema/xhtml-link.rnc
-%exclude /usr/share/emacs/26.2/etc/schema/xhtml-lst.rnc
-%exclude /usr/share/emacs/26.2/etc/schema/xhtml-meta.rnc
-%exclude /usr/share/emacs/26.2/etc/schema/xhtml-nameident.rnc
-%exclude /usr/share/emacs/26.2/etc/schema/xhtml-object.rnc
-%exclude /usr/share/emacs/26.2/etc/schema/xhtml-param.rnc
-%exclude /usr/share/emacs/26.2/etc/schema/xhtml-pres.rnc
-%exclude /usr/share/emacs/26.2/etc/schema/xhtml-ruby.rnc
-%exclude /usr/share/emacs/26.2/etc/schema/xhtml-script.rnc
-%exclude /usr/share/emacs/26.2/etc/schema/xhtml-ssismap.rnc
-%exclude /usr/share/emacs/26.2/etc/schema/xhtml-struct.rnc
-%exclude /usr/share/emacs/26.2/etc/schema/xhtml-table.rnc
-%exclude /usr/share/emacs/26.2/etc/schema/xhtml-text.rnc
-%exclude /usr/share/emacs/26.2/etc/schema/xhtml-tgt.rnc
-%exclude /usr/share/emacs/26.2/etc/schema/xhtml-xstyle.rnc
-%exclude /usr/share/emacs/26.2/etc/schema/xhtml.rnc
-%exclude /usr/share/emacs/26.2/etc/schema/xslt.rnc
-%exclude /usr/share/emacs/26.2/etc/ses-example.ses
-%exclude /usr/share/emacs/26.2/etc/spook.lines
-%exclude /usr/share/emacs/26.2/etc/srecode/c.srt
-%exclude /usr/share/emacs/26.2/etc/srecode/cpp.srt
-%exclude /usr/share/emacs/26.2/etc/srecode/default.srt
-%exclude /usr/share/emacs/26.2/etc/srecode/doc-cpp.srt
-%exclude /usr/share/emacs/26.2/etc/srecode/doc-default.srt
-%exclude /usr/share/emacs/26.2/etc/srecode/doc-java.srt
-%exclude /usr/share/emacs/26.2/etc/srecode/ede-autoconf.srt
-%exclude /usr/share/emacs/26.2/etc/srecode/ede-make.srt
-%exclude /usr/share/emacs/26.2/etc/srecode/el.srt
-%exclude /usr/share/emacs/26.2/etc/srecode/getset-cpp.srt
-%exclude /usr/share/emacs/26.2/etc/srecode/java.srt
-%exclude /usr/share/emacs/26.2/etc/srecode/make.srt
-%exclude /usr/share/emacs/26.2/etc/srecode/template.srt
-%exclude /usr/share/emacs/26.2/etc/srecode/test.srt
-%exclude /usr/share/emacs/26.2/etc/srecode/texi.srt
-%exclude /usr/share/emacs/26.2/etc/srecode/wisent.srt
-%exclude /usr/share/emacs/26.2/etc/themes/adwaita-theme.el
-%exclude /usr/share/emacs/26.2/etc/themes/deeper-blue-theme.el
-%exclude /usr/share/emacs/26.2/etc/themes/dichromacy-theme.el
-%exclude /usr/share/emacs/26.2/etc/themes/leuven-theme.el
-%exclude /usr/share/emacs/26.2/etc/themes/light-blue-theme.el
-%exclude /usr/share/emacs/26.2/etc/themes/manoj-dark-theme.el
-%exclude /usr/share/emacs/26.2/etc/themes/misterioso-theme.el
-%exclude /usr/share/emacs/26.2/etc/themes/tango-dark-theme.el
-%exclude /usr/share/emacs/26.2/etc/themes/tango-theme.el
-%exclude /usr/share/emacs/26.2/etc/themes/tsdh-dark-theme.el
-%exclude /usr/share/emacs/26.2/etc/themes/tsdh-light-theme.el
-%exclude /usr/share/emacs/26.2/etc/themes/wheatgrass-theme.el
-%exclude /usr/share/emacs/26.2/etc/themes/whiteboard-theme.el
-%exclude /usr/share/emacs/26.2/etc/themes/wombat-theme.el
-%exclude /usr/share/emacs/26.2/etc/tutorials/TUTORIAL
-%exclude /usr/share/emacs/26.2/etc/tutorials/TUTORIAL.bg
-%exclude /usr/share/emacs/26.2/etc/tutorials/TUTORIAL.cn
-%exclude /usr/share/emacs/26.2/etc/tutorials/TUTORIAL.cs
-%exclude /usr/share/emacs/26.2/etc/tutorials/TUTORIAL.de
-%exclude /usr/share/emacs/26.2/etc/tutorials/TUTORIAL.eo
-%exclude /usr/share/emacs/26.2/etc/tutorials/TUTORIAL.es
-%exclude /usr/share/emacs/26.2/etc/tutorials/TUTORIAL.fr
-%exclude /usr/share/emacs/26.2/etc/tutorials/TUTORIAL.he
-%exclude /usr/share/emacs/26.2/etc/tutorials/TUTORIAL.it
-%exclude /usr/share/emacs/26.2/etc/tutorials/TUTORIAL.ja
-%exclude /usr/share/emacs/26.2/etc/tutorials/TUTORIAL.ko
-%exclude /usr/share/emacs/26.2/etc/tutorials/TUTORIAL.nl
-%exclude /usr/share/emacs/26.2/etc/tutorials/TUTORIAL.pl
-%exclude /usr/share/emacs/26.2/etc/tutorials/TUTORIAL.pt_BR
-%exclude /usr/share/emacs/26.2/etc/tutorials/TUTORIAL.ro
-%exclude /usr/share/emacs/26.2/etc/tutorials/TUTORIAL.ru
-%exclude /usr/share/emacs/26.2/etc/tutorials/TUTORIAL.sk
-%exclude /usr/share/emacs/26.2/etc/tutorials/TUTORIAL.sl
-%exclude /usr/share/emacs/26.2/etc/tutorials/TUTORIAL.sv
-%exclude /usr/share/emacs/26.2/etc/tutorials/TUTORIAL.th
-%exclude /usr/share/emacs/26.2/etc/tutorials/TUTORIAL.translators
-%exclude /usr/share/emacs/26.2/etc/tutorials/TUTORIAL.zh
-%exclude /usr/share/emacs/26.2/etc/yow.lines
-%exclude /usr/share/emacs/26.2/lisp/COPYING
-%exclude /usr/share/emacs/26.2/lisp/README
-%exclude /usr/share/emacs/26.2/lisp/abbrev.el.gz
-%exclude /usr/share/emacs/26.2/lisp/abbrev.elc
-%exclude /usr/share/emacs/26.2/lisp/align.el.gz
-%exclude /usr/share/emacs/26.2/lisp/align.elc
-%exclude /usr/share/emacs/26.2/lisp/allout-widgets.el.gz
-%exclude /usr/share/emacs/26.2/lisp/allout-widgets.elc
-%exclude /usr/share/emacs/26.2/lisp/allout.el.gz
-%exclude /usr/share/emacs/26.2/lisp/allout.elc
-%exclude /usr/share/emacs/26.2/lisp/ansi-color.el.gz
-%exclude /usr/share/emacs/26.2/lisp/ansi-color.elc
-%exclude /usr/share/emacs/26.2/lisp/apropos.el.gz
-%exclude /usr/share/emacs/26.2/lisp/apropos.elc
-%exclude /usr/share/emacs/26.2/lisp/arc-mode.el.gz
-%exclude /usr/share/emacs/26.2/lisp/arc-mode.elc
-%exclude /usr/share/emacs/26.2/lisp/array.el.gz
-%exclude /usr/share/emacs/26.2/lisp/array.elc
-%exclude /usr/share/emacs/26.2/lisp/auth-source-pass.el.gz
-%exclude /usr/share/emacs/26.2/lisp/auth-source-pass.elc
-%exclude /usr/share/emacs/26.2/lisp/auth-source.el.gz
-%exclude /usr/share/emacs/26.2/lisp/auth-source.elc
-%exclude /usr/share/emacs/26.2/lisp/autoarg.el.gz
-%exclude /usr/share/emacs/26.2/lisp/autoarg.elc
-%exclude /usr/share/emacs/26.2/lisp/autoinsert.el.gz
-%exclude /usr/share/emacs/26.2/lisp/autoinsert.elc
-%exclude /usr/share/emacs/26.2/lisp/autorevert.el.gz
-%exclude /usr/share/emacs/26.2/lisp/autorevert.elc
-%exclude /usr/share/emacs/26.2/lisp/avoid.el.gz
-%exclude /usr/share/emacs/26.2/lisp/avoid.elc
-%exclude /usr/share/emacs/26.2/lisp/battery.el.gz
-%exclude /usr/share/emacs/26.2/lisp/battery.elc
-%exclude /usr/share/emacs/26.2/lisp/bindings.el.gz
-%exclude /usr/share/emacs/26.2/lisp/bindings.elc
-%exclude /usr/share/emacs/26.2/lisp/bookmark.el.gz
-%exclude /usr/share/emacs/26.2/lisp/bookmark.elc
-%exclude /usr/share/emacs/26.2/lisp/bs.el.gz
-%exclude /usr/share/emacs/26.2/lisp/bs.elc
-%exclude /usr/share/emacs/26.2/lisp/buff-menu.el.gz
-%exclude /usr/share/emacs/26.2/lisp/buff-menu.elc
-%exclude /usr/share/emacs/26.2/lisp/button.el.gz
-%exclude /usr/share/emacs/26.2/lisp/button.elc
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-aent.el.gz
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-aent.elc
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-alg.el.gz
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-alg.elc
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-arith.el.gz
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-arith.elc
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-bin.el.gz
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-bin.elc
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-comb.el.gz
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-comb.elc
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-cplx.el.gz
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-cplx.elc
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-embed.el.gz
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-embed.elc
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-ext.el.gz
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-ext.elc
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-fin.el.gz
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-fin.elc
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-forms.el.gz
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-forms.elc
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-frac.el.gz
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-frac.elc
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-funcs.el.gz
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-funcs.elc
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-graph.el.gz
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-graph.elc
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-help.el.gz
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-help.elc
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-incom.el.gz
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-incom.elc
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-keypd.el.gz
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-keypd.elc
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-lang.el.gz
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-lang.elc
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-loaddefs.el
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-macs.el.gz
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-macs.elc
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-map.el.gz
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-map.elc
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-math.el.gz
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-math.elc
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-menu.el.gz
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-menu.elc
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-misc.el.gz
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-misc.elc
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-mode.el.gz
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-mode.elc
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-mtx.el.gz
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-mtx.elc
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-nlfit.el.gz
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-nlfit.elc
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-poly.el.gz
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-poly.elc
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-prog.el.gz
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-prog.elc
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-rewr.el.gz
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-rewr.elc
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-rules.el.gz
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-rules.elc
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-sel.el.gz
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-sel.elc
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-stat.el.gz
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-stat.elc
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-store.el.gz
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-store.elc
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-stuff.el.gz
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-stuff.elc
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-trail.el.gz
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-trail.elc
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-undo.el.gz
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-undo.elc
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-units.el.gz
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-units.elc
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-vec.el.gz
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-vec.elc
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-yank.el.gz
-%exclude /usr/share/emacs/26.2/lisp/calc/calc-yank.elc
-%exclude /usr/share/emacs/26.2/lisp/calc/calc.el.gz
-%exclude /usr/share/emacs/26.2/lisp/calc/calc.elc
-%exclude /usr/share/emacs/26.2/lisp/calc/calcalg2.el.gz
-%exclude /usr/share/emacs/26.2/lisp/calc/calcalg2.elc
-%exclude /usr/share/emacs/26.2/lisp/calc/calcalg3.el.gz
-%exclude /usr/share/emacs/26.2/lisp/calc/calcalg3.elc
-%exclude /usr/share/emacs/26.2/lisp/calc/calccomp.el.gz
-%exclude /usr/share/emacs/26.2/lisp/calc/calccomp.elc
-%exclude /usr/share/emacs/26.2/lisp/calc/calcsel2.el.gz
-%exclude /usr/share/emacs/26.2/lisp/calc/calcsel2.elc
-%exclude /usr/share/emacs/26.2/lisp/calculator.el.gz
-%exclude /usr/share/emacs/26.2/lisp/calculator.elc
-%exclude /usr/share/emacs/26.2/lisp/calendar/appt.el.gz
-%exclude /usr/share/emacs/26.2/lisp/calendar/appt.elc
-%exclude /usr/share/emacs/26.2/lisp/calendar/cal-bahai.el.gz
-%exclude /usr/share/emacs/26.2/lisp/calendar/cal-bahai.elc
-%exclude /usr/share/emacs/26.2/lisp/calendar/cal-china.el.gz
-%exclude /usr/share/emacs/26.2/lisp/calendar/cal-china.elc
-%exclude /usr/share/emacs/26.2/lisp/calendar/cal-coptic.el.gz
-%exclude /usr/share/emacs/26.2/lisp/calendar/cal-coptic.elc
-%exclude /usr/share/emacs/26.2/lisp/calendar/cal-dst.el.gz
-%exclude /usr/share/emacs/26.2/lisp/calendar/cal-dst.elc
-%exclude /usr/share/emacs/26.2/lisp/calendar/cal-french.el.gz
-%exclude /usr/share/emacs/26.2/lisp/calendar/cal-french.elc
-%exclude /usr/share/emacs/26.2/lisp/calendar/cal-hebrew.el.gz
-%exclude /usr/share/emacs/26.2/lisp/calendar/cal-hebrew.elc
-%exclude /usr/share/emacs/26.2/lisp/calendar/cal-html.el.gz
-%exclude /usr/share/emacs/26.2/lisp/calendar/cal-html.elc
-%exclude /usr/share/emacs/26.2/lisp/calendar/cal-islam.el.gz
-%exclude /usr/share/emacs/26.2/lisp/calendar/cal-islam.elc
-%exclude /usr/share/emacs/26.2/lisp/calendar/cal-iso.el.gz
-%exclude /usr/share/emacs/26.2/lisp/calendar/cal-iso.elc
-%exclude /usr/share/emacs/26.2/lisp/calendar/cal-julian.el.gz
-%exclude /usr/share/emacs/26.2/lisp/calendar/cal-julian.elc
-%exclude /usr/share/emacs/26.2/lisp/calendar/cal-loaddefs.el
-%exclude /usr/share/emacs/26.2/lisp/calendar/cal-mayan.el.gz
-%exclude /usr/share/emacs/26.2/lisp/calendar/cal-mayan.elc
-%exclude /usr/share/emacs/26.2/lisp/calendar/cal-menu.el.gz
-%exclude /usr/share/emacs/26.2/lisp/calendar/cal-menu.elc
-%exclude /usr/share/emacs/26.2/lisp/calendar/cal-move.el.gz
-%exclude /usr/share/emacs/26.2/lisp/calendar/cal-move.elc
-%exclude /usr/share/emacs/26.2/lisp/calendar/cal-persia.el.gz
-%exclude /usr/share/emacs/26.2/lisp/calendar/cal-persia.elc
-%exclude /usr/share/emacs/26.2/lisp/calendar/cal-tex.el.gz
-%exclude /usr/share/emacs/26.2/lisp/calendar/cal-tex.elc
-%exclude /usr/share/emacs/26.2/lisp/calendar/cal-x.el.gz
-%exclude /usr/share/emacs/26.2/lisp/calendar/cal-x.elc
-%exclude /usr/share/emacs/26.2/lisp/calendar/calendar.el.gz
-%exclude /usr/share/emacs/26.2/lisp/calendar/calendar.elc
-%exclude /usr/share/emacs/26.2/lisp/calendar/diary-lib.el.gz
-%exclude /usr/share/emacs/26.2/lisp/calendar/diary-lib.elc
-%exclude /usr/share/emacs/26.2/lisp/calendar/diary-loaddefs.el
-%exclude /usr/share/emacs/26.2/lisp/calendar/hol-loaddefs.el
-%exclude /usr/share/emacs/26.2/lisp/calendar/holidays.el.gz
-%exclude /usr/share/emacs/26.2/lisp/calendar/holidays.elc
-%exclude /usr/share/emacs/26.2/lisp/calendar/icalendar.el.gz
-%exclude /usr/share/emacs/26.2/lisp/calendar/icalendar.elc
-%exclude /usr/share/emacs/26.2/lisp/calendar/lunar.el.gz
-%exclude /usr/share/emacs/26.2/lisp/calendar/lunar.elc
-%exclude /usr/share/emacs/26.2/lisp/calendar/parse-time.el.gz
-%exclude /usr/share/emacs/26.2/lisp/calendar/parse-time.elc
-%exclude /usr/share/emacs/26.2/lisp/calendar/solar.el.gz
-%exclude /usr/share/emacs/26.2/lisp/calendar/solar.elc
-%exclude /usr/share/emacs/26.2/lisp/calendar/time-date.el.gz
-%exclude /usr/share/emacs/26.2/lisp/calendar/time-date.elc
-%exclude /usr/share/emacs/26.2/lisp/calendar/timeclock.el.gz
-%exclude /usr/share/emacs/26.2/lisp/calendar/timeclock.elc
-%exclude /usr/share/emacs/26.2/lisp/calendar/todo-mode.el.gz
-%exclude /usr/share/emacs/26.2/lisp/calendar/todo-mode.elc
-%exclude /usr/share/emacs/26.2/lisp/case-table.el.gz
-%exclude /usr/share/emacs/26.2/lisp/case-table.elc
-%exclude /usr/share/emacs/26.2/lisp/cdl.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cdl.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/cedet-cscope.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/cedet-cscope.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/cedet-files.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/cedet-files.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/cedet-global.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/cedet-global.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/cedet-idutils.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/cedet-idutils.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/cedet.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/cedet.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/data-debug.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/data-debug.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/auto.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/auto.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/autoconf-edit.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/autoconf-edit.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/base.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/base.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/config.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/config.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/cpp-root.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/cpp-root.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/custom.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/custom.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/detect.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/detect.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/dired.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/dired.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/emacs.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/emacs.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/files.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/files.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/generic.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/generic.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/linux.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/linux.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/loaddefs.el
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/locate.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/locate.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/make.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/make.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/makefile-edit.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/makefile-edit.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/pconf.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/pconf.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/pmake.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/pmake.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/proj-archive.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/proj-archive.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/proj-aux.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/proj-aux.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/proj-comp.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/proj-comp.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/proj-elisp.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/proj-elisp.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/proj-info.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/proj-info.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/proj-misc.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/proj-misc.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/proj-obj.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/proj-obj.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/proj-prog.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/proj-prog.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/proj-scheme.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/proj-scheme.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/proj-shared.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/proj-shared.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/proj.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/proj.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/project-am.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/project-am.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/shell.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/shell.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/simple.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/simple.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/source.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/source.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/speedbar.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/speedbar.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/srecode.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/srecode.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/system.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/system.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/util.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/ede/util.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/inversion.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/inversion.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/mode-local.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/mode-local.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/pulse.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/pulse.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/analyze.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/analyze.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/analyze/complete.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/analyze/complete.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/analyze/debug.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/analyze/debug.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/analyze/fcn.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/analyze/fcn.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/analyze/refs.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/analyze/refs.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/bovine.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/bovine.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/bovine/c-by.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/bovine/c-by.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/bovine/c.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/bovine/c.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/bovine/debug.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/bovine/debug.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/bovine/el.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/bovine/el.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/bovine/gcc.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/bovine/gcc.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/bovine/grammar.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/bovine/grammar.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/bovine/make-by.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/bovine/make-by.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/bovine/make.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/bovine/make.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/bovine/scm-by.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/bovine/scm-by.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/bovine/scm.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/bovine/scm.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/chart.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/chart.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/complete.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/complete.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/ctxt.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/ctxt.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/db-debug.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/db-debug.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/db-ebrowse.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/db-ebrowse.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/db-el.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/db-el.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/db-file.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/db-file.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/db-find.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/db-find.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/db-global.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/db-global.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/db-javascript.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/db-javascript.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/db-mode.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/db-mode.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/db-ref.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/db-ref.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/db-typecache.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/db-typecache.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/db.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/db.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/debug.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/debug.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/decorate.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/decorate.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/decorate/include.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/decorate/include.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/decorate/mode.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/decorate/mode.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/dep.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/dep.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/doc.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/doc.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/ede-grammar.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/ede-grammar.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/edit.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/edit.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/find.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/find.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/format.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/format.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/fw.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/fw.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/grammar-wy.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/grammar-wy.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/grammar.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/grammar.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/html.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/html.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/ia-sb.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/ia-sb.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/ia.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/ia.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/idle.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/idle.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/imenu.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/imenu.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/java.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/java.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/lex-spp.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/lex-spp.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/lex.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/lex.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/loaddefs.el
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/mru-bookmark.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/mru-bookmark.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/sb.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/sb.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/scope.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/scope.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/senator.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/senator.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/sort.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/sort.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/symref.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/symref.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/symref/cscope.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/symref/cscope.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/symref/filter.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/symref/filter.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/symref/global.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/symref/global.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/symref/grep.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/symref/grep.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/symref/idutils.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/symref/idutils.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/symref/list.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/symref/list.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/tag-file.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/tag-file.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/tag-ls.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/tag-ls.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/tag-write.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/tag-write.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/tag.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/tag.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/texi.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/texi.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/util-modes.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/util-modes.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/util.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/util.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/wisent.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/wisent.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/wisent/comp.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/wisent/comp.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/wisent/grammar.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/wisent/grammar.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/wisent/java-tags.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/wisent/java-tags.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/wisent/javascript.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/wisent/javascript.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/wisent/javat-wy.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/wisent/javat-wy.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/wisent/js-wy.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/wisent/js-wy.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/wisent/python-wy.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/wisent/python-wy.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/wisent/python.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/wisent/python.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/wisent/wisent.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/semantic/wisent/wisent.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/srecode.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/srecode.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/srecode/args.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/srecode/args.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/srecode/compile.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/srecode/compile.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/srecode/cpp.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/srecode/cpp.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/srecode/ctxt.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/srecode/ctxt.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/srecode/dictionary.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/srecode/dictionary.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/srecode/document.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/srecode/document.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/srecode/el.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/srecode/el.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/srecode/expandproto.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/srecode/expandproto.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/srecode/extract.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/srecode/extract.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/srecode/fields.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/srecode/fields.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/srecode/filters.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/srecode/filters.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/srecode/find.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/srecode/find.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/srecode/getset.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/srecode/getset.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/srecode/insert.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/srecode/insert.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/srecode/java.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/srecode/java.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/srecode/loaddefs.el
-%exclude /usr/share/emacs/26.2/lisp/cedet/srecode/map.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/srecode/map.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/srecode/mode.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/srecode/mode.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/srecode/semantic.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/srecode/semantic.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/srecode/srt-mode.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/srecode/srt-mode.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/srecode/srt-wy.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/srecode/srt-wy.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/srecode/srt.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/srecode/srt.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/srecode/table.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/srecode/table.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/srecode/template.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/srecode/template.elc
-%exclude /usr/share/emacs/26.2/lisp/cedet/srecode/texi.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cedet/srecode/texi.elc
-%exclude /usr/share/emacs/26.2/lisp/char-fold.el.gz
-%exclude /usr/share/emacs/26.2/lisp/char-fold.elc
-%exclude /usr/share/emacs/26.2/lisp/chistory.el.gz
-%exclude /usr/share/emacs/26.2/lisp/chistory.elc
-%exclude /usr/share/emacs/26.2/lisp/cmuscheme.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cmuscheme.elc
-%exclude /usr/share/emacs/26.2/lisp/color.el.gz
-%exclude /usr/share/emacs/26.2/lisp/color.elc
-%exclude /usr/share/emacs/26.2/lisp/comint.el.gz
-%exclude /usr/share/emacs/26.2/lisp/comint.elc
-%exclude /usr/share/emacs/26.2/lisp/completion.el.gz
-%exclude /usr/share/emacs/26.2/lisp/completion.elc
-%exclude /usr/share/emacs/26.2/lisp/composite.el.gz
-%exclude /usr/share/emacs/26.2/lisp/composite.elc
-%exclude /usr/share/emacs/26.2/lisp/cus-dep.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cus-dep.elc
-%exclude /usr/share/emacs/26.2/lisp/cus-edit.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cus-edit.elc
-%exclude /usr/share/emacs/26.2/lisp/cus-face.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cus-face.elc
-%exclude /usr/share/emacs/26.2/lisp/cus-load.el
-%exclude /usr/share/emacs/26.2/lisp/cus-start.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cus-start.elc
-%exclude /usr/share/emacs/26.2/lisp/cus-theme.el.gz
-%exclude /usr/share/emacs/26.2/lisp/cus-theme.elc
-%exclude /usr/share/emacs/26.2/lisp/custom.el.gz
-%exclude /usr/share/emacs/26.2/lisp/custom.elc
-%exclude /usr/share/emacs/26.2/lisp/dabbrev.el.gz
-%exclude /usr/share/emacs/26.2/lisp/dabbrev.elc
-%exclude /usr/share/emacs/26.2/lisp/delim-col.el.gz
-%exclude /usr/share/emacs/26.2/lisp/delim-col.elc
-%exclude /usr/share/emacs/26.2/lisp/delsel.el.gz
-%exclude /usr/share/emacs/26.2/lisp/delsel.elc
-%exclude /usr/share/emacs/26.2/lisp/descr-text.el.gz
-%exclude /usr/share/emacs/26.2/lisp/descr-text.elc
-%exclude /usr/share/emacs/26.2/lisp/desktop.el.gz
-%exclude /usr/share/emacs/26.2/lisp/desktop.elc
-%exclude /usr/share/emacs/26.2/lisp/dframe.el.gz
-%exclude /usr/share/emacs/26.2/lisp/dframe.elc
-%exclude /usr/share/emacs/26.2/lisp/dired-aux.el.gz
-%exclude /usr/share/emacs/26.2/lisp/dired-aux.elc
-%exclude /usr/share/emacs/26.2/lisp/dired-loaddefs.el
-%exclude /usr/share/emacs/26.2/lisp/dired-x.el.gz
-%exclude /usr/share/emacs/26.2/lisp/dired-x.elc
-%exclude /usr/share/emacs/26.2/lisp/dired.el.gz
-%exclude /usr/share/emacs/26.2/lisp/dired.elc
-%exclude /usr/share/emacs/26.2/lisp/dirtrack.el.gz
-%exclude /usr/share/emacs/26.2/lisp/dirtrack.elc
-%exclude /usr/share/emacs/26.2/lisp/disp-table.el.gz
-%exclude /usr/share/emacs/26.2/lisp/disp-table.elc
-%exclude /usr/share/emacs/26.2/lisp/display-line-numbers.el.gz
-%exclude /usr/share/emacs/26.2/lisp/display-line-numbers.elc
-%exclude /usr/share/emacs/26.2/lisp/dnd.el.gz
-%exclude /usr/share/emacs/26.2/lisp/dnd.elc
-%exclude /usr/share/emacs/26.2/lisp/doc-view.el.gz
-%exclude /usr/share/emacs/26.2/lisp/doc-view.elc
-%exclude /usr/share/emacs/26.2/lisp/dom.el.gz
-%exclude /usr/share/emacs/26.2/lisp/dom.elc
-%exclude /usr/share/emacs/26.2/lisp/dos-fns.el.gz
-%exclude /usr/share/emacs/26.2/lisp/dos-fns.elc
-%exclude /usr/share/emacs/26.2/lisp/dos-vars.el.gz
-%exclude /usr/share/emacs/26.2/lisp/dos-vars.elc
-%exclude /usr/share/emacs/26.2/lisp/dos-w32.el.gz
-%exclude /usr/share/emacs/26.2/lisp/dos-w32.elc
-%exclude /usr/share/emacs/26.2/lisp/double.el.gz
-%exclude /usr/share/emacs/26.2/lisp/double.elc
-%exclude /usr/share/emacs/26.2/lisp/dynamic-setting.el.gz
-%exclude /usr/share/emacs/26.2/lisp/dynamic-setting.elc
-%exclude /usr/share/emacs/26.2/lisp/ebuff-menu.el.gz
-%exclude /usr/share/emacs/26.2/lisp/ebuff-menu.elc
-%exclude /usr/share/emacs/26.2/lisp/echistory.el.gz
-%exclude /usr/share/emacs/26.2/lisp/echistory.elc
-%exclude /usr/share/emacs/26.2/lisp/ecomplete.el.gz
-%exclude /usr/share/emacs/26.2/lisp/ecomplete.elc
-%exclude /usr/share/emacs/26.2/lisp/edmacro.el.gz
-%exclude /usr/share/emacs/26.2/lisp/edmacro.elc
-%exclude /usr/share/emacs/26.2/lisp/ehelp.el.gz
-%exclude /usr/share/emacs/26.2/lisp/ehelp.elc
-%exclude /usr/share/emacs/26.2/lisp/elec-pair.el.gz
-%exclude /usr/share/emacs/26.2/lisp/elec-pair.elc
-%exclude /usr/share/emacs/26.2/lisp/electric.el.gz
-%exclude /usr/share/emacs/26.2/lisp/electric.elc
-%exclude /usr/share/emacs/26.2/lisp/elide-head.el.gz
-%exclude /usr/share/emacs/26.2/lisp/elide-head.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/advice.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/advice.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/autoload.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/autoload.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/avl-tree.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/avl-tree.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/backquote.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/backquote.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/benchmark.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/benchmark.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/bindat.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/bindat.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/byte-opt.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/byte-opt.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/byte-run.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/byte-run.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/bytecomp.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/bytecomp.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/cconv.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/cconv.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/chart.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/chart.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/check-declare.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/check-declare.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/checkdoc.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/checkdoc.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/cl-extra.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/cl-extra.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/cl-generic.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/cl-generic.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/cl-indent.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/cl-indent.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/cl-lib.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/cl-lib.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/cl-loaddefs.el
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/cl-macs.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/cl-macs.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/cl-preloaded.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/cl-preloaded.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/cl-print.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/cl-print.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/cl-seq.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/cl-seq.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/cl.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/cl.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/copyright.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/copyright.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/crm.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/crm.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/cursor-sensor.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/cursor-sensor.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/debug.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/debug.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/derived.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/derived.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/disass.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/disass.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/easy-mmode.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/easy-mmode.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/easymenu.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/easymenu.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/edebug.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/edebug.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/eieio-base.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/eieio-base.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/eieio-compat.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/eieio-compat.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/eieio-core.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/eieio-core.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/eieio-custom.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/eieio-custom.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/eieio-datadebug.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/eieio-datadebug.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/eieio-loaddefs.el
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/eieio-opt.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/eieio-opt.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/eieio-speedbar.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/eieio-speedbar.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/eieio.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/eieio.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/eldoc.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/eldoc.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/elint.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/elint.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/elp.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/elp.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/ert-x.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/ert-x.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/ert.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/ert.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/ewoc.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/ewoc.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/find-func.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/find-func.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/float-sup.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/float-sup.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/generator.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/generator.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/generic.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/generic.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/gv.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/gv.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/helper.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/helper.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/inline.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/inline.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/let-alist.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/let-alist.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/lisp-mnt.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/lisp-mnt.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/lisp-mode.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/lisp-mode.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/lisp.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/lisp.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/macroexp.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/macroexp.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/map-ynp.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/map-ynp.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/map.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/map.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/nadvice.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/nadvice.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/package-x.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/package-x.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/package.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/package.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/pcase.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/pcase.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/pp.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/pp.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/radix-tree.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/radix-tree.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/re-builder.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/re-builder.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/regexp-opt.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/regexp-opt.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/regi.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/regi.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/ring.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/ring.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/rmc.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/rmc.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/rx.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/rx.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/seq.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/seq.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/shadow.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/shadow.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/smie.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/smie.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/subr-x.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/subr-x.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/syntax.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/syntax.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/tabulated-list.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/tabulated-list.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/tcover-ses.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/tcover-ses.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/tcover-unsafep.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/tcover-unsafep.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/testcover.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/testcover.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/thunk.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/thunk.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/timer-list.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/timer-list.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/timer.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/timer.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/tq.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/tq.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/trace.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/trace.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/unsafep.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/unsafep.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/warnings.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lisp/warnings.elc
-%exclude /usr/share/emacs/26.2/lisp/emacs-lock.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emacs-lock.elc
-%exclude /usr/share/emacs/26.2/lisp/emulation/cua-base.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emulation/cua-base.elc
-%exclude /usr/share/emacs/26.2/lisp/emulation/cua-gmrk.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emulation/cua-gmrk.elc
-%exclude /usr/share/emacs/26.2/lisp/emulation/cua-rect.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emulation/cua-rect.elc
-%exclude /usr/share/emacs/26.2/lisp/emulation/edt-lk201.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emulation/edt-lk201.elc
-%exclude /usr/share/emacs/26.2/lisp/emulation/edt-mapper.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emulation/edt-mapper.elc
-%exclude /usr/share/emacs/26.2/lisp/emulation/edt-pc.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emulation/edt-pc.elc
-%exclude /usr/share/emacs/26.2/lisp/emulation/edt-vt100.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emulation/edt-vt100.elc
-%exclude /usr/share/emacs/26.2/lisp/emulation/edt.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emulation/edt.elc
-%exclude /usr/share/emacs/26.2/lisp/emulation/keypad.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emulation/keypad.elc
-%exclude /usr/share/emacs/26.2/lisp/emulation/viper-cmd.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emulation/viper-cmd.elc
-%exclude /usr/share/emacs/26.2/lisp/emulation/viper-ex.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emulation/viper-ex.elc
-%exclude /usr/share/emacs/26.2/lisp/emulation/viper-init.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emulation/viper-init.elc
-%exclude /usr/share/emacs/26.2/lisp/emulation/viper-keym.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emulation/viper-keym.elc
-%exclude /usr/share/emacs/26.2/lisp/emulation/viper-macs.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emulation/viper-macs.elc
-%exclude /usr/share/emacs/26.2/lisp/emulation/viper-mous.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emulation/viper-mous.elc
-%exclude /usr/share/emacs/26.2/lisp/emulation/viper-util.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emulation/viper-util.elc
-%exclude /usr/share/emacs/26.2/lisp/emulation/viper.el.gz
-%exclude /usr/share/emacs/26.2/lisp/emulation/viper.elc
-%exclude /usr/share/emacs/26.2/lisp/env.el.gz
-%exclude /usr/share/emacs/26.2/lisp/env.elc
-%exclude /usr/share/emacs/26.2/lisp/epa-dired.el.gz
-%exclude /usr/share/emacs/26.2/lisp/epa-dired.elc
-%exclude /usr/share/emacs/26.2/lisp/epa-file.el.gz
-%exclude /usr/share/emacs/26.2/lisp/epa-file.elc
-%exclude /usr/share/emacs/26.2/lisp/epa-hook.el.gz
-%exclude /usr/share/emacs/26.2/lisp/epa-hook.elc
-%exclude /usr/share/emacs/26.2/lisp/epa-mail.el.gz
-%exclude /usr/share/emacs/26.2/lisp/epa-mail.elc
-%exclude /usr/share/emacs/26.2/lisp/epa.el.gz
-%exclude /usr/share/emacs/26.2/lisp/epa.elc
-%exclude /usr/share/emacs/26.2/lisp/epg-config.el.gz
-%exclude /usr/share/emacs/26.2/lisp/epg-config.elc
-%exclude /usr/share/emacs/26.2/lisp/epg.el.gz
-%exclude /usr/share/emacs/26.2/lisp/epg.elc
-%exclude /usr/share/emacs/26.2/lisp/erc/erc-autoaway.el.gz
-%exclude /usr/share/emacs/26.2/lisp/erc/erc-autoaway.elc
-%exclude /usr/share/emacs/26.2/lisp/erc/erc-backend.el.gz
-%exclude /usr/share/emacs/26.2/lisp/erc/erc-backend.elc
-%exclude /usr/share/emacs/26.2/lisp/erc/erc-button.el.gz
-%exclude /usr/share/emacs/26.2/lisp/erc/erc-button.elc
-%exclude /usr/share/emacs/26.2/lisp/erc/erc-capab.el.gz
-%exclude /usr/share/emacs/26.2/lisp/erc/erc-capab.elc
-%exclude /usr/share/emacs/26.2/lisp/erc/erc-compat.el.gz
-%exclude /usr/share/emacs/26.2/lisp/erc/erc-compat.elc
-%exclude /usr/share/emacs/26.2/lisp/erc/erc-dcc.el.gz
-%exclude /usr/share/emacs/26.2/lisp/erc/erc-dcc.elc
-%exclude /usr/share/emacs/26.2/lisp/erc/erc-desktop-notifications.el.gz
-%exclude /usr/share/emacs/26.2/lisp/erc/erc-desktop-notifications.elc
-%exclude /usr/share/emacs/26.2/lisp/erc/erc-ezbounce.el.gz
-%exclude /usr/share/emacs/26.2/lisp/erc/erc-ezbounce.elc
-%exclude /usr/share/emacs/26.2/lisp/erc/erc-fill.el.gz
-%exclude /usr/share/emacs/26.2/lisp/erc/erc-fill.elc
-%exclude /usr/share/emacs/26.2/lisp/erc/erc-goodies.el.gz
-%exclude /usr/share/emacs/26.2/lisp/erc/erc-goodies.elc
-%exclude /usr/share/emacs/26.2/lisp/erc/erc-ibuffer.el.gz
-%exclude /usr/share/emacs/26.2/lisp/erc/erc-ibuffer.elc
-%exclude /usr/share/emacs/26.2/lisp/erc/erc-identd.el.gz
-%exclude /usr/share/emacs/26.2/lisp/erc/erc-identd.elc
-%exclude /usr/share/emacs/26.2/lisp/erc/erc-imenu.el.gz
-%exclude /usr/share/emacs/26.2/lisp/erc/erc-imenu.elc
-%exclude /usr/share/emacs/26.2/lisp/erc/erc-join.el.gz
-%exclude /usr/share/emacs/26.2/lisp/erc/erc-join.elc
-%exclude /usr/share/emacs/26.2/lisp/erc/erc-lang.el.gz
-%exclude /usr/share/emacs/26.2/lisp/erc/erc-lang.elc
-%exclude /usr/share/emacs/26.2/lisp/erc/erc-list.el.gz
-%exclude /usr/share/emacs/26.2/lisp/erc/erc-list.elc
-%exclude /usr/share/emacs/26.2/lisp/erc/erc-log.el.gz
-%exclude /usr/share/emacs/26.2/lisp/erc/erc-log.elc
-%exclude /usr/share/emacs/26.2/lisp/erc/erc-match.el.gz
-%exclude /usr/share/emacs/26.2/lisp/erc/erc-match.elc
-%exclude /usr/share/emacs/26.2/lisp/erc/erc-menu.el.gz
-%exclude /usr/share/emacs/26.2/lisp/erc/erc-menu.elc
-%exclude /usr/share/emacs/26.2/lisp/erc/erc-netsplit.el.gz
-%exclude /usr/share/emacs/26.2/lisp/erc/erc-netsplit.elc
-%exclude /usr/share/emacs/26.2/lisp/erc/erc-networks.el.gz
-%exclude /usr/share/emacs/26.2/lisp/erc/erc-networks.elc
-%exclude /usr/share/emacs/26.2/lisp/erc/erc-notify.el.gz
-%exclude /usr/share/emacs/26.2/lisp/erc/erc-notify.elc
-%exclude /usr/share/emacs/26.2/lisp/erc/erc-page.el.gz
-%exclude /usr/share/emacs/26.2/lisp/erc/erc-page.elc
-%exclude /usr/share/emacs/26.2/lisp/erc/erc-pcomplete.el.gz
-%exclude /usr/share/emacs/26.2/lisp/erc/erc-pcomplete.elc
-%exclude /usr/share/emacs/26.2/lisp/erc/erc-replace.el.gz
-%exclude /usr/share/emacs/26.2/lisp/erc/erc-replace.elc
-%exclude /usr/share/emacs/26.2/lisp/erc/erc-ring.el.gz
-%exclude /usr/share/emacs/26.2/lisp/erc/erc-ring.elc
-%exclude /usr/share/emacs/26.2/lisp/erc/erc-services.el.gz
-%exclude /usr/share/emacs/26.2/lisp/erc/erc-services.elc
-%exclude /usr/share/emacs/26.2/lisp/erc/erc-sound.el.gz
-%exclude /usr/share/emacs/26.2/lisp/erc/erc-sound.elc
-%exclude /usr/share/emacs/26.2/lisp/erc/erc-speedbar.el.gz
-%exclude /usr/share/emacs/26.2/lisp/erc/erc-speedbar.elc
-%exclude /usr/share/emacs/26.2/lisp/erc/erc-spelling.el.gz
-%exclude /usr/share/emacs/26.2/lisp/erc/erc-spelling.elc
-%exclude /usr/share/emacs/26.2/lisp/erc/erc-stamp.el.gz
-%exclude /usr/share/emacs/26.2/lisp/erc/erc-stamp.elc
-%exclude /usr/share/emacs/26.2/lisp/erc/erc-track.el.gz
-%exclude /usr/share/emacs/26.2/lisp/erc/erc-track.elc
-%exclude /usr/share/emacs/26.2/lisp/erc/erc-truncate.el.gz
-%exclude /usr/share/emacs/26.2/lisp/erc/erc-truncate.elc
-%exclude /usr/share/emacs/26.2/lisp/erc/erc-xdcc.el.gz
-%exclude /usr/share/emacs/26.2/lisp/erc/erc-xdcc.elc
-%exclude /usr/share/emacs/26.2/lisp/erc/erc.el.gz
-%exclude /usr/share/emacs/26.2/lisp/erc/erc.elc
-%exclude /usr/share/emacs/26.2/lisp/eshell/em-alias.el.gz
-%exclude /usr/share/emacs/26.2/lisp/eshell/em-alias.elc
-%exclude /usr/share/emacs/26.2/lisp/eshell/em-banner.el.gz
-%exclude /usr/share/emacs/26.2/lisp/eshell/em-banner.elc
-%exclude /usr/share/emacs/26.2/lisp/eshell/em-basic.el.gz
-%exclude /usr/share/emacs/26.2/lisp/eshell/em-basic.elc
-%exclude /usr/share/emacs/26.2/lisp/eshell/em-cmpl.el.gz
-%exclude /usr/share/emacs/26.2/lisp/eshell/em-cmpl.elc
-%exclude /usr/share/emacs/26.2/lisp/eshell/em-dirs.el.gz
-%exclude /usr/share/emacs/26.2/lisp/eshell/em-dirs.elc
-%exclude /usr/share/emacs/26.2/lisp/eshell/em-glob.el.gz
-%exclude /usr/share/emacs/26.2/lisp/eshell/em-glob.elc
-%exclude /usr/share/emacs/26.2/lisp/eshell/em-hist.el.gz
-%exclude /usr/share/emacs/26.2/lisp/eshell/em-hist.elc
-%exclude /usr/share/emacs/26.2/lisp/eshell/em-ls.el.gz
-%exclude /usr/share/emacs/26.2/lisp/eshell/em-ls.elc
-%exclude /usr/share/emacs/26.2/lisp/eshell/em-pred.el.gz
-%exclude /usr/share/emacs/26.2/lisp/eshell/em-pred.elc
-%exclude /usr/share/emacs/26.2/lisp/eshell/em-prompt.el.gz
-%exclude /usr/share/emacs/26.2/lisp/eshell/em-prompt.elc
-%exclude /usr/share/emacs/26.2/lisp/eshell/em-rebind.el.gz
-%exclude /usr/share/emacs/26.2/lisp/eshell/em-rebind.elc
-%exclude /usr/share/emacs/26.2/lisp/eshell/em-script.el.gz
-%exclude /usr/share/emacs/26.2/lisp/eshell/em-script.elc
-%exclude /usr/share/emacs/26.2/lisp/eshell/em-smart.el.gz
-%exclude /usr/share/emacs/26.2/lisp/eshell/em-smart.elc
-%exclude /usr/share/emacs/26.2/lisp/eshell/em-term.el.gz
-%exclude /usr/share/emacs/26.2/lisp/eshell/em-term.elc
-%exclude /usr/share/emacs/26.2/lisp/eshell/em-tramp.el.gz
-%exclude /usr/share/emacs/26.2/lisp/eshell/em-tramp.elc
-%exclude /usr/share/emacs/26.2/lisp/eshell/em-unix.el.gz
-%exclude /usr/share/emacs/26.2/lisp/eshell/em-unix.elc
-%exclude /usr/share/emacs/26.2/lisp/eshell/em-xtra.el.gz
-%exclude /usr/share/emacs/26.2/lisp/eshell/em-xtra.elc
-%exclude /usr/share/emacs/26.2/lisp/eshell/esh-arg.el.gz
-%exclude /usr/share/emacs/26.2/lisp/eshell/esh-arg.elc
-%exclude /usr/share/emacs/26.2/lisp/eshell/esh-cmd.el.gz
-%exclude /usr/share/emacs/26.2/lisp/eshell/esh-cmd.elc
-%exclude /usr/share/emacs/26.2/lisp/eshell/esh-ext.el.gz
-%exclude /usr/share/emacs/26.2/lisp/eshell/esh-ext.elc
-%exclude /usr/share/emacs/26.2/lisp/eshell/esh-groups.el
-%exclude /usr/share/emacs/26.2/lisp/eshell/esh-io.el.gz
-%exclude /usr/share/emacs/26.2/lisp/eshell/esh-io.elc
-%exclude /usr/share/emacs/26.2/lisp/eshell/esh-mode.el.gz
-%exclude /usr/share/emacs/26.2/lisp/eshell/esh-mode.elc
-%exclude /usr/share/emacs/26.2/lisp/eshell/esh-module.el.gz
-%exclude /usr/share/emacs/26.2/lisp/eshell/esh-module.elc
-%exclude /usr/share/emacs/26.2/lisp/eshell/esh-opt.el.gz
-%exclude /usr/share/emacs/26.2/lisp/eshell/esh-opt.elc
-%exclude /usr/share/emacs/26.2/lisp/eshell/esh-proc.el.gz
-%exclude /usr/share/emacs/26.2/lisp/eshell/esh-proc.elc
-%exclude /usr/share/emacs/26.2/lisp/eshell/esh-util.el.gz
-%exclude /usr/share/emacs/26.2/lisp/eshell/esh-util.elc
-%exclude /usr/share/emacs/26.2/lisp/eshell/esh-var.el.gz
-%exclude /usr/share/emacs/26.2/lisp/eshell/esh-var.elc
-%exclude /usr/share/emacs/26.2/lisp/eshell/eshell.el.gz
-%exclude /usr/share/emacs/26.2/lisp/eshell/eshell.elc
-%exclude /usr/share/emacs/26.2/lisp/expand.el.gz
-%exclude /usr/share/emacs/26.2/lisp/expand.elc
-%exclude /usr/share/emacs/26.2/lisp/ezimage.el.gz
-%exclude /usr/share/emacs/26.2/lisp/ezimage.elc
-%exclude /usr/share/emacs/26.2/lisp/face-remap.el.gz
-%exclude /usr/share/emacs/26.2/lisp/face-remap.elc
-%exclude /usr/share/emacs/26.2/lisp/facemenu.el.gz
-%exclude /usr/share/emacs/26.2/lisp/facemenu.elc
-%exclude /usr/share/emacs/26.2/lisp/faces.el.gz
-%exclude /usr/share/emacs/26.2/lisp/faces.elc
-%exclude /usr/share/emacs/26.2/lisp/ffap.el.gz
-%exclude /usr/share/emacs/26.2/lisp/ffap.elc
-%exclude /usr/share/emacs/26.2/lisp/filecache.el.gz
-%exclude /usr/share/emacs/26.2/lisp/filecache.elc
-%exclude /usr/share/emacs/26.2/lisp/filenotify.el.gz
-%exclude /usr/share/emacs/26.2/lisp/filenotify.elc
-%exclude /usr/share/emacs/26.2/lisp/files-x.el.gz
-%exclude /usr/share/emacs/26.2/lisp/files-x.elc
-%exclude /usr/share/emacs/26.2/lisp/files.el.gz
-%exclude /usr/share/emacs/26.2/lisp/files.elc
-%exclude /usr/share/emacs/26.2/lisp/filesets.el.gz
-%exclude /usr/share/emacs/26.2/lisp/filesets.elc
-%exclude /usr/share/emacs/26.2/lisp/find-cmd.el.gz
-%exclude /usr/share/emacs/26.2/lisp/find-cmd.elc
-%exclude /usr/share/emacs/26.2/lisp/find-dired.el.gz
-%exclude /usr/share/emacs/26.2/lisp/find-dired.elc
-%exclude /usr/share/emacs/26.2/lisp/find-file.el.gz
-%exclude /usr/share/emacs/26.2/lisp/find-file.elc
-%exclude /usr/share/emacs/26.2/lisp/find-lisp.el.gz
-%exclude /usr/share/emacs/26.2/lisp/find-lisp.elc
-%exclude /usr/share/emacs/26.2/lisp/finder-inf.el
-%exclude /usr/share/emacs/26.2/lisp/finder.el.gz
-%exclude /usr/share/emacs/26.2/lisp/finder.elc
-%exclude /usr/share/emacs/26.2/lisp/flow-ctrl.el.gz
-%exclude /usr/share/emacs/26.2/lisp/flow-ctrl.elc
-%exclude /usr/share/emacs/26.2/lisp/foldout.el.gz
-%exclude /usr/share/emacs/26.2/lisp/foldout.elc
-%exclude /usr/share/emacs/26.2/lisp/follow.el.gz
-%exclude /usr/share/emacs/26.2/lisp/follow.elc
-%exclude /usr/share/emacs/26.2/lisp/font-core.el.gz
-%exclude /usr/share/emacs/26.2/lisp/font-core.elc
-%exclude /usr/share/emacs/26.2/lisp/font-lock.el.gz
-%exclude /usr/share/emacs/26.2/lisp/font-lock.elc
-%exclude /usr/share/emacs/26.2/lisp/format-spec.el.gz
-%exclude /usr/share/emacs/26.2/lisp/format-spec.elc
-%exclude /usr/share/emacs/26.2/lisp/format.el.gz
-%exclude /usr/share/emacs/26.2/lisp/format.elc
-%exclude /usr/share/emacs/26.2/lisp/forms.el.gz
-%exclude /usr/share/emacs/26.2/lisp/forms.elc
-%exclude /usr/share/emacs/26.2/lisp/frame.el.gz
-%exclude /usr/share/emacs/26.2/lisp/frame.elc
-%exclude /usr/share/emacs/26.2/lisp/frameset.el.gz
-%exclude /usr/share/emacs/26.2/lisp/frameset.elc
-%exclude /usr/share/emacs/26.2/lisp/fringe.el.gz
-%exclude /usr/share/emacs/26.2/lisp/fringe.elc
-%exclude /usr/share/emacs/26.2/lisp/generic-x.el.gz
-%exclude /usr/share/emacs/26.2/lisp/generic-x.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/.dir-locals.el
-%exclude /usr/share/emacs/26.2/lisp/gnus/canlock.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/canlock.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/deuglify.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/deuglify.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/gmm-utils.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/gmm-utils.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-agent.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-agent.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-art.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-art.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-async.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-async.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-bcklg.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-bcklg.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-bookmark.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-bookmark.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-cache.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-cache.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-cite.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-cite.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-cloud.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-cloud.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-cus.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-cus.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-delay.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-delay.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-demon.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-demon.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-diary.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-diary.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-dired.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-dired.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-draft.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-draft.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-dup.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-dup.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-eform.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-eform.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-fun.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-fun.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-gravatar.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-gravatar.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-group.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-group.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-html.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-html.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-icalendar.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-icalendar.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-int.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-int.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-kill.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-kill.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-logic.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-logic.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-mh.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-mh.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-ml.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-ml.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-mlspl.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-mlspl.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-msg.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-msg.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-notifications.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-notifications.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-picon.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-picon.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-range.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-range.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-registry.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-registry.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-rfc1843.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-rfc1843.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-salt.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-salt.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-score.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-score.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-sieve.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-sieve.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-spec.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-spec.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-srvr.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-srvr.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-start.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-start.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-sum.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-sum.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-topic.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-topic.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-undo.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-undo.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-util.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-util.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-uu.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-uu.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-vm.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-vm.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-win.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus-win.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/gnus.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/gssapi.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/gssapi.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/legacy-gnus-agent.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/legacy-gnus-agent.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/mail-source.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/mail-source.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/message.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/message.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/mm-archive.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/mm-archive.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/mm-bodies.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/mm-bodies.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/mm-decode.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/mm-decode.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/mm-encode.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/mm-encode.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/mm-extern.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/mm-extern.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/mm-partial.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/mm-partial.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/mm-url.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/mm-url.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/mm-util.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/mm-util.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/mm-uu.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/mm-uu.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/mm-view.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/mm-view.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/mml-sec.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/mml-sec.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/mml-smime.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/mml-smime.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/mml.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/mml.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/mml1991.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/mml1991.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/mml2015.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/mml2015.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/nnagent.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/nnagent.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/nnbabyl.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/nnbabyl.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/nndiary.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/nndiary.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/nndir.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/nndir.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/nndoc.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/nndoc.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/nndraft.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/nndraft.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/nneething.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/nneething.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/nnfolder.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/nnfolder.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/nngateway.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/nngateway.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/nnheader.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/nnheader.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/nnimap.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/nnimap.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/nnir.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/nnir.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/nnmail.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/nnmail.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/nnmaildir.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/nnmaildir.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/nnmairix.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/nnmairix.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/nnmbox.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/nnmbox.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/nnmh.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/nnmh.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/nnml.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/nnml.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/nnnil.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/nnnil.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/nnoo.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/nnoo.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/nnregistry.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/nnregistry.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/nnrss.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/nnrss.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/nnspool.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/nnspool.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/nntp.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/nntp.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/nnvirtual.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/nnvirtual.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/nnweb.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/nnweb.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/score-mode.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/score-mode.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/smiley.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/smiley.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/smime.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/smime.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/spam-report.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/spam-report.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/spam-stat.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/spam-stat.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/spam-wash.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/spam-wash.elc
-%exclude /usr/share/emacs/26.2/lisp/gnus/spam.el.gz
-%exclude /usr/share/emacs/26.2/lisp/gnus/spam.elc
-%exclude /usr/share/emacs/26.2/lisp/help-at-pt.el.gz
-%exclude /usr/share/emacs/26.2/lisp/help-at-pt.elc
-%exclude /usr/share/emacs/26.2/lisp/help-fns.el.gz
-%exclude /usr/share/emacs/26.2/lisp/help-fns.elc
-%exclude /usr/share/emacs/26.2/lisp/help-macro.el.gz
-%exclude /usr/share/emacs/26.2/lisp/help-macro.elc
-%exclude /usr/share/emacs/26.2/lisp/help-mode.el.gz
-%exclude /usr/share/emacs/26.2/lisp/help-mode.elc
-%exclude /usr/share/emacs/26.2/lisp/help.el.gz
-%exclude /usr/share/emacs/26.2/lisp/help.elc
-%exclude /usr/share/emacs/26.2/lisp/hex-util.el.gz
-%exclude /usr/share/emacs/26.2/lisp/hex-util.elc
-%exclude /usr/share/emacs/26.2/lisp/hexl.el.gz
-%exclude /usr/share/emacs/26.2/lisp/hexl.elc
-%exclude /usr/share/emacs/26.2/lisp/hfy-cmap.el.gz
-%exclude /usr/share/emacs/26.2/lisp/hfy-cmap.elc
-%exclude /usr/share/emacs/26.2/lisp/hi-lock.el.gz
-%exclude /usr/share/emacs/26.2/lisp/hi-lock.elc
-%exclude /usr/share/emacs/26.2/lisp/hilit-chg.el.gz
-%exclude /usr/share/emacs/26.2/lisp/hilit-chg.elc
-%exclude /usr/share/emacs/26.2/lisp/hippie-exp.el.gz
-%exclude /usr/share/emacs/26.2/lisp/hippie-exp.elc
-%exclude /usr/share/emacs/26.2/lisp/hl-line.el.gz
-%exclude /usr/share/emacs/26.2/lisp/hl-line.elc
-%exclude /usr/share/emacs/26.2/lisp/htmlfontify-loaddefs.el
-%exclude /usr/share/emacs/26.2/lisp/htmlfontify.el.gz
-%exclude /usr/share/emacs/26.2/lisp/htmlfontify.elc
-%exclude /usr/share/emacs/26.2/lisp/ibuf-ext.el.gz
-%exclude /usr/share/emacs/26.2/lisp/ibuf-ext.elc
-%exclude /usr/share/emacs/26.2/lisp/ibuf-macs.el.gz
-%exclude /usr/share/emacs/26.2/lisp/ibuf-macs.elc
-%exclude /usr/share/emacs/26.2/lisp/ibuffer-loaddefs.el
-%exclude /usr/share/emacs/26.2/lisp/ibuffer.el.gz
-%exclude /usr/share/emacs/26.2/lisp/ibuffer.elc
-%exclude /usr/share/emacs/26.2/lisp/icomplete.el.gz
-%exclude /usr/share/emacs/26.2/lisp/icomplete.elc
-%exclude /usr/share/emacs/26.2/lisp/ido.el.gz
-%exclude /usr/share/emacs/26.2/lisp/ido.elc
-%exclude /usr/share/emacs/26.2/lisp/ielm.el.gz
-%exclude /usr/share/emacs/26.2/lisp/ielm.elc
-%exclude /usr/share/emacs/26.2/lisp/iimage.el.gz
-%exclude /usr/share/emacs/26.2/lisp/iimage.elc
-%exclude /usr/share/emacs/26.2/lisp/image-dired.el.gz
-%exclude /usr/share/emacs/26.2/lisp/image-dired.elc
-%exclude /usr/share/emacs/26.2/lisp/image-file.el.gz
-%exclude /usr/share/emacs/26.2/lisp/image-file.elc
-%exclude /usr/share/emacs/26.2/lisp/image-mode.el.gz
-%exclude /usr/share/emacs/26.2/lisp/image-mode.elc
-%exclude /usr/share/emacs/26.2/lisp/image.el.gz
-%exclude /usr/share/emacs/26.2/lisp/image.elc
-%exclude /usr/share/emacs/26.2/lisp/image/compface.el.gz
-%exclude /usr/share/emacs/26.2/lisp/image/compface.elc
-%exclude /usr/share/emacs/26.2/lisp/image/gravatar.el.gz
-%exclude /usr/share/emacs/26.2/lisp/image/gravatar.elc
-%exclude /usr/share/emacs/26.2/lisp/imenu.el.gz
-%exclude /usr/share/emacs/26.2/lisp/imenu.elc
-%exclude /usr/share/emacs/26.2/lisp/indent.el.gz
-%exclude /usr/share/emacs/26.2/lisp/indent.elc
-%exclude /usr/share/emacs/26.2/lisp/info-look.el.gz
-%exclude /usr/share/emacs/26.2/lisp/info-look.elc
-%exclude /usr/share/emacs/26.2/lisp/info-xref.el.gz
-%exclude /usr/share/emacs/26.2/lisp/info-xref.elc
-%exclude /usr/share/emacs/26.2/lisp/info.el.gz
-%exclude /usr/share/emacs/26.2/lisp/info.elc
-%exclude /usr/share/emacs/26.2/lisp/informat.el.gz
-%exclude /usr/share/emacs/26.2/lisp/informat.elc
-%exclude /usr/share/emacs/26.2/lisp/international/ccl.el.gz
-%exclude /usr/share/emacs/26.2/lisp/international/ccl.elc
-%exclude /usr/share/emacs/26.2/lisp/international/characters.el.gz
-%exclude /usr/share/emacs/26.2/lisp/international/characters.elc
-%exclude /usr/share/emacs/26.2/lisp/international/charprop.el
-%exclude /usr/share/emacs/26.2/lisp/international/charscript.el.gz
-%exclude /usr/share/emacs/26.2/lisp/international/charscript.elc
-%exclude /usr/share/emacs/26.2/lisp/international/cp51932.el.gz
-%exclude /usr/share/emacs/26.2/lisp/international/cp51932.elc
-%exclude /usr/share/emacs/26.2/lisp/international/eucjp-ms.el.gz
-%exclude /usr/share/emacs/26.2/lisp/international/eucjp-ms.elc
-%exclude /usr/share/emacs/26.2/lisp/international/fontset.el.gz
-%exclude /usr/share/emacs/26.2/lisp/international/fontset.elc
-%exclude /usr/share/emacs/26.2/lisp/international/isearch-x.el.gz
-%exclude /usr/share/emacs/26.2/lisp/international/isearch-x.elc
-%exclude /usr/share/emacs/26.2/lisp/international/iso-ascii.el.gz
-%exclude /usr/share/emacs/26.2/lisp/international/iso-ascii.elc
-%exclude /usr/share/emacs/26.2/lisp/international/iso-cvt.el.gz
-%exclude /usr/share/emacs/26.2/lisp/international/iso-cvt.elc
-%exclude /usr/share/emacs/26.2/lisp/international/iso-transl.el.gz
-%exclude /usr/share/emacs/26.2/lisp/international/iso-transl.elc
-%exclude /usr/share/emacs/26.2/lisp/international/ja-dic-cnv.el.gz
-%exclude /usr/share/emacs/26.2/lisp/international/ja-dic-cnv.elc
-%exclude /usr/share/emacs/26.2/lisp/international/ja-dic-utl.el.gz
-%exclude /usr/share/emacs/26.2/lisp/international/ja-dic-utl.elc
-%exclude /usr/share/emacs/26.2/lisp/international/kinsoku.el.gz
-%exclude /usr/share/emacs/26.2/lisp/international/kinsoku.elc
-%exclude /usr/share/emacs/26.2/lisp/international/kkc.el.gz
-%exclude /usr/share/emacs/26.2/lisp/international/kkc.elc
-%exclude /usr/share/emacs/26.2/lisp/international/latexenc.el.gz
-%exclude /usr/share/emacs/26.2/lisp/international/latexenc.elc
-%exclude /usr/share/emacs/26.2/lisp/international/latin1-disp.el.gz
-%exclude /usr/share/emacs/26.2/lisp/international/latin1-disp.elc
-%exclude /usr/share/emacs/26.2/lisp/international/mule-cmds.el.gz
-%exclude /usr/share/emacs/26.2/lisp/international/mule-cmds.elc
-%exclude /usr/share/emacs/26.2/lisp/international/mule-conf.el.gz
-%exclude /usr/share/emacs/26.2/lisp/international/mule-conf.elc
-%exclude /usr/share/emacs/26.2/lisp/international/mule-diag.el.gz
-%exclude /usr/share/emacs/26.2/lisp/international/mule-diag.elc
-%exclude /usr/share/emacs/26.2/lisp/international/mule-util.el.gz
-%exclude /usr/share/emacs/26.2/lisp/international/mule-util.elc
-%exclude /usr/share/emacs/26.2/lisp/international/mule.el.gz
-%exclude /usr/share/emacs/26.2/lisp/international/mule.elc
-%exclude /usr/share/emacs/26.2/lisp/international/ogonek.el.gz
-%exclude /usr/share/emacs/26.2/lisp/international/ogonek.elc
-%exclude /usr/share/emacs/26.2/lisp/international/quail.el.gz
-%exclude /usr/share/emacs/26.2/lisp/international/quail.elc
-%exclude /usr/share/emacs/26.2/lisp/international/rfc1843.el.gz
-%exclude /usr/share/emacs/26.2/lisp/international/rfc1843.elc
-%exclude /usr/share/emacs/26.2/lisp/international/robin.el.gz
-%exclude /usr/share/emacs/26.2/lisp/international/robin.elc
-%exclude /usr/share/emacs/26.2/lisp/international/titdic-cnv.el.gz
-%exclude /usr/share/emacs/26.2/lisp/international/titdic-cnv.elc
-%exclude /usr/share/emacs/26.2/lisp/international/ucs-normalize.el.gz
-%exclude /usr/share/emacs/26.2/lisp/international/ucs-normalize.elc
-%exclude /usr/share/emacs/26.2/lisp/international/uni-bidi.el
-%exclude /usr/share/emacs/26.2/lisp/international/uni-brackets.el
-%exclude /usr/share/emacs/26.2/lisp/international/uni-category.el
-%exclude /usr/share/emacs/26.2/lisp/international/uni-combining.el
-%exclude /usr/share/emacs/26.2/lisp/international/uni-comment.el
-%exclude /usr/share/emacs/26.2/lisp/international/uni-decimal.el
-%exclude /usr/share/emacs/26.2/lisp/international/uni-decomposition.el
-%exclude /usr/share/emacs/26.2/lisp/international/uni-digit.el
-%exclude /usr/share/emacs/26.2/lisp/international/uni-lowercase.el
-%exclude /usr/share/emacs/26.2/lisp/international/uni-mirrored.el
-%exclude /usr/share/emacs/26.2/lisp/international/uni-name.el
-%exclude /usr/share/emacs/26.2/lisp/international/uni-numeric.el
-%exclude /usr/share/emacs/26.2/lisp/international/uni-old-name.el
-%exclude /usr/share/emacs/26.2/lisp/international/uni-special-lowercase.el
-%exclude /usr/share/emacs/26.2/lisp/international/uni-special-titlecase.el
-%exclude /usr/share/emacs/26.2/lisp/international/uni-special-uppercase.el
-%exclude /usr/share/emacs/26.2/lisp/international/uni-titlecase.el
-%exclude /usr/share/emacs/26.2/lisp/international/uni-uppercase.el
-%exclude /usr/share/emacs/26.2/lisp/international/utf-7.el.gz
-%exclude /usr/share/emacs/26.2/lisp/international/utf-7.elc
-%exclude /usr/share/emacs/26.2/lisp/international/utf7.el.gz
-%exclude /usr/share/emacs/26.2/lisp/international/utf7.elc
-%exclude /usr/share/emacs/26.2/lisp/isearch.el.gz
-%exclude /usr/share/emacs/26.2/lisp/isearch.elc
-%exclude /usr/share/emacs/26.2/lisp/isearchb.el.gz
-%exclude /usr/share/emacs/26.2/lisp/isearchb.elc
-%exclude /usr/share/emacs/26.2/lisp/jit-lock.el.gz
-%exclude /usr/share/emacs/26.2/lisp/jit-lock.elc
-%exclude /usr/share/emacs/26.2/lisp/jka-cmpr-hook.el.gz
-%exclude /usr/share/emacs/26.2/lisp/jka-cmpr-hook.elc
-%exclude /usr/share/emacs/26.2/lisp/jka-compr.el.gz
-%exclude /usr/share/emacs/26.2/lisp/jka-compr.elc
-%exclude /usr/share/emacs/26.2/lisp/json.el.gz
-%exclude /usr/share/emacs/26.2/lisp/json.elc
-%exclude /usr/share/emacs/26.2/lisp/kermit.el.gz
-%exclude /usr/share/emacs/26.2/lisp/kermit.elc
-%exclude /usr/share/emacs/26.2/lisp/kmacro.el.gz
-%exclude /usr/share/emacs/26.2/lisp/kmacro.elc
-%exclude /usr/share/emacs/26.2/lisp/language/burmese.el.gz
-%exclude /usr/share/emacs/26.2/lisp/language/burmese.elc
-%exclude /usr/share/emacs/26.2/lisp/language/cham.el.gz
-%exclude /usr/share/emacs/26.2/lisp/language/cham.elc
-%exclude /usr/share/emacs/26.2/lisp/language/china-util.el.gz
-%exclude /usr/share/emacs/26.2/lisp/language/china-util.elc
-%exclude /usr/share/emacs/26.2/lisp/language/chinese.el.gz
-%exclude /usr/share/emacs/26.2/lisp/language/chinese.elc
-%exclude /usr/share/emacs/26.2/lisp/language/cyril-util.el.gz
-%exclude /usr/share/emacs/26.2/lisp/language/cyril-util.elc
-%exclude /usr/share/emacs/26.2/lisp/language/cyrillic.el.gz
-%exclude /usr/share/emacs/26.2/lisp/language/cyrillic.elc
-%exclude /usr/share/emacs/26.2/lisp/language/czech.el.gz
-%exclude /usr/share/emacs/26.2/lisp/language/czech.elc
-%exclude /usr/share/emacs/26.2/lisp/language/english.el.gz
-%exclude /usr/share/emacs/26.2/lisp/language/english.elc
-%exclude /usr/share/emacs/26.2/lisp/language/ethio-util.el.gz
-%exclude /usr/share/emacs/26.2/lisp/language/ethio-util.elc
-%exclude /usr/share/emacs/26.2/lisp/language/ethiopic.el.gz
-%exclude /usr/share/emacs/26.2/lisp/language/ethiopic.elc
-%exclude /usr/share/emacs/26.2/lisp/language/european.el.gz
-%exclude /usr/share/emacs/26.2/lisp/language/european.elc
-%exclude /usr/share/emacs/26.2/lisp/language/georgian.el.gz
-%exclude /usr/share/emacs/26.2/lisp/language/georgian.elc
-%exclude /usr/share/emacs/26.2/lisp/language/greek.el.gz
-%exclude /usr/share/emacs/26.2/lisp/language/greek.elc
-%exclude /usr/share/emacs/26.2/lisp/language/hanja-util.el.gz
-%exclude /usr/share/emacs/26.2/lisp/language/hanja-util.elc
-%exclude /usr/share/emacs/26.2/lisp/language/hebrew.el.gz
-%exclude /usr/share/emacs/26.2/lisp/language/hebrew.elc
-%exclude /usr/share/emacs/26.2/lisp/language/ind-util.el.gz
-%exclude /usr/share/emacs/26.2/lisp/language/ind-util.elc
-%exclude /usr/share/emacs/26.2/lisp/language/indian.el.gz
-%exclude /usr/share/emacs/26.2/lisp/language/indian.elc
-%exclude /usr/share/emacs/26.2/lisp/language/japan-util.el.gz
-%exclude /usr/share/emacs/26.2/lisp/language/japan-util.elc
-%exclude /usr/share/emacs/26.2/lisp/language/japanese.el.gz
-%exclude /usr/share/emacs/26.2/lisp/language/japanese.elc
-%exclude /usr/share/emacs/26.2/lisp/language/khmer.el.gz
-%exclude /usr/share/emacs/26.2/lisp/language/khmer.elc
-%exclude /usr/share/emacs/26.2/lisp/language/korea-util.el.gz
-%exclude /usr/share/emacs/26.2/lisp/language/korea-util.elc
-%exclude /usr/share/emacs/26.2/lisp/language/korean.el.gz
-%exclude /usr/share/emacs/26.2/lisp/language/korean.elc
-%exclude /usr/share/emacs/26.2/lisp/language/lao-util.el.gz
-%exclude /usr/share/emacs/26.2/lisp/language/lao-util.elc
-%exclude /usr/share/emacs/26.2/lisp/language/lao.el.gz
-%exclude /usr/share/emacs/26.2/lisp/language/lao.elc
-%exclude /usr/share/emacs/26.2/lisp/language/misc-lang.el.gz
-%exclude /usr/share/emacs/26.2/lisp/language/misc-lang.elc
-%exclude /usr/share/emacs/26.2/lisp/language/romanian.el.gz
-%exclude /usr/share/emacs/26.2/lisp/language/romanian.elc
-%exclude /usr/share/emacs/26.2/lisp/language/sinhala.el.gz
-%exclude /usr/share/emacs/26.2/lisp/language/sinhala.elc
-%exclude /usr/share/emacs/26.2/lisp/language/slovak.el.gz
-%exclude /usr/share/emacs/26.2/lisp/language/slovak.elc
-%exclude /usr/share/emacs/26.2/lisp/language/tai-viet.el.gz
-%exclude /usr/share/emacs/26.2/lisp/language/tai-viet.elc
-%exclude /usr/share/emacs/26.2/lisp/language/thai-util.el.gz
-%exclude /usr/share/emacs/26.2/lisp/language/thai-util.elc
-%exclude /usr/share/emacs/26.2/lisp/language/thai-word.el.gz
-%exclude /usr/share/emacs/26.2/lisp/language/thai-word.elc
-%exclude /usr/share/emacs/26.2/lisp/language/thai.el.gz
-%exclude /usr/share/emacs/26.2/lisp/language/thai.elc
-%exclude /usr/share/emacs/26.2/lisp/language/tibet-util.el.gz
-%exclude /usr/share/emacs/26.2/lisp/language/tibet-util.elc
-%exclude /usr/share/emacs/26.2/lisp/language/tibetan.el.gz
-%exclude /usr/share/emacs/26.2/lisp/language/tibetan.elc
-%exclude /usr/share/emacs/26.2/lisp/language/tv-util.el.gz
-%exclude /usr/share/emacs/26.2/lisp/language/tv-util.elc
-%exclude /usr/share/emacs/26.2/lisp/language/utf-8-lang.el.gz
-%exclude /usr/share/emacs/26.2/lisp/language/utf-8-lang.elc
-%exclude /usr/share/emacs/26.2/lisp/language/viet-util.el.gz
-%exclude /usr/share/emacs/26.2/lisp/language/viet-util.elc
-%exclude /usr/share/emacs/26.2/lisp/language/vietnamese.el.gz
-%exclude /usr/share/emacs/26.2/lisp/language/vietnamese.elc
-%exclude /usr/share/emacs/26.2/lisp/ldefs-boot.el
-%exclude /usr/share/emacs/26.2/lisp/leim/ja-dic/ja-dic.el.gz
-%exclude /usr/share/emacs/26.2/lisp/leim/ja-dic/ja-dic.elc
-%exclude /usr/share/emacs/26.2/lisp/leim/leim-list.el
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/4Corner.el.gz
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/4Corner.elc
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/ARRAY30.el.gz
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/ARRAY30.elc
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/CCDOSPY.el.gz
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/CCDOSPY.elc
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/CTLau-b5.el.gz
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/CTLau-b5.elc
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/CTLau.el.gz
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/CTLau.elc
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/ECDICT.el.gz
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/ECDICT.elc
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/ETZY.el.gz
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/ETZY.elc
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/PY-b5.el.gz
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/PY-b5.elc
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/PY.el.gz
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/PY.elc
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/Punct-b5.el.gz
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/Punct-b5.elc
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/Punct.el.gz
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/Punct.elc
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/QJ-b5.el.gz
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/QJ-b5.elc
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/QJ.el.gz
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/QJ.elc
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/SW.el.gz
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/SW.elc
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/TONEPY.el.gz
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/TONEPY.elc
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/ZIRANMA.el.gz
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/ZIRANMA.elc
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/ZOZY.el.gz
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/ZOZY.elc
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/arabic.el.gz
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/arabic.elc
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/croatian.el.gz
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/croatian.elc
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/cyril-jis.el.gz
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/cyril-jis.elc
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/cyrillic.el.gz
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/cyrillic.elc
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/czech.el.gz
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/czech.elc
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/ethiopic.el.gz
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/ethiopic.elc
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/georgian.el.gz
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/georgian.elc
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/greek.el.gz
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/greek.elc
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/hangul.el.gz
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/hangul.elc
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/hanja-jis.el.gz
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/hanja-jis.elc
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/hanja.el.gz
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/hanja.elc
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/hanja3.el.gz
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/hanja3.elc
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/hebrew.el.gz
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/hebrew.elc
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/indian.el.gz
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/indian.elc
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/ipa-praat.el.gz
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/ipa-praat.elc
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/ipa.el.gz
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/ipa.elc
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/japanese.el.gz
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/japanese.elc
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/lao.el.gz
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/lao.elc
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/latin-alt.el.gz
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/latin-alt.elc
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/latin-ltx.el.gz
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/latin-ltx.elc
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/latin-post.el.gz
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/latin-post.elc
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/latin-pre.el.gz
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/latin-pre.elc
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/lrt.el.gz
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/lrt.elc
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/persian.el.gz
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/persian.elc
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/programmer-dvorak.el.gz
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/programmer-dvorak.elc
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/py-punct.el.gz
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/py-punct.elc
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/pypunct-b5.el.gz
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/pypunct-b5.elc
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/quick-b5.el.gz
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/quick-b5.elc
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/quick-cns.el.gz
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/quick-cns.elc
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/rfc1345.el.gz
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/rfc1345.elc
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/sgml-input.el.gz
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/sgml-input.elc
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/sisheng.el.gz
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/sisheng.elc
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/slovak.el.gz
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/slovak.elc
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/symbol-ksc.el.gz
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/symbol-ksc.elc
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/tamil-dvorak.el.gz
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/tamil-dvorak.elc
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/thai.el.gz
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/thai.elc
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/tibetan.el.gz
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/tibetan.elc
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/tsang-b5.el.gz
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/tsang-b5.elc
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/tsang-cns.el.gz
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/tsang-cns.elc
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/uni-input.el.gz
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/uni-input.elc
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/viqr.el.gz
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/viqr.elc
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/vntelex.el.gz
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/vntelex.elc
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/vnvni.el.gz
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/vnvni.elc
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/welsh.el.gz
-%exclude /usr/share/emacs/26.2/lisp/leim/quail/welsh.elc
-%exclude /usr/share/emacs/26.2/lisp/linum.el.gz
-%exclude /usr/share/emacs/26.2/lisp/linum.elc
-%exclude /usr/share/emacs/26.2/lisp/loaddefs.el
-%exclude /usr/share/emacs/26.2/lisp/loadhist.el.gz
-%exclude /usr/share/emacs/26.2/lisp/loadhist.elc
-%exclude /usr/share/emacs/26.2/lisp/loadup.el
-%exclude /usr/share/emacs/26.2/lisp/locate.el.gz
-%exclude /usr/share/emacs/26.2/lisp/locate.elc
-%exclude /usr/share/emacs/26.2/lisp/lpr.el.gz
-%exclude /usr/share/emacs/26.2/lisp/lpr.elc
-%exclude /usr/share/emacs/26.2/lisp/ls-lisp.el.gz
-%exclude /usr/share/emacs/26.2/lisp/ls-lisp.elc
-%exclude /usr/share/emacs/26.2/lisp/macros.el.gz
-%exclude /usr/share/emacs/26.2/lisp/macros.elc
-%exclude /usr/share/emacs/26.2/lisp/mail/binhex.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mail/binhex.elc
-%exclude /usr/share/emacs/26.2/lisp/mail/blessmail.el
-%exclude /usr/share/emacs/26.2/lisp/mail/emacsbug.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mail/emacsbug.elc
-%exclude /usr/share/emacs/26.2/lisp/mail/feedmail.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mail/feedmail.elc
-%exclude /usr/share/emacs/26.2/lisp/mail/flow-fill.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mail/flow-fill.elc
-%exclude /usr/share/emacs/26.2/lisp/mail/footnote.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mail/footnote.elc
-%exclude /usr/share/emacs/26.2/lisp/mail/hashcash.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mail/hashcash.elc
-%exclude /usr/share/emacs/26.2/lisp/mail/ietf-drums.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mail/ietf-drums.elc
-%exclude /usr/share/emacs/26.2/lisp/mail/mail-extr.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mail/mail-extr.elc
-%exclude /usr/share/emacs/26.2/lisp/mail/mail-hist.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mail/mail-hist.elc
-%exclude /usr/share/emacs/26.2/lisp/mail/mail-parse.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mail/mail-parse.elc
-%exclude /usr/share/emacs/26.2/lisp/mail/mail-prsvr.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mail/mail-prsvr.elc
-%exclude /usr/share/emacs/26.2/lisp/mail/mail-utils.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mail/mail-utils.elc
-%exclude /usr/share/emacs/26.2/lisp/mail/mailabbrev.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mail/mailabbrev.elc
-%exclude /usr/share/emacs/26.2/lisp/mail/mailalias.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mail/mailalias.elc
-%exclude /usr/share/emacs/26.2/lisp/mail/mailclient.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mail/mailclient.elc
-%exclude /usr/share/emacs/26.2/lisp/mail/mailheader.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mail/mailheader.elc
-%exclude /usr/share/emacs/26.2/lisp/mail/metamail.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mail/metamail.elc
-%exclude /usr/share/emacs/26.2/lisp/mail/mspools.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mail/mspools.elc
-%exclude /usr/share/emacs/26.2/lisp/mail/qp.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mail/qp.elc
-%exclude /usr/share/emacs/26.2/lisp/mail/reporter.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mail/reporter.elc
-%exclude /usr/share/emacs/26.2/lisp/mail/rfc2045.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mail/rfc2045.elc
-%exclude /usr/share/emacs/26.2/lisp/mail/rfc2047.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mail/rfc2047.elc
-%exclude /usr/share/emacs/26.2/lisp/mail/rfc2231.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mail/rfc2231.elc
-%exclude /usr/share/emacs/26.2/lisp/mail/rfc2368.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mail/rfc2368.elc
-%exclude /usr/share/emacs/26.2/lisp/mail/rfc822.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mail/rfc822.elc
-%exclude /usr/share/emacs/26.2/lisp/mail/rmail-loaddefs.el
-%exclude /usr/share/emacs/26.2/lisp/mail/rmail-spam-filter.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mail/rmail-spam-filter.elc
-%exclude /usr/share/emacs/26.2/lisp/mail/rmail.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mail/rmail.elc
-%exclude /usr/share/emacs/26.2/lisp/mail/rmailedit.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mail/rmailedit.elc
-%exclude /usr/share/emacs/26.2/lisp/mail/rmailkwd.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mail/rmailkwd.elc
-%exclude /usr/share/emacs/26.2/lisp/mail/rmailmm.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mail/rmailmm.elc
-%exclude /usr/share/emacs/26.2/lisp/mail/rmailmsc.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mail/rmailmsc.elc
-%exclude /usr/share/emacs/26.2/lisp/mail/rmailout.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mail/rmailout.elc
-%exclude /usr/share/emacs/26.2/lisp/mail/rmailsort.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mail/rmailsort.elc
-%exclude /usr/share/emacs/26.2/lisp/mail/rmailsum.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mail/rmailsum.elc
-%exclude /usr/share/emacs/26.2/lisp/mail/sendmail.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mail/sendmail.elc
-%exclude /usr/share/emacs/26.2/lisp/mail/smtpmail.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mail/smtpmail.elc
-%exclude /usr/share/emacs/26.2/lisp/mail/supercite.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mail/supercite.elc
-%exclude /usr/share/emacs/26.2/lisp/mail/uce.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mail/uce.elc
-%exclude /usr/share/emacs/26.2/lisp/mail/undigest.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mail/undigest.elc
-%exclude /usr/share/emacs/26.2/lisp/mail/unrmail.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mail/unrmail.elc
-%exclude /usr/share/emacs/26.2/lisp/mail/uudecode.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mail/uudecode.elc
-%exclude /usr/share/emacs/26.2/lisp/mail/yenc.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mail/yenc.elc
-%exclude /usr/share/emacs/26.2/lisp/makesum.el.gz
-%exclude /usr/share/emacs/26.2/lisp/makesum.elc
-%exclude /usr/share/emacs/26.2/lisp/man.el.gz
-%exclude /usr/share/emacs/26.2/lisp/man.elc
-%exclude /usr/share/emacs/26.2/lisp/master.el.gz
-%exclude /usr/share/emacs/26.2/lisp/master.elc
-%exclude /usr/share/emacs/26.2/lisp/mb-depth.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mb-depth.elc
-%exclude /usr/share/emacs/26.2/lisp/md4.el.gz
-%exclude /usr/share/emacs/26.2/lisp/md4.elc
-%exclude /usr/share/emacs/26.2/lisp/menu-bar.el.gz
-%exclude /usr/share/emacs/26.2/lisp/menu-bar.elc
-%exclude /usr/share/emacs/26.2/lisp/mh-e/mh-acros.el
-%exclude /usr/share/emacs/26.2/lisp/mh-e/mh-alias.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mh-e/mh-alias.elc
-%exclude /usr/share/emacs/26.2/lisp/mh-e/mh-buffers.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mh-e/mh-buffers.elc
-%exclude /usr/share/emacs/26.2/lisp/mh-e/mh-comp.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mh-e/mh-comp.elc
-%exclude /usr/share/emacs/26.2/lisp/mh-e/mh-compat.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mh-e/mh-compat.elc
-%exclude /usr/share/emacs/26.2/lisp/mh-e/mh-e.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mh-e/mh-e.elc
-%exclude /usr/share/emacs/26.2/lisp/mh-e/mh-folder.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mh-e/mh-folder.elc
-%exclude /usr/share/emacs/26.2/lisp/mh-e/mh-funcs.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mh-e/mh-funcs.elc
-%exclude /usr/share/emacs/26.2/lisp/mh-e/mh-gnus.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mh-e/mh-gnus.elc
-%exclude /usr/share/emacs/26.2/lisp/mh-e/mh-identity.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mh-e/mh-identity.elc
-%exclude /usr/share/emacs/26.2/lisp/mh-e/mh-inc.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mh-e/mh-inc.elc
-%exclude /usr/share/emacs/26.2/lisp/mh-e/mh-junk.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mh-e/mh-junk.elc
-%exclude /usr/share/emacs/26.2/lisp/mh-e/mh-letter.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mh-e/mh-letter.elc
-%exclude /usr/share/emacs/26.2/lisp/mh-e/mh-limit.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mh-e/mh-limit.elc
-%exclude /usr/share/emacs/26.2/lisp/mh-e/mh-loaddefs.el
-%exclude /usr/share/emacs/26.2/lisp/mh-e/mh-mime.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mh-e/mh-mime.elc
-%exclude /usr/share/emacs/26.2/lisp/mh-e/mh-print.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mh-e/mh-print.elc
-%exclude /usr/share/emacs/26.2/lisp/mh-e/mh-scan.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mh-e/mh-scan.elc
-%exclude /usr/share/emacs/26.2/lisp/mh-e/mh-search.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mh-e/mh-search.elc
-%exclude /usr/share/emacs/26.2/lisp/mh-e/mh-seq.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mh-e/mh-seq.elc
-%exclude /usr/share/emacs/26.2/lisp/mh-e/mh-show.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mh-e/mh-show.elc
-%exclude /usr/share/emacs/26.2/lisp/mh-e/mh-speed.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mh-e/mh-speed.elc
-%exclude /usr/share/emacs/26.2/lisp/mh-e/mh-thread.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mh-e/mh-thread.elc
-%exclude /usr/share/emacs/26.2/lisp/mh-e/mh-tool-bar.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mh-e/mh-tool-bar.elc
-%exclude /usr/share/emacs/26.2/lisp/mh-e/mh-utils.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mh-e/mh-utils.elc
-%exclude /usr/share/emacs/26.2/lisp/mh-e/mh-xface.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mh-e/mh-xface.elc
-%exclude /usr/share/emacs/26.2/lisp/midnight.el.gz
-%exclude /usr/share/emacs/26.2/lisp/midnight.elc
-%exclude /usr/share/emacs/26.2/lisp/minibuf-eldef.el.gz
-%exclude /usr/share/emacs/26.2/lisp/minibuf-eldef.elc
-%exclude /usr/share/emacs/26.2/lisp/minibuffer.el.gz
-%exclude /usr/share/emacs/26.2/lisp/minibuffer.elc
-%exclude /usr/share/emacs/26.2/lisp/misc.el.gz
-%exclude /usr/share/emacs/26.2/lisp/misc.elc
-%exclude /usr/share/emacs/26.2/lisp/misearch.el.gz
-%exclude /usr/share/emacs/26.2/lisp/misearch.elc
-%exclude /usr/share/emacs/26.2/lisp/mouse-copy.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mouse-copy.elc
-%exclude /usr/share/emacs/26.2/lisp/mouse-drag.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mouse-drag.elc
-%exclude /usr/share/emacs/26.2/lisp/mouse.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mouse.elc
-%exclude /usr/share/emacs/26.2/lisp/mpc.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mpc.elc
-%exclude /usr/share/emacs/26.2/lisp/msb.el.gz
-%exclude /usr/share/emacs/26.2/lisp/msb.elc
-%exclude /usr/share/emacs/26.2/lisp/mwheel.el.gz
-%exclude /usr/share/emacs/26.2/lisp/mwheel.elc
-%exclude /usr/share/emacs/26.2/lisp/net/ange-ftp.el.gz
-%exclude /usr/share/emacs/26.2/lisp/net/ange-ftp.elc
-%exclude /usr/share/emacs/26.2/lisp/net/browse-url.el.gz
-%exclude /usr/share/emacs/26.2/lisp/net/browse-url.elc
-%exclude /usr/share/emacs/26.2/lisp/net/dbus.el.gz
-%exclude /usr/share/emacs/26.2/lisp/net/dbus.elc
-%exclude /usr/share/emacs/26.2/lisp/net/dig.el.gz
-%exclude /usr/share/emacs/26.2/lisp/net/dig.elc
-%exclude /usr/share/emacs/26.2/lisp/net/dns.el.gz
-%exclude /usr/share/emacs/26.2/lisp/net/dns.elc
-%exclude /usr/share/emacs/26.2/lisp/net/eudc-bob.el.gz
-%exclude /usr/share/emacs/26.2/lisp/net/eudc-bob.elc
-%exclude /usr/share/emacs/26.2/lisp/net/eudc-export.el.gz
-%exclude /usr/share/emacs/26.2/lisp/net/eudc-export.elc
-%exclude /usr/share/emacs/26.2/lisp/net/eudc-hotlist.el.gz
-%exclude /usr/share/emacs/26.2/lisp/net/eudc-hotlist.elc
-%exclude /usr/share/emacs/26.2/lisp/net/eudc-vars.el.gz
-%exclude /usr/share/emacs/26.2/lisp/net/eudc-vars.elc
-%exclude /usr/share/emacs/26.2/lisp/net/eudc.el.gz
-%exclude /usr/share/emacs/26.2/lisp/net/eudc.elc
-%exclude /usr/share/emacs/26.2/lisp/net/eudcb-bbdb.el.gz
-%exclude /usr/share/emacs/26.2/lisp/net/eudcb-bbdb.elc
-%exclude /usr/share/emacs/26.2/lisp/net/eudcb-ldap.el.gz
-%exclude /usr/share/emacs/26.2/lisp/net/eudcb-ldap.elc
-%exclude /usr/share/emacs/26.2/lisp/net/eudcb-mab.el.gz
-%exclude /usr/share/emacs/26.2/lisp/net/eudcb-mab.elc
-%exclude /usr/share/emacs/26.2/lisp/net/eww.el.gz
-%exclude /usr/share/emacs/26.2/lisp/net/eww.elc
-%exclude /usr/share/emacs/26.2/lisp/net/gnutls.el.gz
-%exclude /usr/share/emacs/26.2/lisp/net/gnutls.elc
-%exclude /usr/share/emacs/26.2/lisp/net/goto-addr.el.gz
-%exclude /usr/share/emacs/26.2/lisp/net/goto-addr.elc
-%exclude /usr/share/emacs/26.2/lisp/net/hmac-def.el.gz
-%exclude /usr/share/emacs/26.2/lisp/net/hmac-def.elc
-%exclude /usr/share/emacs/26.2/lisp/net/hmac-md5.el.gz
-%exclude /usr/share/emacs/26.2/lisp/net/hmac-md5.elc
-%exclude /usr/share/emacs/26.2/lisp/net/imap.el.gz
-%exclude /usr/share/emacs/26.2/lisp/net/imap.elc
-%exclude /usr/share/emacs/26.2/lisp/net/ldap.el.gz
-%exclude /usr/share/emacs/26.2/lisp/net/ldap.elc
-%exclude /usr/share/emacs/26.2/lisp/net/mailcap.el.gz
-%exclude /usr/share/emacs/26.2/lisp/net/mailcap.elc
-%exclude /usr/share/emacs/26.2/lisp/net/mairix.el.gz
-%exclude /usr/share/emacs/26.2/lisp/net/mairix.elc
-%exclude /usr/share/emacs/26.2/lisp/net/net-utils.el.gz
-%exclude /usr/share/emacs/26.2/lisp/net/net-utils.elc
-%exclude /usr/share/emacs/26.2/lisp/net/netrc.el.gz
-%exclude /usr/share/emacs/26.2/lisp/net/netrc.elc
-%exclude /usr/share/emacs/26.2/lisp/net/network-stream.el.gz
-%exclude /usr/share/emacs/26.2/lisp/net/network-stream.elc
-%exclude /usr/share/emacs/26.2/lisp/net/newst-backend.el.gz
-%exclude /usr/share/emacs/26.2/lisp/net/newst-backend.elc
-%exclude /usr/share/emacs/26.2/lisp/net/newst-plainview.el.gz
-%exclude /usr/share/emacs/26.2/lisp/net/newst-plainview.elc
-%exclude /usr/share/emacs/26.2/lisp/net/newst-reader.el.gz
-%exclude /usr/share/emacs/26.2/lisp/net/newst-reader.elc
-%exclude /usr/share/emacs/26.2/lisp/net/newst-ticker.el.gz
-%exclude /usr/share/emacs/26.2/lisp/net/newst-ticker.elc
-%exclude /usr/share/emacs/26.2/lisp/net/newst-treeview.el.gz
-%exclude /usr/share/emacs/26.2/lisp/net/newst-treeview.elc
-%exclude /usr/share/emacs/26.2/lisp/net/newsticker.el.gz
-%exclude /usr/share/emacs/26.2/lisp/net/newsticker.elc
-%exclude /usr/share/emacs/26.2/lisp/net/nsm.el.gz
-%exclude /usr/share/emacs/26.2/lisp/net/nsm.elc
-%exclude /usr/share/emacs/26.2/lisp/net/ntlm.el.gz
-%exclude /usr/share/emacs/26.2/lisp/net/ntlm.elc
-%exclude /usr/share/emacs/26.2/lisp/net/pop3.el.gz
-%exclude /usr/share/emacs/26.2/lisp/net/pop3.elc
-%exclude /usr/share/emacs/26.2/lisp/net/puny.el.gz
-%exclude /usr/share/emacs/26.2/lisp/net/puny.elc
-%exclude /usr/share/emacs/26.2/lisp/net/quickurl.el.gz
-%exclude /usr/share/emacs/26.2/lisp/net/quickurl.elc
-%exclude /usr/share/emacs/26.2/lisp/net/rcirc.el.gz
-%exclude /usr/share/emacs/26.2/lisp/net/rcirc.elc
-%exclude /usr/share/emacs/26.2/lisp/net/rfc2104.el.gz
-%exclude /usr/share/emacs/26.2/lisp/net/rfc2104.elc
-%exclude /usr/share/emacs/26.2/lisp/net/rlogin.el.gz
-%exclude /usr/share/emacs/26.2/lisp/net/rlogin.elc
-%exclude /usr/share/emacs/26.2/lisp/net/sasl-cram.el.gz
-%exclude /usr/share/emacs/26.2/lisp/net/sasl-cram.elc
-%exclude /usr/share/emacs/26.2/lisp/net/sasl-digest.el.gz
-%exclude /usr/share/emacs/26.2/lisp/net/sasl-digest.elc
-%exclude /usr/share/emacs/26.2/lisp/net/sasl-ntlm.el.gz
-%exclude /usr/share/emacs/26.2/lisp/net/sasl-ntlm.elc
-%exclude /usr/share/emacs/26.2/lisp/net/sasl-scram-rfc.el.gz
-%exclude /usr/share/emacs/26.2/lisp/net/sasl-scram-rfc.elc
-%exclude /usr/share/emacs/26.2/lisp/net/sasl.el.gz
-%exclude /usr/share/emacs/26.2/lisp/net/sasl.elc
-%exclude /usr/share/emacs/26.2/lisp/net/secrets.el.gz
-%exclude /usr/share/emacs/26.2/lisp/net/secrets.elc
-%exclude /usr/share/emacs/26.2/lisp/net/shr-color.el.gz
-%exclude /usr/share/emacs/26.2/lisp/net/shr-color.elc
-%exclude /usr/share/emacs/26.2/lisp/net/shr.el.gz
-%exclude /usr/share/emacs/26.2/lisp/net/shr.elc
-%exclude /usr/share/emacs/26.2/lisp/net/sieve-manage.el.gz
-%exclude /usr/share/emacs/26.2/lisp/net/sieve-manage.elc
-%exclude /usr/share/emacs/26.2/lisp/net/sieve-mode.el.gz
-%exclude /usr/share/emacs/26.2/lisp/net/sieve-mode.elc
-%exclude /usr/share/emacs/26.2/lisp/net/sieve.el.gz
-%exclude /usr/share/emacs/26.2/lisp/net/sieve.elc
-%exclude /usr/share/emacs/26.2/lisp/net/snmp-mode.el.gz
-%exclude /usr/share/emacs/26.2/lisp/net/snmp-mode.elc
-%exclude /usr/share/emacs/26.2/lisp/net/soap-client.el.gz
-%exclude /usr/share/emacs/26.2/lisp/net/soap-client.elc
-%exclude /usr/share/emacs/26.2/lisp/net/soap-inspect.el.gz
-%exclude /usr/share/emacs/26.2/lisp/net/soap-inspect.elc
-%exclude /usr/share/emacs/26.2/lisp/net/socks.el.gz
-%exclude /usr/share/emacs/26.2/lisp/net/socks.elc
-%exclude /usr/share/emacs/26.2/lisp/net/starttls.el.gz
-%exclude /usr/share/emacs/26.2/lisp/net/starttls.elc
-%exclude /usr/share/emacs/26.2/lisp/net/telnet.el.gz
-%exclude /usr/share/emacs/26.2/lisp/net/telnet.elc
-%exclude /usr/share/emacs/26.2/lisp/net/tls.el.gz
-%exclude /usr/share/emacs/26.2/lisp/net/tls.elc
-%exclude /usr/share/emacs/26.2/lisp/net/tramp-adb.el.gz
-%exclude /usr/share/emacs/26.2/lisp/net/tramp-adb.elc
-%exclude /usr/share/emacs/26.2/lisp/net/tramp-cache.el.gz
-%exclude /usr/share/emacs/26.2/lisp/net/tramp-cache.elc
-%exclude /usr/share/emacs/26.2/lisp/net/tramp-cmds.el.gz
-%exclude /usr/share/emacs/26.2/lisp/net/tramp-cmds.elc
-%exclude /usr/share/emacs/26.2/lisp/net/tramp-compat.el.gz
-%exclude /usr/share/emacs/26.2/lisp/net/tramp-compat.elc
-%exclude /usr/share/emacs/26.2/lisp/net/tramp-ftp.el.gz
-%exclude /usr/share/emacs/26.2/lisp/net/tramp-ftp.elc
-%exclude /usr/share/emacs/26.2/lisp/net/tramp-gvfs.el.gz
-%exclude /usr/share/emacs/26.2/lisp/net/tramp-gvfs.elc
-%exclude /usr/share/emacs/26.2/lisp/net/tramp-loaddefs.el
-%exclude /usr/share/emacs/26.2/lisp/net/tramp-sh.el.gz
-%exclude /usr/share/emacs/26.2/lisp/net/tramp-sh.elc
-%exclude /usr/share/emacs/26.2/lisp/net/tramp-smb.el.gz
-%exclude /usr/share/emacs/26.2/lisp/net/tramp-smb.elc
-%exclude /usr/share/emacs/26.2/lisp/net/tramp-uu.el.gz
-%exclude /usr/share/emacs/26.2/lisp/net/tramp-uu.elc
-%exclude /usr/share/emacs/26.2/lisp/net/tramp.el.gz
-%exclude /usr/share/emacs/26.2/lisp/net/tramp.elc
-%exclude /usr/share/emacs/26.2/lisp/net/trampver.el.gz
-%exclude /usr/share/emacs/26.2/lisp/net/trampver.elc
-%exclude /usr/share/emacs/26.2/lisp/net/webjump.el.gz
-%exclude /usr/share/emacs/26.2/lisp/net/webjump.elc
-%exclude /usr/share/emacs/26.2/lisp/net/zeroconf.el.gz
-%exclude /usr/share/emacs/26.2/lisp/net/zeroconf.elc
-%exclude /usr/share/emacs/26.2/lisp/newcomment.el.gz
-%exclude /usr/share/emacs/26.2/lisp/newcomment.elc
-%exclude /usr/share/emacs/26.2/lisp/notifications.el.gz
-%exclude /usr/share/emacs/26.2/lisp/notifications.elc
-%exclude /usr/share/emacs/26.2/lisp/novice.el.gz
-%exclude /usr/share/emacs/26.2/lisp/novice.elc
-%exclude /usr/share/emacs/26.2/lisp/nxml/nxml-enc.el.gz
-%exclude /usr/share/emacs/26.2/lisp/nxml/nxml-enc.elc
-%exclude /usr/share/emacs/26.2/lisp/nxml/nxml-maint.el.gz
-%exclude /usr/share/emacs/26.2/lisp/nxml/nxml-maint.elc
-%exclude /usr/share/emacs/26.2/lisp/nxml/nxml-mode.el.gz
-%exclude /usr/share/emacs/26.2/lisp/nxml/nxml-mode.elc
-%exclude /usr/share/emacs/26.2/lisp/nxml/nxml-ns.el.gz
-%exclude /usr/share/emacs/26.2/lisp/nxml/nxml-ns.elc
-%exclude /usr/share/emacs/26.2/lisp/nxml/nxml-outln.el.gz
-%exclude /usr/share/emacs/26.2/lisp/nxml/nxml-outln.elc
-%exclude /usr/share/emacs/26.2/lisp/nxml/nxml-parse.el.gz
-%exclude /usr/share/emacs/26.2/lisp/nxml/nxml-parse.elc
-%exclude /usr/share/emacs/26.2/lisp/nxml/nxml-rap.el.gz
-%exclude /usr/share/emacs/26.2/lisp/nxml/nxml-rap.elc
-%exclude /usr/share/emacs/26.2/lisp/nxml/nxml-util.el.gz
-%exclude /usr/share/emacs/26.2/lisp/nxml/nxml-util.elc
-%exclude /usr/share/emacs/26.2/lisp/nxml/rng-cmpct.el.gz
-%exclude /usr/share/emacs/26.2/lisp/nxml/rng-cmpct.elc
-%exclude /usr/share/emacs/26.2/lisp/nxml/rng-dt.el.gz
-%exclude /usr/share/emacs/26.2/lisp/nxml/rng-dt.elc
-%exclude /usr/share/emacs/26.2/lisp/nxml/rng-loc.el.gz
-%exclude /usr/share/emacs/26.2/lisp/nxml/rng-loc.elc
-%exclude /usr/share/emacs/26.2/lisp/nxml/rng-maint.el.gz
-%exclude /usr/share/emacs/26.2/lisp/nxml/rng-maint.elc
-%exclude /usr/share/emacs/26.2/lisp/nxml/rng-match.el.gz
-%exclude /usr/share/emacs/26.2/lisp/nxml/rng-match.elc
-%exclude /usr/share/emacs/26.2/lisp/nxml/rng-nxml.el.gz
-%exclude /usr/share/emacs/26.2/lisp/nxml/rng-nxml.elc
-%exclude /usr/share/emacs/26.2/lisp/nxml/rng-parse.el.gz
-%exclude /usr/share/emacs/26.2/lisp/nxml/rng-parse.elc
-%exclude /usr/share/emacs/26.2/lisp/nxml/rng-pttrn.el.gz
-%exclude /usr/share/emacs/26.2/lisp/nxml/rng-pttrn.elc
-%exclude /usr/share/emacs/26.2/lisp/nxml/rng-uri.el.gz
-%exclude /usr/share/emacs/26.2/lisp/nxml/rng-uri.elc
-%exclude /usr/share/emacs/26.2/lisp/nxml/rng-util.el.gz
-%exclude /usr/share/emacs/26.2/lisp/nxml/rng-util.elc
-%exclude /usr/share/emacs/26.2/lisp/nxml/rng-valid.el.gz
-%exclude /usr/share/emacs/26.2/lisp/nxml/rng-valid.elc
-%exclude /usr/share/emacs/26.2/lisp/nxml/rng-xsd.el.gz
-%exclude /usr/share/emacs/26.2/lisp/nxml/rng-xsd.elc
-%exclude /usr/share/emacs/26.2/lisp/nxml/xmltok.el.gz
-%exclude /usr/share/emacs/26.2/lisp/nxml/xmltok.elc
-%exclude /usr/share/emacs/26.2/lisp/nxml/xsd-regexp.el.gz
-%exclude /usr/share/emacs/26.2/lisp/nxml/xsd-regexp.elc
-%exclude /usr/share/emacs/26.2/lisp/obarray.el.gz
-%exclude /usr/share/emacs/26.2/lisp/obarray.elc
-%exclude /usr/share/emacs/26.2/lisp/obsolete/abbrevlist.el.gz
-%exclude /usr/share/emacs/26.2/lisp/obsolete/abbrevlist.elc
-%exclude /usr/share/emacs/26.2/lisp/obsolete/assoc.el.gz
-%exclude /usr/share/emacs/26.2/lisp/obsolete/assoc.elc
-%exclude /usr/share/emacs/26.2/lisp/obsolete/bruce.el.gz
-%exclude /usr/share/emacs/26.2/lisp/obsolete/bruce.elc
-%exclude /usr/share/emacs/26.2/lisp/obsolete/cc-compat.el.gz
-%exclude /usr/share/emacs/26.2/lisp/obsolete/cc-compat.elc
-%exclude /usr/share/emacs/26.2/lisp/obsolete/cl-compat.el.gz
-%exclude /usr/share/emacs/26.2/lisp/obsolete/cl-compat.elc
-%exclude /usr/share/emacs/26.2/lisp/obsolete/complete.el.gz
-%exclude /usr/share/emacs/26.2/lisp/obsolete/complete.elc
-%exclude /usr/share/emacs/26.2/lisp/obsolete/crisp.el.gz
-%exclude /usr/share/emacs/26.2/lisp/obsolete/crisp.elc
-%exclude /usr/share/emacs/26.2/lisp/obsolete/cust-print.el.gz
-%exclude /usr/share/emacs/26.2/lisp/obsolete/cust-print.elc
-%exclude /usr/share/emacs/26.2/lisp/obsolete/erc-hecomplete.el.gz
-%exclude /usr/share/emacs/26.2/lisp/obsolete/erc-hecomplete.elc
-%exclude /usr/share/emacs/26.2/lisp/obsolete/eudcb-ph.el.gz
-%exclude /usr/share/emacs/26.2/lisp/obsolete/eudcb-ph.elc
-%exclude /usr/share/emacs/26.2/lisp/obsolete/fast-lock.el.gz
-%exclude /usr/share/emacs/26.2/lisp/obsolete/fast-lock.elc
-%exclude /usr/share/emacs/26.2/lisp/obsolete/gs.el.gz
-%exclude /usr/share/emacs/26.2/lisp/obsolete/gs.elc
-%exclude /usr/share/emacs/26.2/lisp/obsolete/gulp.el.gz
-%exclude /usr/share/emacs/26.2/lisp/obsolete/gulp.elc
-%exclude /usr/share/emacs/26.2/lisp/obsolete/html2text.el.gz
-%exclude /usr/share/emacs/26.2/lisp/obsolete/html2text.elc
-%exclude /usr/share/emacs/26.2/lisp/obsolete/iswitchb.el.gz
-%exclude /usr/share/emacs/26.2/lisp/obsolete/iswitchb.elc
-%exclude /usr/share/emacs/26.2/lisp/obsolete/landmark.el.gz
-%exclude /usr/share/emacs/26.2/lisp/obsolete/landmark.elc
-%exclude /usr/share/emacs/26.2/lisp/obsolete/lazy-lock.el.gz
-%exclude /usr/share/emacs/26.2/lisp/obsolete/lazy-lock.elc
-%exclude /usr/share/emacs/26.2/lisp/obsolete/ledit.el.gz
-%exclude /usr/share/emacs/26.2/lisp/obsolete/ledit.elc
-%exclude /usr/share/emacs/26.2/lisp/obsolete/levents.el.gz
-%exclude /usr/share/emacs/26.2/lisp/obsolete/levents.elc
-%exclude /usr/share/emacs/26.2/lisp/obsolete/lmenu.el.gz
-%exclude /usr/share/emacs/26.2/lisp/obsolete/lmenu.elc
-%exclude /usr/share/emacs/26.2/lisp/obsolete/longlines.el.gz
-%exclude /usr/share/emacs/26.2/lisp/obsolete/longlines.elc
-%exclude /usr/share/emacs/26.2/lisp/obsolete/lucid.el.gz
-%exclude /usr/share/emacs/26.2/lisp/obsolete/lucid.elc
-%exclude /usr/share/emacs/26.2/lisp/obsolete/mailpost.el.gz
-%exclude /usr/share/emacs/26.2/lisp/obsolete/mailpost.elc
-%exclude /usr/share/emacs/26.2/lisp/obsolete/meese.el.gz
-%exclude /usr/share/emacs/26.2/lisp/obsolete/meese.elc
-%exclude /usr/share/emacs/26.2/lisp/obsolete/messcompat.el
-%exclude /usr/share/emacs/26.2/lisp/obsolete/mouse-sel.el.gz
-%exclude /usr/share/emacs/26.2/lisp/obsolete/mouse-sel.elc
-%exclude /usr/share/emacs/26.2/lisp/obsolete/old-emacs-lock.el.gz
-%exclude /usr/share/emacs/26.2/lisp/obsolete/old-emacs-lock.elc
-%exclude /usr/share/emacs/26.2/lisp/obsolete/old-whitespace.el.gz
-%exclude /usr/share/emacs/26.2/lisp/obsolete/old-whitespace.elc
-%exclude /usr/share/emacs/26.2/lisp/obsolete/options.el.gz
-%exclude /usr/share/emacs/26.2/lisp/obsolete/options.elc
-%exclude /usr/share/emacs/26.2/lisp/obsolete/otodo-mode.el.gz
-%exclude /usr/share/emacs/26.2/lisp/obsolete/otodo-mode.elc
-%exclude /usr/share/emacs/26.2/lisp/obsolete/patcomp.el.gz
-%exclude /usr/share/emacs/26.2/lisp/obsolete/patcomp.elc
-%exclude /usr/share/emacs/26.2/lisp/obsolete/pc-mode.el.gz
-%exclude /usr/share/emacs/26.2/lisp/obsolete/pc-mode.elc
-%exclude /usr/share/emacs/26.2/lisp/obsolete/pc-select.el.gz
-%exclude /usr/share/emacs/26.2/lisp/obsolete/pc-select.elc
-%exclude /usr/share/emacs/26.2/lisp/obsolete/pgg-def.el.gz
-%exclude /usr/share/emacs/26.2/lisp/obsolete/pgg-def.elc
-%exclude /usr/share/emacs/26.2/lisp/obsolete/pgg-gpg.el.gz
-%exclude /usr/share/emacs/26.2/lisp/obsolete/pgg-gpg.elc
-%exclude /usr/share/emacs/26.2/lisp/obsolete/pgg-parse.el.gz
-%exclude /usr/share/emacs/26.2/lisp/obsolete/pgg-parse.elc
-%exclude /usr/share/emacs/26.2/lisp/obsolete/pgg-pgp.el.gz
-%exclude /usr/share/emacs/26.2/lisp/obsolete/pgg-pgp.elc
-%exclude /usr/share/emacs/26.2/lisp/obsolete/pgg-pgp5.el.gz
-%exclude /usr/share/emacs/26.2/lisp/obsolete/pgg-pgp5.elc
-%exclude /usr/share/emacs/26.2/lisp/obsolete/pgg.el.gz
-%exclude /usr/share/emacs/26.2/lisp/obsolete/pgg.elc
-%exclude /usr/share/emacs/26.2/lisp/obsolete/rcompile.el.gz
-%exclude /usr/share/emacs/26.2/lisp/obsolete/rcompile.elc
-%exclude /usr/share/emacs/26.2/lisp/obsolete/s-region.el.gz
-%exclude /usr/share/emacs/26.2/lisp/obsolete/s-region.elc
-%exclude /usr/share/emacs/26.2/lisp/obsolete/sregex.el.gz
-%exclude /usr/share/emacs/26.2/lisp/obsolete/sregex.elc
-%exclude /usr/share/emacs/26.2/lisp/obsolete/sup-mouse.el.gz
-%exclude /usr/share/emacs/26.2/lisp/obsolete/sup-mouse.elc
-%exclude /usr/share/emacs/26.2/lisp/obsolete/terminal.el.gz
-%exclude /usr/share/emacs/26.2/lisp/obsolete/terminal.elc
-%exclude /usr/share/emacs/26.2/lisp/obsolete/tpu-edt.el.gz
-%exclude /usr/share/emacs/26.2/lisp/obsolete/tpu-edt.elc
-%exclude /usr/share/emacs/26.2/lisp/obsolete/tpu-extras.el.gz
-%exclude /usr/share/emacs/26.2/lisp/obsolete/tpu-extras.elc
-%exclude /usr/share/emacs/26.2/lisp/obsolete/tpu-mapper.el.gz
-%exclude /usr/share/emacs/26.2/lisp/obsolete/tpu-mapper.elc
-%exclude /usr/share/emacs/26.2/lisp/obsolete/vc-arch.el.gz
-%exclude /usr/share/emacs/26.2/lisp/obsolete/vc-arch.elc
-%exclude /usr/share/emacs/26.2/lisp/obsolete/vi.el.gz
-%exclude /usr/share/emacs/26.2/lisp/obsolete/vi.elc
-%exclude /usr/share/emacs/26.2/lisp/obsolete/vip.el.gz
-%exclude /usr/share/emacs/26.2/lisp/obsolete/vip.elc
-%exclude /usr/share/emacs/26.2/lisp/obsolete/ws-mode.el.gz
-%exclude /usr/share/emacs/26.2/lisp/obsolete/ws-mode.elc
-%exclude /usr/share/emacs/26.2/lisp/obsolete/xesam.el.gz
-%exclude /usr/share/emacs/26.2/lisp/obsolete/xesam.elc
-%exclude /usr/share/emacs/26.2/lisp/obsolete/yow.el.gz
-%exclude /usr/share/emacs/26.2/lisp/obsolete/yow.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ob-C.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ob-C.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ob-J.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ob-J.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ob-R.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ob-R.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ob-abc.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ob-abc.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ob-asymptote.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ob-asymptote.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ob-awk.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ob-awk.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ob-calc.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ob-calc.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ob-clojure.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ob-clojure.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ob-comint.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ob-comint.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ob-coq.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ob-coq.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ob-core.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ob-core.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ob-css.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ob-css.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ob-ditaa.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ob-ditaa.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ob-dot.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ob-dot.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ob-ebnf.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ob-ebnf.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ob-emacs-lisp.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ob-emacs-lisp.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ob-eval.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ob-eval.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ob-exp.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ob-exp.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ob-forth.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ob-forth.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ob-fortran.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ob-fortran.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ob-gnuplot.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ob-gnuplot.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ob-groovy.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ob-groovy.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ob-haskell.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ob-haskell.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ob-hledger.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ob-hledger.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ob-io.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ob-io.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ob-java.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ob-java.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ob-js.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ob-js.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ob-keys.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ob-keys.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ob-latex.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ob-latex.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ob-ledger.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ob-ledger.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ob-lilypond.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ob-lilypond.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ob-lisp.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ob-lisp.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ob-lob.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ob-lob.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ob-lua.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ob-lua.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ob-makefile.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ob-makefile.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ob-matlab.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ob-matlab.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ob-maxima.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ob-maxima.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ob-mscgen.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ob-mscgen.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ob-ocaml.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ob-ocaml.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ob-octave.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ob-octave.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ob-org.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ob-org.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ob-perl.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ob-perl.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ob-picolisp.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ob-picolisp.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ob-plantuml.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ob-plantuml.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ob-processing.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ob-processing.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ob-python.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ob-python.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ob-ref.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ob-ref.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ob-ruby.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ob-ruby.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ob-sass.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ob-sass.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ob-scheme.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ob-scheme.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ob-screen.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ob-screen.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ob-sed.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ob-sed.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ob-shell.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ob-shell.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ob-shen.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ob-shen.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ob-sql.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ob-sql.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ob-sqlite.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ob-sqlite.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ob-stan.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ob-stan.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ob-table.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ob-table.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ob-tangle.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ob-tangle.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ob-vala.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ob-vala.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ob.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ob.elc
-%exclude /usr/share/emacs/26.2/lisp/org/org-agenda.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/org-agenda.elc
-%exclude /usr/share/emacs/26.2/lisp/org/org-archive.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/org-archive.elc
-%exclude /usr/share/emacs/26.2/lisp/org/org-attach.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/org-attach.elc
-%exclude /usr/share/emacs/26.2/lisp/org/org-bbdb.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/org-bbdb.elc
-%exclude /usr/share/emacs/26.2/lisp/org/org-bibtex.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/org-bibtex.elc
-%exclude /usr/share/emacs/26.2/lisp/org/org-capture.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/org-capture.elc
-%exclude /usr/share/emacs/26.2/lisp/org/org-clock.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/org-clock.elc
-%exclude /usr/share/emacs/26.2/lisp/org/org-colview.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/org-colview.elc
-%exclude /usr/share/emacs/26.2/lisp/org/org-compat.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/org-compat.elc
-%exclude /usr/share/emacs/26.2/lisp/org/org-crypt.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/org-crypt.elc
-%exclude /usr/share/emacs/26.2/lisp/org/org-ctags.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/org-ctags.elc
-%exclude /usr/share/emacs/26.2/lisp/org/org-datetree.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/org-datetree.elc
-%exclude /usr/share/emacs/26.2/lisp/org/org-docview.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/org-docview.elc
-%exclude /usr/share/emacs/26.2/lisp/org/org-duration.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/org-duration.elc
-%exclude /usr/share/emacs/26.2/lisp/org/org-element.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/org-element.elc
-%exclude /usr/share/emacs/26.2/lisp/org/org-entities.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/org-entities.elc
-%exclude /usr/share/emacs/26.2/lisp/org/org-eshell.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/org-eshell.elc
-%exclude /usr/share/emacs/26.2/lisp/org/org-eww.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/org-eww.elc
-%exclude /usr/share/emacs/26.2/lisp/org/org-faces.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/org-faces.elc
-%exclude /usr/share/emacs/26.2/lisp/org/org-feed.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/org-feed.elc
-%exclude /usr/share/emacs/26.2/lisp/org/org-footnote.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/org-footnote.elc
-%exclude /usr/share/emacs/26.2/lisp/org/org-gnus.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/org-gnus.elc
-%exclude /usr/share/emacs/26.2/lisp/org/org-habit.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/org-habit.elc
-%exclude /usr/share/emacs/26.2/lisp/org/org-id.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/org-id.elc
-%exclude /usr/share/emacs/26.2/lisp/org/org-indent.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/org-indent.elc
-%exclude /usr/share/emacs/26.2/lisp/org/org-info.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/org-info.elc
-%exclude /usr/share/emacs/26.2/lisp/org/org-inlinetask.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/org-inlinetask.elc
-%exclude /usr/share/emacs/26.2/lisp/org/org-install.el
-%exclude /usr/share/emacs/26.2/lisp/org/org-irc.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/org-irc.elc
-%exclude /usr/share/emacs/26.2/lisp/org/org-lint.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/org-lint.elc
-%exclude /usr/share/emacs/26.2/lisp/org/org-list.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/org-list.elc
-%exclude /usr/share/emacs/26.2/lisp/org/org-loaddefs.el
-%exclude /usr/share/emacs/26.2/lisp/org/org-macro.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/org-macro.elc
-%exclude /usr/share/emacs/26.2/lisp/org/org-macs.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/org-macs.elc
-%exclude /usr/share/emacs/26.2/lisp/org/org-mhe.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/org-mhe.elc
-%exclude /usr/share/emacs/26.2/lisp/org/org-mobile.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/org-mobile.elc
-%exclude /usr/share/emacs/26.2/lisp/org/org-mouse.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/org-mouse.elc
-%exclude /usr/share/emacs/26.2/lisp/org/org-pcomplete.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/org-pcomplete.elc
-%exclude /usr/share/emacs/26.2/lisp/org/org-plot.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/org-plot.elc
-%exclude /usr/share/emacs/26.2/lisp/org/org-protocol.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/org-protocol.elc
-%exclude /usr/share/emacs/26.2/lisp/org/org-rmail.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/org-rmail.elc
-%exclude /usr/share/emacs/26.2/lisp/org/org-src.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/org-src.elc
-%exclude /usr/share/emacs/26.2/lisp/org/org-table.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/org-table.elc
-%exclude /usr/share/emacs/26.2/lisp/org/org-timer.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/org-timer.elc
-%exclude /usr/share/emacs/26.2/lisp/org/org-version.el
-%exclude /usr/share/emacs/26.2/lisp/org/org-w3m.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/org-w3m.elc
-%exclude /usr/share/emacs/26.2/lisp/org/org.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/org.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ox-ascii.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ox-ascii.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ox-beamer.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ox-beamer.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ox-html.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ox-html.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ox-icalendar.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ox-icalendar.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ox-latex.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ox-latex.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ox-man.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ox-man.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ox-md.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ox-md.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ox-odt.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ox-odt.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ox-org.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ox-org.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ox-publish.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ox-publish.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ox-texinfo.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ox-texinfo.elc
-%exclude /usr/share/emacs/26.2/lisp/org/ox.el.gz
-%exclude /usr/share/emacs/26.2/lisp/org/ox.elc
-%exclude /usr/share/emacs/26.2/lisp/outline.el.gz
-%exclude /usr/share/emacs/26.2/lisp/outline.elc
-%exclude /usr/share/emacs/26.2/lisp/paren.el.gz
-%exclude /usr/share/emacs/26.2/lisp/paren.elc
-%exclude /usr/share/emacs/26.2/lisp/password-cache.el.gz
-%exclude /usr/share/emacs/26.2/lisp/password-cache.elc
-%exclude /usr/share/emacs/26.2/lisp/pcmpl-cvs.el.gz
-%exclude /usr/share/emacs/26.2/lisp/pcmpl-cvs.elc
-%exclude /usr/share/emacs/26.2/lisp/pcmpl-gnu.el.gz
-%exclude /usr/share/emacs/26.2/lisp/pcmpl-gnu.elc
-%exclude /usr/share/emacs/26.2/lisp/pcmpl-linux.el.gz
-%exclude /usr/share/emacs/26.2/lisp/pcmpl-linux.elc
-%exclude /usr/share/emacs/26.2/lisp/pcmpl-rpm.el.gz
-%exclude /usr/share/emacs/26.2/lisp/pcmpl-rpm.elc
-%exclude /usr/share/emacs/26.2/lisp/pcmpl-unix.el.gz
-%exclude /usr/share/emacs/26.2/lisp/pcmpl-unix.elc
-%exclude /usr/share/emacs/26.2/lisp/pcmpl-x.el.gz
-%exclude /usr/share/emacs/26.2/lisp/pcmpl-x.elc
-%exclude /usr/share/emacs/26.2/lisp/pcomplete.el.gz
-%exclude /usr/share/emacs/26.2/lisp/pcomplete.elc
-%exclude /usr/share/emacs/26.2/lisp/pixel-scroll.el.gz
-%exclude /usr/share/emacs/26.2/lisp/pixel-scroll.elc
-%exclude /usr/share/emacs/26.2/lisp/play/5x5.el.gz
-%exclude /usr/share/emacs/26.2/lisp/play/5x5.elc
-%exclude /usr/share/emacs/26.2/lisp/play/animate.el.gz
-%exclude /usr/share/emacs/26.2/lisp/play/animate.elc
-%exclude /usr/share/emacs/26.2/lisp/play/blackbox.el.gz
-%exclude /usr/share/emacs/26.2/lisp/play/blackbox.elc
-%exclude /usr/share/emacs/26.2/lisp/play/bubbles.el.gz
-%exclude /usr/share/emacs/26.2/lisp/play/bubbles.elc
-%exclude /usr/share/emacs/26.2/lisp/play/cookie1.el.gz
-%exclude /usr/share/emacs/26.2/lisp/play/cookie1.elc
-%exclude /usr/share/emacs/26.2/lisp/play/decipher.el.gz
-%exclude /usr/share/emacs/26.2/lisp/play/decipher.elc
-%exclude /usr/share/emacs/26.2/lisp/play/dissociate.el.gz
-%exclude /usr/share/emacs/26.2/lisp/play/dissociate.elc
-%exclude /usr/share/emacs/26.2/lisp/play/doctor.el.gz
-%exclude /usr/share/emacs/26.2/lisp/play/doctor.elc
-%exclude /usr/share/emacs/26.2/lisp/play/dunnet.el.gz
-%exclude /usr/share/emacs/26.2/lisp/play/dunnet.elc
-%exclude /usr/share/emacs/26.2/lisp/play/fortune.el.gz
-%exclude /usr/share/emacs/26.2/lisp/play/fortune.elc
-%exclude /usr/share/emacs/26.2/lisp/play/gamegrid.el.gz
-%exclude /usr/share/emacs/26.2/lisp/play/gamegrid.elc
-%exclude /usr/share/emacs/26.2/lisp/play/gametree.el.gz
-%exclude /usr/share/emacs/26.2/lisp/play/gametree.elc
-%exclude /usr/share/emacs/26.2/lisp/play/gomoku.el.gz
-%exclude /usr/share/emacs/26.2/lisp/play/gomoku.elc
-%exclude /usr/share/emacs/26.2/lisp/play/handwrite.el.gz
-%exclude /usr/share/emacs/26.2/lisp/play/handwrite.elc
-%exclude /usr/share/emacs/26.2/lisp/play/hanoi.el.gz
-%exclude /usr/share/emacs/26.2/lisp/play/hanoi.elc
-%exclude /usr/share/emacs/26.2/lisp/play/life.el.gz
-%exclude /usr/share/emacs/26.2/lisp/play/life.elc
-%exclude /usr/share/emacs/26.2/lisp/play/morse.el.gz
-%exclude /usr/share/emacs/26.2/lisp/play/morse.elc
-%exclude /usr/share/emacs/26.2/lisp/play/mpuz.el.gz
-%exclude /usr/share/emacs/26.2/lisp/play/mpuz.elc
-%exclude /usr/share/emacs/26.2/lisp/play/pong.el.gz
-%exclude /usr/share/emacs/26.2/lisp/play/pong.elc
-%exclude /usr/share/emacs/26.2/lisp/play/snake.el.gz
-%exclude /usr/share/emacs/26.2/lisp/play/snake.elc
-%exclude /usr/share/emacs/26.2/lisp/play/solitaire.el.gz
-%exclude /usr/share/emacs/26.2/lisp/play/solitaire.elc
-%exclude /usr/share/emacs/26.2/lisp/play/spook.el.gz
-%exclude /usr/share/emacs/26.2/lisp/play/spook.elc
-%exclude /usr/share/emacs/26.2/lisp/play/studly.el.gz
-%exclude /usr/share/emacs/26.2/lisp/play/studly.elc
-%exclude /usr/share/emacs/26.2/lisp/play/tetris.el.gz
-%exclude /usr/share/emacs/26.2/lisp/play/tetris.elc
-%exclude /usr/share/emacs/26.2/lisp/play/zone.el.gz
-%exclude /usr/share/emacs/26.2/lisp/play/zone.elc
-%exclude /usr/share/emacs/26.2/lisp/plstore.el.gz
-%exclude /usr/share/emacs/26.2/lisp/plstore.elc
-%exclude /usr/share/emacs/26.2/lisp/printing.el.gz
-%exclude /usr/share/emacs/26.2/lisp/printing.elc
-%exclude /usr/share/emacs/26.2/lisp/proced.el.gz
-%exclude /usr/share/emacs/26.2/lisp/proced.elc
-%exclude /usr/share/emacs/26.2/lisp/profiler.el.gz
-%exclude /usr/share/emacs/26.2/lisp/profiler.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/ada-mode.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/ada-mode.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/ada-prj.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/ada-prj.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/ada-stmt.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/ada-stmt.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/ada-xref.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/ada-xref.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/antlr-mode.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/antlr-mode.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/asm-mode.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/asm-mode.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/autoconf.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/autoconf.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/bat-mode.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/bat-mode.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/bug-reference.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/bug-reference.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/cc-align.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/cc-align.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/cc-awk.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/cc-awk.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/cc-bytecomp.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/cc-bytecomp.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/cc-cmds.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/cc-cmds.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/cc-defs.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/cc-defs.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/cc-engine.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/cc-engine.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/cc-fonts.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/cc-fonts.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/cc-guess.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/cc-guess.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/cc-langs.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/cc-langs.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/cc-menus.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/cc-menus.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/cc-mode.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/cc-mode.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/cc-styles.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/cc-styles.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/cc-vars.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/cc-vars.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/cfengine.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/cfengine.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/cmacexp.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/cmacexp.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/compile.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/compile.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/cperl-mode.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/cperl-mode.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/cpp.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/cpp.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/cwarn.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/cwarn.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/dcl-mode.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/dcl-mode.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/ebnf-abn.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/ebnf-abn.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/ebnf-bnf.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/ebnf-bnf.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/ebnf-dtd.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/ebnf-dtd.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/ebnf-ebx.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/ebnf-ebx.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/ebnf-iso.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/ebnf-iso.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/ebnf-otz.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/ebnf-otz.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/ebnf-yac.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/ebnf-yac.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/ebnf2ps.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/ebnf2ps.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/ebrowse.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/ebrowse.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/elisp-mode.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/elisp-mode.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/etags.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/etags.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/executable.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/executable.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/f90.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/f90.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/flymake-proc.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/flymake-proc.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/flymake.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/flymake.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/fortran.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/fortran.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/gdb-mi.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/gdb-mi.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/glasses.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/glasses.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/grep.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/grep.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/gud.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/gud.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/hideif.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/hideif.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/hideshow.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/hideshow.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/icon.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/icon.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/idlw-complete-structtag.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/idlw-complete-structtag.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/idlw-help.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/idlw-help.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/idlw-shell.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/idlw-shell.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/idlw-toolbar.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/idlw-toolbar.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/idlwave.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/idlwave.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/inf-lisp.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/inf-lisp.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/js.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/js.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/ld-script.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/ld-script.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/m4-mode.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/m4-mode.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/make-mode.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/make-mode.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/mantemp.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/mantemp.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/meta-mode.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/meta-mode.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/mixal-mode.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/mixal-mode.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/modula2.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/modula2.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/octave.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/octave.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/opascal.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/opascal.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/pascal.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/pascal.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/perl-mode.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/perl-mode.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/prog-mode.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/prog-mode.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/project.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/project.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/prolog.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/prolog.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/ps-mode.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/ps-mode.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/python.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/python.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/ruby-mode.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/ruby-mode.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/scheme.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/scheme.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/sh-script.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/sh-script.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/simula.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/simula.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/sql.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/sql.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/subword.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/subword.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/tcl.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/tcl.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/vera-mode.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/vera-mode.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/verilog-mode.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/verilog-mode.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/vhdl-mode.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/vhdl-mode.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/which-func.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/which-func.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/xref.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/xref.elc
-%exclude /usr/share/emacs/26.2/lisp/progmodes/xscheme.el.gz
-%exclude /usr/share/emacs/26.2/lisp/progmodes/xscheme.elc
-%exclude /usr/share/emacs/26.2/lisp/ps-bdf.el.gz
-%exclude /usr/share/emacs/26.2/lisp/ps-bdf.elc
-%exclude /usr/share/emacs/26.2/lisp/ps-def.el.gz
-%exclude /usr/share/emacs/26.2/lisp/ps-def.elc
-%exclude /usr/share/emacs/26.2/lisp/ps-mule.el.gz
-%exclude /usr/share/emacs/26.2/lisp/ps-mule.elc
-%exclude /usr/share/emacs/26.2/lisp/ps-print-loaddefs.el
-%exclude /usr/share/emacs/26.2/lisp/ps-print.el.gz
-%exclude /usr/share/emacs/26.2/lisp/ps-print.elc
-%exclude /usr/share/emacs/26.2/lisp/ps-samp.el.gz
-%exclude /usr/share/emacs/26.2/lisp/ps-samp.elc
-%exclude /usr/share/emacs/26.2/lisp/recentf.el.gz
-%exclude /usr/share/emacs/26.2/lisp/recentf.elc
-%exclude /usr/share/emacs/26.2/lisp/rect.el.gz
-%exclude /usr/share/emacs/26.2/lisp/rect.elc
-%exclude /usr/share/emacs/26.2/lisp/register.el.gz
-%exclude /usr/share/emacs/26.2/lisp/register.elc
-%exclude /usr/share/emacs/26.2/lisp/registry.el.gz
-%exclude /usr/share/emacs/26.2/lisp/registry.elc
-%exclude /usr/share/emacs/26.2/lisp/repeat.el.gz
-%exclude /usr/share/emacs/26.2/lisp/repeat.elc
-%exclude /usr/share/emacs/26.2/lisp/replace.el.gz
-%exclude /usr/share/emacs/26.2/lisp/replace.elc
-%exclude /usr/share/emacs/26.2/lisp/reposition.el.gz
-%exclude /usr/share/emacs/26.2/lisp/reposition.elc
-%exclude /usr/share/emacs/26.2/lisp/reveal.el.gz
-%exclude /usr/share/emacs/26.2/lisp/reveal.elc
-%exclude /usr/share/emacs/26.2/lisp/rfn-eshadow.el.gz
-%exclude /usr/share/emacs/26.2/lisp/rfn-eshadow.elc
-%exclude /usr/share/emacs/26.2/lisp/rot13.el.gz
-%exclude /usr/share/emacs/26.2/lisp/rot13.elc
-%exclude /usr/share/emacs/26.2/lisp/rtree.el.gz
-%exclude /usr/share/emacs/26.2/lisp/rtree.elc
-%exclude /usr/share/emacs/26.2/lisp/ruler-mode.el.gz
-%exclude /usr/share/emacs/26.2/lisp/ruler-mode.elc
-%exclude /usr/share/emacs/26.2/lisp/savehist.el.gz
-%exclude /usr/share/emacs/26.2/lisp/savehist.elc
-%exclude /usr/share/emacs/26.2/lisp/saveplace.el.gz
-%exclude /usr/share/emacs/26.2/lisp/saveplace.elc
-%exclude /usr/share/emacs/26.2/lisp/sb-image.el.gz
-%exclude /usr/share/emacs/26.2/lisp/sb-image.elc
-%exclude /usr/share/emacs/26.2/lisp/scroll-all.el.gz
-%exclude /usr/share/emacs/26.2/lisp/scroll-all.elc
-%exclude /usr/share/emacs/26.2/lisp/scroll-bar.el.gz
-%exclude /usr/share/emacs/26.2/lisp/scroll-bar.elc
-%exclude /usr/share/emacs/26.2/lisp/scroll-lock.el.gz
-%exclude /usr/share/emacs/26.2/lisp/scroll-lock.elc
-%exclude /usr/share/emacs/26.2/lisp/select.el.gz
-%exclude /usr/share/emacs/26.2/lisp/select.elc
-%exclude /usr/share/emacs/26.2/lisp/server.el.gz
-%exclude /usr/share/emacs/26.2/lisp/server.elc
-%exclude /usr/share/emacs/26.2/lisp/ses.el.gz
-%exclude /usr/share/emacs/26.2/lisp/ses.elc
-%exclude /usr/share/emacs/26.2/lisp/shadowfile.el.gz
-%exclude /usr/share/emacs/26.2/lisp/shadowfile.elc
-%exclude /usr/share/emacs/26.2/lisp/shell.el.gz
-%exclude /usr/share/emacs/26.2/lisp/shell.elc
-%exclude /usr/share/emacs/26.2/lisp/simple.el.gz
-%exclude /usr/share/emacs/26.2/lisp/simple.elc
-%exclude /usr/share/emacs/26.2/lisp/skeleton.el.gz
-%exclude /usr/share/emacs/26.2/lisp/skeleton.elc
-%exclude /usr/share/emacs/26.2/lisp/sort.el.gz
-%exclude /usr/share/emacs/26.2/lisp/sort.elc
-%exclude /usr/share/emacs/26.2/lisp/soundex.el.gz
-%exclude /usr/share/emacs/26.2/lisp/soundex.elc
-%exclude /usr/share/emacs/26.2/lisp/speedbar.el.gz
-%exclude /usr/share/emacs/26.2/lisp/speedbar.elc
-%exclude /usr/share/emacs/26.2/lisp/startup.el.gz
-%exclude /usr/share/emacs/26.2/lisp/startup.elc
-%exclude /usr/share/emacs/26.2/lisp/strokes.el.gz
-%exclude /usr/share/emacs/26.2/lisp/strokes.elc
-%exclude /usr/share/emacs/26.2/lisp/subdirs.el
-%exclude /usr/share/emacs/26.2/lisp/subr.el.gz
-%exclude /usr/share/emacs/26.2/lisp/subr.elc
-%exclude /usr/share/emacs/26.2/lisp/svg.el.gz
-%exclude /usr/share/emacs/26.2/lisp/svg.elc
-%exclude /usr/share/emacs/26.2/lisp/t-mouse.el.gz
-%exclude /usr/share/emacs/26.2/lisp/t-mouse.elc
-%exclude /usr/share/emacs/26.2/lisp/tabify.el.gz
-%exclude /usr/share/emacs/26.2/lisp/tabify.elc
-%exclude /usr/share/emacs/26.2/lisp/talk.el.gz
-%exclude /usr/share/emacs/26.2/lisp/talk.elc
-%exclude /usr/share/emacs/26.2/lisp/tar-mode.el.gz
-%exclude /usr/share/emacs/26.2/lisp/tar-mode.elc
-%exclude /usr/share/emacs/26.2/lisp/tempo.el.gz
-%exclude /usr/share/emacs/26.2/lisp/tempo.elc
-%exclude /usr/share/emacs/26.2/lisp/term.el.gz
-%exclude /usr/share/emacs/26.2/lisp/term.elc
-%exclude /usr/share/emacs/26.2/lisp/term/AT386.el.gz
-%exclude /usr/share/emacs/26.2/lisp/term/AT386.elc
-%exclude /usr/share/emacs/26.2/lisp/term/README
-%exclude /usr/share/emacs/26.2/lisp/term/bobcat.el.gz
-%exclude /usr/share/emacs/26.2/lisp/term/bobcat.elc
-%exclude /usr/share/emacs/26.2/lisp/term/common-win.el.gz
-%exclude /usr/share/emacs/26.2/lisp/term/common-win.elc
-%exclude /usr/share/emacs/26.2/lisp/term/cygwin.el.gz
-%exclude /usr/share/emacs/26.2/lisp/term/cygwin.elc
-%exclude /usr/share/emacs/26.2/lisp/term/internal.el.gz
-%exclude /usr/share/emacs/26.2/lisp/term/internal.elc
-%exclude /usr/share/emacs/26.2/lisp/term/iris-ansi.el.gz
-%exclude /usr/share/emacs/26.2/lisp/term/iris-ansi.elc
-%exclude /usr/share/emacs/26.2/lisp/term/konsole.el.gz
-%exclude /usr/share/emacs/26.2/lisp/term/konsole.elc
-%exclude /usr/share/emacs/26.2/lisp/term/linux.el.gz
-%exclude /usr/share/emacs/26.2/lisp/term/linux.elc
-%exclude /usr/share/emacs/26.2/lisp/term/lk201.el.gz
-%exclude /usr/share/emacs/26.2/lisp/term/lk201.elc
-%exclude /usr/share/emacs/26.2/lisp/term/news.el.gz
-%exclude /usr/share/emacs/26.2/lisp/term/news.elc
-%exclude /usr/share/emacs/26.2/lisp/term/ns-win.el.gz
-%exclude /usr/share/emacs/26.2/lisp/term/ns-win.elc
-%exclude /usr/share/emacs/26.2/lisp/term/pc-win.el.gz
-%exclude /usr/share/emacs/26.2/lisp/term/pc-win.elc
-%exclude /usr/share/emacs/26.2/lisp/term/rxvt.el.gz
-%exclude /usr/share/emacs/26.2/lisp/term/rxvt.elc
-%exclude /usr/share/emacs/26.2/lisp/term/screen.el.gz
-%exclude /usr/share/emacs/26.2/lisp/term/screen.elc
-%exclude /usr/share/emacs/26.2/lisp/term/sun.el.gz
-%exclude /usr/share/emacs/26.2/lisp/term/sun.elc
-%exclude /usr/share/emacs/26.2/lisp/term/tmux.el.gz
-%exclude /usr/share/emacs/26.2/lisp/term/tmux.elc
-%exclude /usr/share/emacs/26.2/lisp/term/tty-colors.el.gz
-%exclude /usr/share/emacs/26.2/lisp/term/tty-colors.elc
-%exclude /usr/share/emacs/26.2/lisp/term/tvi970.el.gz
-%exclude /usr/share/emacs/26.2/lisp/term/tvi970.elc
-%exclude /usr/share/emacs/26.2/lisp/term/vt100.el.gz
-%exclude /usr/share/emacs/26.2/lisp/term/vt100.elc
-%exclude /usr/share/emacs/26.2/lisp/term/vt200.el.gz
-%exclude /usr/share/emacs/26.2/lisp/term/vt200.elc
-%exclude /usr/share/emacs/26.2/lisp/term/w32-win.el.gz
-%exclude /usr/share/emacs/26.2/lisp/term/w32-win.elc
-%exclude /usr/share/emacs/26.2/lisp/term/w32console.el.gz
-%exclude /usr/share/emacs/26.2/lisp/term/w32console.elc
-%exclude /usr/share/emacs/26.2/lisp/term/wyse50.el.gz
-%exclude /usr/share/emacs/26.2/lisp/term/wyse50.elc
-%exclude /usr/share/emacs/26.2/lisp/term/x-win.el.gz
-%exclude /usr/share/emacs/26.2/lisp/term/x-win.elc
-%exclude /usr/share/emacs/26.2/lisp/term/xterm.el.gz
-%exclude /usr/share/emacs/26.2/lisp/term/xterm.elc
-%exclude /usr/share/emacs/26.2/lisp/textmodes/artist.el.gz
-%exclude /usr/share/emacs/26.2/lisp/textmodes/artist.elc
-%exclude /usr/share/emacs/26.2/lisp/textmodes/bib-mode.el.gz
-%exclude /usr/share/emacs/26.2/lisp/textmodes/bib-mode.elc
-%exclude /usr/share/emacs/26.2/lisp/textmodes/bibtex-style.el.gz
-%exclude /usr/share/emacs/26.2/lisp/textmodes/bibtex-style.elc
-%exclude /usr/share/emacs/26.2/lisp/textmodes/bibtex.el.gz
-%exclude /usr/share/emacs/26.2/lisp/textmodes/bibtex.elc
-%exclude /usr/share/emacs/26.2/lisp/textmodes/conf-mode.el.gz
-%exclude /usr/share/emacs/26.2/lisp/textmodes/conf-mode.elc
-%exclude /usr/share/emacs/26.2/lisp/textmodes/css-mode.el.gz
-%exclude /usr/share/emacs/26.2/lisp/textmodes/css-mode.elc
-%exclude /usr/share/emacs/26.2/lisp/textmodes/dns-mode.el.gz
-%exclude /usr/share/emacs/26.2/lisp/textmodes/dns-mode.elc
-%exclude /usr/share/emacs/26.2/lisp/textmodes/enriched.el.gz
-%exclude /usr/share/emacs/26.2/lisp/textmodes/enriched.elc
-%exclude /usr/share/emacs/26.2/lisp/textmodes/fill.el.gz
-%exclude /usr/share/emacs/26.2/lisp/textmodes/fill.elc
-%exclude /usr/share/emacs/26.2/lisp/textmodes/flyspell.el.gz
-%exclude /usr/share/emacs/26.2/lisp/textmodes/flyspell.elc
-%exclude /usr/share/emacs/26.2/lisp/textmodes/ispell.el.gz
-%exclude /usr/share/emacs/26.2/lisp/textmodes/ispell.elc
-%exclude /usr/share/emacs/26.2/lisp/textmodes/less-css-mode.el.gz
-%exclude /usr/share/emacs/26.2/lisp/textmodes/less-css-mode.elc
-%exclude /usr/share/emacs/26.2/lisp/textmodes/makeinfo.el.gz
-%exclude /usr/share/emacs/26.2/lisp/textmodes/makeinfo.elc
-%exclude /usr/share/emacs/26.2/lisp/textmodes/mhtml-mode.el.gz
-%exclude /usr/share/emacs/26.2/lisp/textmodes/mhtml-mode.elc
-%exclude /usr/share/emacs/26.2/lisp/textmodes/nroff-mode.el.gz
-%exclude /usr/share/emacs/26.2/lisp/textmodes/nroff-mode.elc
-%exclude /usr/share/emacs/26.2/lisp/textmodes/page-ext.el.gz
-%exclude /usr/share/emacs/26.2/lisp/textmodes/page-ext.elc
-%exclude /usr/share/emacs/26.2/lisp/textmodes/page.el.gz
-%exclude /usr/share/emacs/26.2/lisp/textmodes/page.elc
-%exclude /usr/share/emacs/26.2/lisp/textmodes/paragraphs.el.gz
-%exclude /usr/share/emacs/26.2/lisp/textmodes/paragraphs.elc
-%exclude /usr/share/emacs/26.2/lisp/textmodes/picture.el.gz
-%exclude /usr/share/emacs/26.2/lisp/textmodes/picture.elc
-%exclude /usr/share/emacs/26.2/lisp/textmodes/po.el.gz
-%exclude /usr/share/emacs/26.2/lisp/textmodes/po.elc
-%exclude /usr/share/emacs/26.2/lisp/textmodes/refbib.el.gz
-%exclude /usr/share/emacs/26.2/lisp/textmodes/refbib.elc
-%exclude /usr/share/emacs/26.2/lisp/textmodes/refer.el.gz
-%exclude /usr/share/emacs/26.2/lisp/textmodes/refer.elc
-%exclude /usr/share/emacs/26.2/lisp/textmodes/refill.el.gz
-%exclude /usr/share/emacs/26.2/lisp/textmodes/refill.elc
-%exclude /usr/share/emacs/26.2/lisp/textmodes/reftex-auc.el.gz
-%exclude /usr/share/emacs/26.2/lisp/textmodes/reftex-auc.elc
-%exclude /usr/share/emacs/26.2/lisp/textmodes/reftex-cite.el.gz
-%exclude /usr/share/emacs/26.2/lisp/textmodes/reftex-cite.elc
-%exclude /usr/share/emacs/26.2/lisp/textmodes/reftex-dcr.el.gz
-%exclude /usr/share/emacs/26.2/lisp/textmodes/reftex-dcr.elc
-%exclude /usr/share/emacs/26.2/lisp/textmodes/reftex-global.el.gz
-%exclude /usr/share/emacs/26.2/lisp/textmodes/reftex-global.elc
-%exclude /usr/share/emacs/26.2/lisp/textmodes/reftex-index.el.gz
-%exclude /usr/share/emacs/26.2/lisp/textmodes/reftex-index.elc
-%exclude /usr/share/emacs/26.2/lisp/textmodes/reftex-loaddefs.el
-%exclude /usr/share/emacs/26.2/lisp/textmodes/reftex-parse.el.gz
-%exclude /usr/share/emacs/26.2/lisp/textmodes/reftex-parse.elc
-%exclude /usr/share/emacs/26.2/lisp/textmodes/reftex-ref.el.gz
-%exclude /usr/share/emacs/26.2/lisp/textmodes/reftex-ref.elc
-%exclude /usr/share/emacs/26.2/lisp/textmodes/reftex-sel.el.gz
-%exclude /usr/share/emacs/26.2/lisp/textmodes/reftex-sel.elc
-%exclude /usr/share/emacs/26.2/lisp/textmodes/reftex-toc.el.gz
-%exclude /usr/share/emacs/26.2/lisp/textmodes/reftex-toc.elc
-%exclude /usr/share/emacs/26.2/lisp/textmodes/reftex-vars.el.gz
-%exclude /usr/share/emacs/26.2/lisp/textmodes/reftex-vars.elc
-%exclude /usr/share/emacs/26.2/lisp/textmodes/reftex.el.gz
-%exclude /usr/share/emacs/26.2/lisp/textmodes/reftex.elc
-%exclude /usr/share/emacs/26.2/lisp/textmodes/remember.el.gz
-%exclude /usr/share/emacs/26.2/lisp/textmodes/remember.elc
-%exclude /usr/share/emacs/26.2/lisp/textmodes/rst.el.gz
-%exclude /usr/share/emacs/26.2/lisp/textmodes/rst.elc
-%exclude /usr/share/emacs/26.2/lisp/textmodes/sgml-mode.el.gz
-%exclude /usr/share/emacs/26.2/lisp/textmodes/sgml-mode.elc
-%exclude /usr/share/emacs/26.2/lisp/textmodes/table.el.gz
-%exclude /usr/share/emacs/26.2/lisp/textmodes/table.elc
-%exclude /usr/share/emacs/26.2/lisp/textmodes/tex-mode.el.gz
-%exclude /usr/share/emacs/26.2/lisp/textmodes/tex-mode.elc
-%exclude /usr/share/emacs/26.2/lisp/textmodes/texinfmt.el.gz
-%exclude /usr/share/emacs/26.2/lisp/textmodes/texinfmt.elc
-%exclude /usr/share/emacs/26.2/lisp/textmodes/texinfo.el.gz
-%exclude /usr/share/emacs/26.2/lisp/textmodes/texinfo.elc
-%exclude /usr/share/emacs/26.2/lisp/textmodes/texnfo-upd.el.gz
-%exclude /usr/share/emacs/26.2/lisp/textmodes/texnfo-upd.elc
-%exclude /usr/share/emacs/26.2/lisp/textmodes/text-mode.el.gz
-%exclude /usr/share/emacs/26.2/lisp/textmodes/text-mode.elc
-%exclude /usr/share/emacs/26.2/lisp/textmodes/tildify.el.gz
-%exclude /usr/share/emacs/26.2/lisp/textmodes/tildify.elc
-%exclude /usr/share/emacs/26.2/lisp/textmodes/two-column.el.gz
-%exclude /usr/share/emacs/26.2/lisp/textmodes/two-column.elc
-%exclude /usr/share/emacs/26.2/lisp/textmodes/underline.el.gz
-%exclude /usr/share/emacs/26.2/lisp/textmodes/underline.elc
-%exclude /usr/share/emacs/26.2/lisp/thingatpt.el.gz
-%exclude /usr/share/emacs/26.2/lisp/thingatpt.elc
-%exclude /usr/share/emacs/26.2/lisp/thumbs.el.gz
-%exclude /usr/share/emacs/26.2/lisp/thumbs.elc
-%exclude /usr/share/emacs/26.2/lisp/time-stamp.el.gz
-%exclude /usr/share/emacs/26.2/lisp/time-stamp.elc
-%exclude /usr/share/emacs/26.2/lisp/time.el.gz
-%exclude /usr/share/emacs/26.2/lisp/time.elc
-%exclude /usr/share/emacs/26.2/lisp/timezone.el.gz
-%exclude /usr/share/emacs/26.2/lisp/timezone.elc
-%exclude /usr/share/emacs/26.2/lisp/tmm.el.gz
-%exclude /usr/share/emacs/26.2/lisp/tmm.elc
-%exclude /usr/share/emacs/26.2/lisp/tool-bar.el.gz
-%exclude /usr/share/emacs/26.2/lisp/tool-bar.elc
-%exclude /usr/share/emacs/26.2/lisp/tooltip.el.gz
-%exclude /usr/share/emacs/26.2/lisp/tooltip.elc
-%exclude /usr/share/emacs/26.2/lisp/tree-widget.el.gz
-%exclude /usr/share/emacs/26.2/lisp/tree-widget.elc
-%exclude /usr/share/emacs/26.2/lisp/tutorial.el.gz
-%exclude /usr/share/emacs/26.2/lisp/tutorial.elc
-%exclude /usr/share/emacs/26.2/lisp/type-break.el.gz
-%exclude /usr/share/emacs/26.2/lisp/type-break.elc
-%exclude /usr/share/emacs/26.2/lisp/uniquify.el.gz
-%exclude /usr/share/emacs/26.2/lisp/uniquify.elc
-%exclude /usr/share/emacs/26.2/lisp/url/url-about.el.gz
-%exclude /usr/share/emacs/26.2/lisp/url/url-about.elc
-%exclude /usr/share/emacs/26.2/lisp/url/url-auth.el.gz
-%exclude /usr/share/emacs/26.2/lisp/url/url-auth.elc
-%exclude /usr/share/emacs/26.2/lisp/url/url-cache.el.gz
-%exclude /usr/share/emacs/26.2/lisp/url/url-cache.elc
-%exclude /usr/share/emacs/26.2/lisp/url/url-cid.el.gz
-%exclude /usr/share/emacs/26.2/lisp/url/url-cid.elc
-%exclude /usr/share/emacs/26.2/lisp/url/url-cookie.el.gz
-%exclude /usr/share/emacs/26.2/lisp/url/url-cookie.elc
-%exclude /usr/share/emacs/26.2/lisp/url/url-dav.el.gz
-%exclude /usr/share/emacs/26.2/lisp/url/url-dav.elc
-%exclude /usr/share/emacs/26.2/lisp/url/url-dired.el.gz
-%exclude /usr/share/emacs/26.2/lisp/url/url-dired.elc
-%exclude /usr/share/emacs/26.2/lisp/url/url-domsuf.el.gz
-%exclude /usr/share/emacs/26.2/lisp/url/url-domsuf.elc
-%exclude /usr/share/emacs/26.2/lisp/url/url-expand.el.gz
-%exclude /usr/share/emacs/26.2/lisp/url/url-expand.elc
-%exclude /usr/share/emacs/26.2/lisp/url/url-file.el.gz
-%exclude /usr/share/emacs/26.2/lisp/url/url-file.elc
-%exclude /usr/share/emacs/26.2/lisp/url/url-ftp.el.gz
-%exclude /usr/share/emacs/26.2/lisp/url/url-ftp.elc
-%exclude /usr/share/emacs/26.2/lisp/url/url-future.el.gz
-%exclude /usr/share/emacs/26.2/lisp/url/url-future.elc
-%exclude /usr/share/emacs/26.2/lisp/url/url-gw.el.gz
-%exclude /usr/share/emacs/26.2/lisp/url/url-gw.elc
-%exclude /usr/share/emacs/26.2/lisp/url/url-handlers.el.gz
-%exclude /usr/share/emacs/26.2/lisp/url/url-handlers.elc
-%exclude /usr/share/emacs/26.2/lisp/url/url-history.el.gz
-%exclude /usr/share/emacs/26.2/lisp/url/url-history.elc
-%exclude /usr/share/emacs/26.2/lisp/url/url-http.el.gz
-%exclude /usr/share/emacs/26.2/lisp/url/url-http.elc
-%exclude /usr/share/emacs/26.2/lisp/url/url-imap.el.gz
-%exclude /usr/share/emacs/26.2/lisp/url/url-imap.elc
-%exclude /usr/share/emacs/26.2/lisp/url/url-irc.el.gz
-%exclude /usr/share/emacs/26.2/lisp/url/url-irc.elc
-%exclude /usr/share/emacs/26.2/lisp/url/url-ldap.el.gz
-%exclude /usr/share/emacs/26.2/lisp/url/url-ldap.elc
-%exclude /usr/share/emacs/26.2/lisp/url/url-mailto.el.gz
-%exclude /usr/share/emacs/26.2/lisp/url/url-mailto.elc
-%exclude /usr/share/emacs/26.2/lisp/url/url-methods.el.gz
-%exclude /usr/share/emacs/26.2/lisp/url/url-methods.elc
-%exclude /usr/share/emacs/26.2/lisp/url/url-misc.el.gz
-%exclude /usr/share/emacs/26.2/lisp/url/url-misc.elc
-%exclude /usr/share/emacs/26.2/lisp/url/url-news.el.gz
-%exclude /usr/share/emacs/26.2/lisp/url/url-news.elc
-%exclude /usr/share/emacs/26.2/lisp/url/url-nfs.el.gz
-%exclude /usr/share/emacs/26.2/lisp/url/url-nfs.elc
-%exclude /usr/share/emacs/26.2/lisp/url/url-ns.el.gz
-%exclude /usr/share/emacs/26.2/lisp/url/url-ns.elc
-%exclude /usr/share/emacs/26.2/lisp/url/url-parse.el.gz
-%exclude /usr/share/emacs/26.2/lisp/url/url-parse.elc
-%exclude /usr/share/emacs/26.2/lisp/url/url-privacy.el.gz
-%exclude /usr/share/emacs/26.2/lisp/url/url-privacy.elc
-%exclude /usr/share/emacs/26.2/lisp/url/url-proxy.el.gz
-%exclude /usr/share/emacs/26.2/lisp/url/url-proxy.elc
-%exclude /usr/share/emacs/26.2/lisp/url/url-queue.el.gz
-%exclude /usr/share/emacs/26.2/lisp/url/url-queue.elc
-%exclude /usr/share/emacs/26.2/lisp/url/url-tramp.el.gz
-%exclude /usr/share/emacs/26.2/lisp/url/url-tramp.elc
-%exclude /usr/share/emacs/26.2/lisp/url/url-util.el.gz
-%exclude /usr/share/emacs/26.2/lisp/url/url-util.elc
-%exclude /usr/share/emacs/26.2/lisp/url/url-vars.el.gz
-%exclude /usr/share/emacs/26.2/lisp/url/url-vars.elc
-%exclude /usr/share/emacs/26.2/lisp/url/url.el.gz
-%exclude /usr/share/emacs/26.2/lisp/url/url.elc
-%exclude /usr/share/emacs/26.2/lisp/userlock.el.gz
-%exclude /usr/share/emacs/26.2/lisp/userlock.elc
-%exclude /usr/share/emacs/26.2/lisp/vc/add-log.el.gz
-%exclude /usr/share/emacs/26.2/lisp/vc/add-log.elc
-%exclude /usr/share/emacs/26.2/lisp/vc/compare-w.el.gz
-%exclude /usr/share/emacs/26.2/lisp/vc/compare-w.elc
-%exclude /usr/share/emacs/26.2/lisp/vc/cvs-status.el.gz
-%exclude /usr/share/emacs/26.2/lisp/vc/cvs-status.elc
-%exclude /usr/share/emacs/26.2/lisp/vc/diff-mode.el.gz
-%exclude /usr/share/emacs/26.2/lisp/vc/diff-mode.elc
-%exclude /usr/share/emacs/26.2/lisp/vc/diff.el.gz
-%exclude /usr/share/emacs/26.2/lisp/vc/diff.elc
-%exclude /usr/share/emacs/26.2/lisp/vc/ediff-diff.el.gz
-%exclude /usr/share/emacs/26.2/lisp/vc/ediff-diff.elc
-%exclude /usr/share/emacs/26.2/lisp/vc/ediff-help.el.gz
-%exclude /usr/share/emacs/26.2/lisp/vc/ediff-help.elc
-%exclude /usr/share/emacs/26.2/lisp/vc/ediff-hook.el.gz
-%exclude /usr/share/emacs/26.2/lisp/vc/ediff-hook.elc
-%exclude /usr/share/emacs/26.2/lisp/vc/ediff-init.el.gz
-%exclude /usr/share/emacs/26.2/lisp/vc/ediff-init.elc
-%exclude /usr/share/emacs/26.2/lisp/vc/ediff-merg.el.gz
-%exclude /usr/share/emacs/26.2/lisp/vc/ediff-merg.elc
-%exclude /usr/share/emacs/26.2/lisp/vc/ediff-mult.el.gz
-%exclude /usr/share/emacs/26.2/lisp/vc/ediff-mult.elc
-%exclude /usr/share/emacs/26.2/lisp/vc/ediff-ptch.el.gz
-%exclude /usr/share/emacs/26.2/lisp/vc/ediff-ptch.elc
-%exclude /usr/share/emacs/26.2/lisp/vc/ediff-util.el.gz
-%exclude /usr/share/emacs/26.2/lisp/vc/ediff-util.elc
-%exclude /usr/share/emacs/26.2/lisp/vc/ediff-vers.el.gz
-%exclude /usr/share/emacs/26.2/lisp/vc/ediff-vers.elc
-%exclude /usr/share/emacs/26.2/lisp/vc/ediff-wind.el.gz
-%exclude /usr/share/emacs/26.2/lisp/vc/ediff-wind.elc
-%exclude /usr/share/emacs/26.2/lisp/vc/ediff.el.gz
-%exclude /usr/share/emacs/26.2/lisp/vc/ediff.elc
-%exclude /usr/share/emacs/26.2/lisp/vc/emerge.el.gz
-%exclude /usr/share/emacs/26.2/lisp/vc/emerge.elc
-%exclude /usr/share/emacs/26.2/lisp/vc/log-edit.el.gz
-%exclude /usr/share/emacs/26.2/lisp/vc/log-edit.elc
-%exclude /usr/share/emacs/26.2/lisp/vc/log-view.el.gz
-%exclude /usr/share/emacs/26.2/lisp/vc/log-view.elc
-%exclude /usr/share/emacs/26.2/lisp/vc/pcvs-defs.el.gz
-%exclude /usr/share/emacs/26.2/lisp/vc/pcvs-defs.elc
-%exclude /usr/share/emacs/26.2/lisp/vc/pcvs-info.el.gz
-%exclude /usr/share/emacs/26.2/lisp/vc/pcvs-info.elc
-%exclude /usr/share/emacs/26.2/lisp/vc/pcvs-parse.el.gz
-%exclude /usr/share/emacs/26.2/lisp/vc/pcvs-parse.elc
-%exclude /usr/share/emacs/26.2/lisp/vc/pcvs-util.el.gz
-%exclude /usr/share/emacs/26.2/lisp/vc/pcvs-util.elc
-%exclude /usr/share/emacs/26.2/lisp/vc/pcvs.el.gz
-%exclude /usr/share/emacs/26.2/lisp/vc/pcvs.elc
-%exclude /usr/share/emacs/26.2/lisp/vc/smerge-mode.el.gz
-%exclude /usr/share/emacs/26.2/lisp/vc/smerge-mode.elc
-%exclude /usr/share/emacs/26.2/lisp/vc/vc-annotate.el.gz
-%exclude /usr/share/emacs/26.2/lisp/vc/vc-annotate.elc
-%exclude /usr/share/emacs/26.2/lisp/vc/vc-bzr.el.gz
-%exclude /usr/share/emacs/26.2/lisp/vc/vc-bzr.elc
-%exclude /usr/share/emacs/26.2/lisp/vc/vc-cvs.el.gz
-%exclude /usr/share/emacs/26.2/lisp/vc/vc-cvs.elc
-%exclude /usr/share/emacs/26.2/lisp/vc/vc-dav.el.gz
-%exclude /usr/share/emacs/26.2/lisp/vc/vc-dav.elc
-%exclude /usr/share/emacs/26.2/lisp/vc/vc-dir.el.gz
-%exclude /usr/share/emacs/26.2/lisp/vc/vc-dir.elc
-%exclude /usr/share/emacs/26.2/lisp/vc/vc-dispatcher.el.gz
-%exclude /usr/share/emacs/26.2/lisp/vc/vc-dispatcher.elc
-%exclude /usr/share/emacs/26.2/lisp/vc/vc-filewise.el.gz
-%exclude /usr/share/emacs/26.2/lisp/vc/vc-filewise.elc
-%exclude /usr/share/emacs/26.2/lisp/vc/vc-git.el.gz
-%exclude /usr/share/emacs/26.2/lisp/vc/vc-git.elc
-%exclude /usr/share/emacs/26.2/lisp/vc/vc-hg.el.gz
-%exclude /usr/share/emacs/26.2/lisp/vc/vc-hg.elc
-%exclude /usr/share/emacs/26.2/lisp/vc/vc-hooks.el.gz
-%exclude /usr/share/emacs/26.2/lisp/vc/vc-hooks.elc
-%exclude /usr/share/emacs/26.2/lisp/vc/vc-mtn.el.gz
-%exclude /usr/share/emacs/26.2/lisp/vc/vc-mtn.elc
-%exclude /usr/share/emacs/26.2/lisp/vc/vc-rcs.el.gz
-%exclude /usr/share/emacs/26.2/lisp/vc/vc-rcs.elc
-%exclude /usr/share/emacs/26.2/lisp/vc/vc-sccs.el.gz
-%exclude /usr/share/emacs/26.2/lisp/vc/vc-sccs.elc
-%exclude /usr/share/emacs/26.2/lisp/vc/vc-src.el.gz
-%exclude /usr/share/emacs/26.2/lisp/vc/vc-src.elc
-%exclude /usr/share/emacs/26.2/lisp/vc/vc-svn.el.gz
-%exclude /usr/share/emacs/26.2/lisp/vc/vc-svn.elc
-%exclude /usr/share/emacs/26.2/lisp/vc/vc.el.gz
-%exclude /usr/share/emacs/26.2/lisp/vc/vc.elc
-%exclude /usr/share/emacs/26.2/lisp/vcursor.el.gz
-%exclude /usr/share/emacs/26.2/lisp/vcursor.elc
-%exclude /usr/share/emacs/26.2/lisp/version.el.gz
-%exclude /usr/share/emacs/26.2/lisp/version.elc
-%exclude /usr/share/emacs/26.2/lisp/view.el.gz
-%exclude /usr/share/emacs/26.2/lisp/view.elc
-%exclude /usr/share/emacs/26.2/lisp/vt-control.el.gz
-%exclude /usr/share/emacs/26.2/lisp/vt-control.elc
-%exclude /usr/share/emacs/26.2/lisp/vt100-led.el.gz
-%exclude /usr/share/emacs/26.2/lisp/vt100-led.elc
-%exclude /usr/share/emacs/26.2/lisp/w32-fns.el.gz
-%exclude /usr/share/emacs/26.2/lisp/w32-fns.elc
-%exclude /usr/share/emacs/26.2/lisp/w32-vars.el.gz
-%exclude /usr/share/emacs/26.2/lisp/w32-vars.elc
-%exclude /usr/share/emacs/26.2/lisp/wdired.el.gz
-%exclude /usr/share/emacs/26.2/lisp/wdired.elc
-%exclude /usr/share/emacs/26.2/lisp/whitespace.el.gz
-%exclude /usr/share/emacs/26.2/lisp/whitespace.elc
-%exclude /usr/share/emacs/26.2/lisp/wid-browse.el.gz
-%exclude /usr/share/emacs/26.2/lisp/wid-browse.elc
-%exclude /usr/share/emacs/26.2/lisp/wid-edit.el.gz
-%exclude /usr/share/emacs/26.2/lisp/wid-edit.elc
-%exclude /usr/share/emacs/26.2/lisp/widget.el.gz
-%exclude /usr/share/emacs/26.2/lisp/widget.elc
-%exclude /usr/share/emacs/26.2/lisp/windmove.el.gz
-%exclude /usr/share/emacs/26.2/lisp/windmove.elc
-%exclude /usr/share/emacs/26.2/lisp/window.el.gz
-%exclude /usr/share/emacs/26.2/lisp/window.elc
-%exclude /usr/share/emacs/26.2/lisp/winner.el.gz
-%exclude /usr/share/emacs/26.2/lisp/winner.elc
-%exclude /usr/share/emacs/26.2/lisp/woman.el.gz
-%exclude /usr/share/emacs/26.2/lisp/woman.elc
-%exclude /usr/share/emacs/26.2/lisp/x-dnd.el.gz
-%exclude /usr/share/emacs/26.2/lisp/x-dnd.elc
-%exclude /usr/share/emacs/26.2/lisp/xdg.el.gz
-%exclude /usr/share/emacs/26.2/lisp/xdg.elc
-%exclude /usr/share/emacs/26.2/lisp/xml.el.gz
-%exclude /usr/share/emacs/26.2/lisp/xml.elc
-%exclude /usr/share/emacs/26.2/lisp/xt-mouse.el.gz
-%exclude /usr/share/emacs/26.2/lisp/xt-mouse.elc
-%exclude /usr/share/emacs/26.2/lisp/xwidget.el.gz
-%exclude /usr/share/emacs/26.2/lisp/xwidget.elc
-%exclude /usr/share/emacs/26.2/site-lisp/subdirs.el
-%exclude /usr/share/emacs/site-lisp/subdirs.el
-%exclude /usr/share/icons/hicolor/128x128/apps/emacs.png
-%exclude /usr/share/icons/hicolor/16x16/apps/emacs.png
-%exclude /usr/share/icons/hicolor/24x24/apps/emacs.png
-%exclude /usr/share/icons/hicolor/32x32/apps/emacs.png
-%exclude /usr/share/icons/hicolor/48x48/apps/emacs.png
-%exclude /usr/share/icons/hicolor/scalable/apps/emacs.svg
-%exclude /usr/share/icons/hicolor/scalable/mimetypes/emacs-document.svg
-%exclude /usr/share/icons/hicolor/scalable/mimetypes/emacs-document23.svg
-%exclude /usr/share/metainfo/emacs.appdata.xml
 /usr/share/applications/emacs.desktop
-
-%files dev
-%defattr(-,root,root,-)
-%exclude /usr/include/emacs-module.h
-
-%files doc
-%defattr(0644,root,root,0755)
-%exclude /usr/share/info/ada-mode.info.gz
-%exclude /usr/share/info/auth.info.gz
-%exclude /usr/share/info/autotype.info.gz
-%exclude /usr/share/info/bovine.info.gz
-%exclude /usr/share/info/calc.info.gz
-%exclude /usr/share/info/ccmode.info.gz
-%exclude /usr/share/info/cl.info.gz
-%exclude /usr/share/info/dbus.info.gz
-%exclude /usr/share/info/dired-x.info.gz
-%exclude /usr/share/info/ebrowse.info.gz
-%exclude /usr/share/info/ede.info.gz
-%exclude /usr/share/info/ediff.info.gz
-%exclude /usr/share/info/edt.info.gz
-%exclude /usr/share/info/efaq.info.gz
-%exclude /usr/share/info/eieio.info.gz
-%exclude /usr/share/info/eintr.info.gz
-%exclude /usr/share/info/elisp.info.gz
-%exclude /usr/share/info/emacs-gnutls.info.gz
-%exclude /usr/share/info/emacs-mime.info.gz
-%exclude /usr/share/info/emacs.info.gz
-%exclude /usr/share/info/epa.info.gz
-%exclude /usr/share/info/erc.info.gz
-%exclude /usr/share/info/ert.info.gz
-%exclude /usr/share/info/eshell.info.gz
-%exclude /usr/share/info/eudc.info.gz
-%exclude /usr/share/info/eww.info.gz
-%exclude /usr/share/info/flymake.info.gz
-%exclude /usr/share/info/forms.info.gz
-%exclude /usr/share/info/gnus.info.gz
-%exclude /usr/share/info/htmlfontify.info.gz
-%exclude /usr/share/info/idlwave.info.gz
-%exclude /usr/share/info/ido.info.gz
-%exclude /usr/share/info/info.info.gz
-%exclude /usr/share/info/mairix-el.info.gz
-%exclude /usr/share/info/message.info.gz
-%exclude /usr/share/info/mh-e.info.gz
-%exclude /usr/share/info/newsticker.info.gz
-%exclude /usr/share/info/nxml-mode.info.gz
-%exclude /usr/share/info/octave-mode.info.gz
-%exclude /usr/share/info/org.info.gz
-%exclude /usr/share/info/pcl-cvs.info.gz
-%exclude /usr/share/info/pgg.info.gz
-%exclude /usr/share/info/rcirc.info.gz
-%exclude /usr/share/info/reftex.info.gz
-%exclude /usr/share/info/remember.info.gz
-%exclude /usr/share/info/sasl.info.gz
-%exclude /usr/share/info/sc.info.gz
-%exclude /usr/share/info/semantic.info.gz
-%exclude /usr/share/info/ses.info.gz
-%exclude /usr/share/info/sieve.info.gz
-%exclude /usr/share/info/smtpmail.info.gz
-%exclude /usr/share/info/speedbar.info.gz
-%exclude /usr/share/info/srecode.info.gz
-%exclude /usr/share/info/todo-mode.info.gz
-%exclude /usr/share/info/tramp.info.gz
-%exclude /usr/share/info/url.info.gz
-%exclude /usr/share/info/vhdl-mode.info.gz
-%exclude /usr/share/info/vip.info.gz
-%exclude /usr/share/info/viper.info.gz
-%exclude /usr/share/info/widget.info.gz
-%exclude /usr/share/info/wisent.info.gz
-%exclude /usr/share/info/woman.info.gz
-
-%files libexec
-%defattr(-,root,root,-)
-%exclude /usr/libexec/emacs/26.2/x86_64-generic-linux-gnu/hexl
-%exclude /usr/libexec/emacs/26.2/x86_64-generic-linux-gnu/movemail
-%exclude /usr/libexec/emacs/26.2/x86_64-generic-linux-gnu/profile
-%exclude /usr/libexec/emacs/26.2/x86_64-generic-linux-gnu/rcs2log
 
 %files license
 %defattr(0644,root,root,0755)
@@ -4158,11 +4359,3 @@ ln -s emacs-x11 %{buildroot}/usr/bin/xemacs
 /usr/share/package-licenses/emacs-x11/msdos_COPYING
 /usr/share/package-licenses/emacs-x11/nt_COPYING
 /usr/share/package-licenses/emacs-x11/src_COPYING
-
-%files man
-%defattr(0644,root,root,0755)
-%exclude /usr/share/man/man1/ctags.1.gz
-%exclude /usr/share/man/man1/ebrowse.1.gz
-%exclude /usr/share/man/man1/emacs.1.gz
-%exclude /usr/share/man/man1/emacsclient.1.gz
-%exclude /usr/share/man/man1/etags.1.gz

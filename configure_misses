@@ -13,14 +13,10 @@ Configure miss: struct ifreq.ifr_addr.sa_len
 Configure miss: whether malloc is Doug Lea style
 Configure miss: main in -lXbsd
 Configure miss: whether X on GNU/Linux needs -b to link
-Configure miss: RSVG
 Configure miss: IMAGEMAGICK
 Configure miss: whether GTK_TYPE_FILE_SELECTION is declared
 Configure miss: lgetfilecon in -lselinux
 Configure miss: library containing cmsCreateTransform
-Configure miss: gpm.h usability
-Configure miss: gpm.h presence
-Configure miss: gpm.h
 Configure miss: maillock in -lmail
 Configure miss: maillock in -llockfile
 Configure miss: liblockfile.so

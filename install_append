@@ -1,3 +1,3 @@
-cp %{buildroot}/usr/bin/emacs %{buildroot}/usr/bin/emacs-x11
+mv %{buildroot}/usr/bin/emacs %{buildroot}/usr/bin/emacs-x11
 sed -i 's/Exec=emacs/Exec=emacs-x11/' %{buildroot}/usr/share/applications/emacs.desktop
 ln -s emacs-x11 %{buildroot}/usr/bin/xemacs

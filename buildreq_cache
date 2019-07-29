@@ -1,4 +1,7 @@
 26.2
+ImageMagick-dev
+gpm-dev
+librsvg-dev
 llvm
 pkgconfig(xpm)
 systemd-dev
