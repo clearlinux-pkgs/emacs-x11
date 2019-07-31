@@ -6,7 +6,7 @@
 #
 Name     : emacs-x11
 Version  : 26.2
-Release  : 34
+Release  : 35
 URL      : https://mirrors.kernel.org/gnu/emacs/emacs-26.2.tar.xz
 Source0  : https://mirrors.kernel.org/gnu/emacs/emacs-26.2.tar.xz
 Source1 : https://mirrors.kernel.org/gnu/emacs/emacs-26.2.tar.xz.sig
@@ -79,7 +79,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1564440069
+export SOURCE_DATE_EPOCH=1564607616
 export GCC_IGNORE_WERROR=1
 export CFLAGS="$CFLAGS -fno-lto "
 export FCFLAGS="$CFLAGS -fno-lto "
@@ -89,7 +89,7 @@ export CXXFLAGS="$CXXFLAGS -fno-lto "
 make  %{?_smp_mflags}
 
 %install
-export SOURCE_DATE_EPOCH=1564440069
+export SOURCE_DATE_EPOCH=1564607616
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/emacs-x11
 cp COPYING %{buildroot}/usr/share/package-licenses/emacs-x11/COPYING
@@ -3936,7 +3936,6 @@ rm -f %{buildroot}/usr/share/icons/hicolor/scalable/apps/emacs.svg
 rm -f %{buildroot}/usr/share/icons/hicolor/scalable/mimetypes/emacs-document.svg
 rm -f %{buildroot}/usr/bin/ctags
 rm -f %{buildroot}/usr/bin/ebrowse
-rm -f %{buildroot}/usr/bin/emacs-26.2
 rm -f %{buildroot}/usr/bin/emacsclient
 rm -f %{buildroot}/usr/bin/etags
 rm -f %{buildroot}/usr/bin/grep-changelog
@@ -4330,7 +4329,9 @@ rm -f %{buildroot}/usr/lib64/systemd/user/emacs.service
 rm -f %{buildroot}/usr/include/emacs-module.h
 rm -f %{buildroot}/usr/share/metainfo/emacs.appdata.xml
 ## install_append content
-mv %{buildroot}/usr/bin/emacs %{buildroot}/usr/bin/emacs-x11
+emacsbin=$(realpath -e %{buildroot}/usr/bin/emacs)
+mv "$emacsbin" %{buildroot}/usr/bin/emacs-x11
+rm %{buildroot}/usr/bin/emacs
 sed -i 's/Exec=emacs/Exec=emacs-x11/' %{buildroot}/usr/share/applications/emacs.desktop
 ln -s emacs-x11 %{buildroot}/usr/bin/xemacs
 ## install_append end
