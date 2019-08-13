@@ -1,6 +1,7 @@
 26.2
 ImageMagick-dev
 gpm-dev
+imagemagick-dev
 librsvg-dev
 llvm
 pkgconfig(xpm)

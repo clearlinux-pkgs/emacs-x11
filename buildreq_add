@@ -12,3 +12,4 @@ libjpeg-turbo-dev
 ncurses-dev
 texinfo
 gnutls-dev
+ImageMagick-dev

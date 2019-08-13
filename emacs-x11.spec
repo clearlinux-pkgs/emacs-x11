@@ -6,7 +6,7 @@
 #
 Name     : emacs-x11
 Version  : 26.2
-Release  : 35
+Release  : 36
 URL      : https://mirrors.kernel.org/gnu/emacs/emacs-26.2.tar.xz
 Source0  : https://mirrors.kernel.org/gnu/emacs/emacs-26.2.tar.xz
 Source1 : https://mirrors.kernel.org/gnu/emacs/emacs-26.2.tar.xz.sig
@@ -41,9 +41,12 @@ BuildRequires : texinfo
 BuildRequires : valgrind
 
 %description
-See the end of the file for license conditions.
-This directory tree holds version 26.2 of GNU Emacs, the extensible,
-customizable, self-documenting real-time display editor.
+eterm-color.ti is a terminfo source file.  eterm-color is a compiled
+version produced by the terminfo compiler (tic).  The compiled files
+are binary, and depend on the version of tic, but they seem to be
+system-independent and backwardly compatible.  So there should be no
+need to recompile the distributed binary version.  If it is
+necessary, use:
 
 %package bin
 Summary: bin components for the emacs-x11 package.
@@ -79,17 +82,18 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1564607616
+export SOURCE_DATE_EPOCH=1565703762
+# -Werror is for werrorists
 export GCC_IGNORE_WERROR=1
 export CFLAGS="$CFLAGS -fno-lto "
 export FCFLAGS="$CFLAGS -fno-lto "
 export FFLAGS="$CFLAGS -fno-lto "
 export CXXFLAGS="$CXXFLAGS -fno-lto "
-%configure --disable-static --without-m17n-flt --without-libotf --without-xaw3d  --with-xpm=yes --with-gif=no --with-tiff=no
+%configure --disable-static --without-m17n-flt --without-libotf --without-xaw3d  --with-xpm=yes --with-gif=no --with-tiff=no --with-imagemagick
 make  %{?_smp_mflags}
 
 %install
-export SOURCE_DATE_EPOCH=1564607616
+export SOURCE_DATE_EPOCH=1565703762
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/emacs-x11
 cp COPYING %{buildroot}/usr/share/package-licenses/emacs-x11/COPYING

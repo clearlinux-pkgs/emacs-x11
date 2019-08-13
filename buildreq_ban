@@ -6,3 +6,4 @@ pkgconfig(gnutls)
 giflib-dev
 tiff-dev
 
+imagemagick-dev
