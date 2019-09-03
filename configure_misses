@@ -16,7 +16,7 @@ Configure miss: whether X on GNU/Linux needs -b to link
 Configure miss: IMAGEMAGICK
 Configure miss: whether GTK_TYPE_FILE_SELECTION is declared
 Configure miss: lgetfilecon in -lselinux
-Configure miss: library containing cmsCreateTransform
+Configure miss: LCMS2
 Configure miss: maillock in -lmail
 Configure miss: maillock in -llockfile
 Configure miss: liblockfile.so
