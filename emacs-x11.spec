@@ -6,7 +6,7 @@
 #
 Name     : emacs-x11
 Version  : 26.3
-Release  : 37
+Release  : 38
 URL      : https://mirrors.kernel.org/gnu/emacs/emacs-26.3.tar.xz
 Source0  : https://mirrors.kernel.org/gnu/emacs/emacs-26.3.tar.xz
 Source1 : https://mirrors.kernel.org/gnu/emacs/emacs-26.3.tar.xz.sig
