@@ -6,21 +6,20 @@
 #
 Name     : emacs-x11
 Version  : 26.3
-Release  : 38
+Release  : 39
 URL      : https://mirrors.kernel.org/gnu/emacs/emacs-26.3.tar.xz
 Source0  : https://mirrors.kernel.org/gnu/emacs/emacs-26.3.tar.xz
-Source1 : https://mirrors.kernel.org/gnu/emacs/emacs-26.3.tar.xz.sig
+Source1  : https://mirrors.kernel.org/gnu/emacs/emacs-26.3.tar.xz.sig
 Summary  : No detailed summary available
 Group    : Development/Tools
 License  : GPL-3.0
 Requires: emacs-x11-bin = %{version}-%{release}
 Requires: emacs-x11-data = %{version}-%{release}
 Requires: emacs-x11-license = %{version}-%{release}
-Requires: emacs
+Requires: emacs = %{version}
 BuildRequires : ImageMagick-dev
 BuildRequires : acl-dev
 BuildRequires : alsa-lib-dev
-BuildRequires : emacs
 BuildRequires : gnutls-dev
 BuildRequires : gpm-dev
 BuildRequires : gtk3-dev
@@ -72,13 +71,14 @@ license components for the emacs-x11 package.
 
 %prep
 %setup -q -n emacs-26.3
+cd %{_builddir}/emacs-26.3
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1567485649
+export SOURCE_DATE_EPOCH=1582226843
 export GCC_IGNORE_WERROR=1
 export CFLAGS="$CFLAGS -fno-lto "
 export FCFLAGS="$CFLAGS -fno-lto "
@@ -88,19 +88,19 @@ export CXXFLAGS="$CXXFLAGS -fno-lto "
 make  %{?_smp_mflags}
 
 %install
-export SOURCE_DATE_EPOCH=1567485649
+export SOURCE_DATE_EPOCH=1582226843
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/emacs-x11
-cp COPYING %{buildroot}/usr/share/package-licenses/emacs-x11/COPYING
-cp etc/COPYING %{buildroot}/usr/share/package-licenses/emacs-x11/etc_COPYING
-cp leim/COPYING %{buildroot}/usr/share/package-licenses/emacs-x11/leim_COPYING
-cp lib-src/COPYING %{buildroot}/usr/share/package-licenses/emacs-x11/lib-src_COPYING
-cp lib/COPYING %{buildroot}/usr/share/package-licenses/emacs-x11/lib_COPYING
-cp lisp/COPYING %{buildroot}/usr/share/package-licenses/emacs-x11/lisp_COPYING
-cp lwlib/COPYING %{buildroot}/usr/share/package-licenses/emacs-x11/lwlib_COPYING
-cp msdos/COPYING %{buildroot}/usr/share/package-licenses/emacs-x11/msdos_COPYING
-cp nt/COPYING %{buildroot}/usr/share/package-licenses/emacs-x11/nt_COPYING
-cp src/COPYING %{buildroot}/usr/share/package-licenses/emacs-x11/src_COPYING
+cp %{_builddir}/emacs-26.3/COPYING %{buildroot}/usr/share/package-licenses/emacs-x11/31a3d460bb3c7d98845187c716a30db81c44b615
+cp %{_builddir}/emacs-26.3/etc/COPYING %{buildroot}/usr/share/package-licenses/emacs-x11/31a3d460bb3c7d98845187c716a30db81c44b615
+cp %{_builddir}/emacs-26.3/leim/COPYING %{buildroot}/usr/share/package-licenses/emacs-x11/31a3d460bb3c7d98845187c716a30db81c44b615
+cp %{_builddir}/emacs-26.3/lib-src/COPYING %{buildroot}/usr/share/package-licenses/emacs-x11/31a3d460bb3c7d98845187c716a30db81c44b615
+cp %{_builddir}/emacs-26.3/lib/COPYING %{buildroot}/usr/share/package-licenses/emacs-x11/31a3d460bb3c7d98845187c716a30db81c44b615
+cp %{_builddir}/emacs-26.3/lisp/COPYING %{buildroot}/usr/share/package-licenses/emacs-x11/31a3d460bb3c7d98845187c716a30db81c44b615
+cp %{_builddir}/emacs-26.3/lwlib/COPYING %{buildroot}/usr/share/package-licenses/emacs-x11/31a3d460bb3c7d98845187c716a30db81c44b615
+cp %{_builddir}/emacs-26.3/msdos/COPYING %{buildroot}/usr/share/package-licenses/emacs-x11/31a3d460bb3c7d98845187c716a30db81c44b615
+cp %{_builddir}/emacs-26.3/nt/COPYING %{buildroot}/usr/share/package-licenses/emacs-x11/31a3d460bb3c7d98845187c716a30db81c44b615
+cp %{_builddir}/emacs-26.3/src/COPYING %{buildroot}/usr/share/package-licenses/emacs-x11/31a3d460bb3c7d98845187c716a30db81c44b615
 %make_install
 ## Remove excluded files
 rm -f %{buildroot}/usr/share/emacs/26.3/etc/AUTHORS
@@ -4349,13 +4349,4 @@ ln -s emacs-x11 %{buildroot}/usr/bin/xemacs
 
 %files license
 %defattr(0644,root,root,0755)
-/usr/share/package-licenses/emacs-x11/COPYING
-/usr/share/package-licenses/emacs-x11/etc_COPYING
-/usr/share/package-licenses/emacs-x11/leim_COPYING
-/usr/share/package-licenses/emacs-x11/lib-src_COPYING
-/usr/share/package-licenses/emacs-x11/lib_COPYING
-/usr/share/package-licenses/emacs-x11/lisp_COPYING
-/usr/share/package-licenses/emacs-x11/lwlib_COPYING
-/usr/share/package-licenses/emacs-x11/msdos_COPYING
-/usr/share/package-licenses/emacs-x11/nt_COPYING
-/usr/share/package-licenses/emacs-x11/src_COPYING
+/usr/share/package-licenses/emacs-x11/31a3d460bb3c7d98845187c716a30db81c44b615
