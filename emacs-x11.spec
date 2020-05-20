@@ -6,7 +6,7 @@
 #
 Name     : emacs-x11
 Version  : 26.3
-Release  : 39
+Release  : 40
 URL      : https://mirrors.kernel.org/gnu/emacs/emacs-26.3.tar.xz
 Source0  : https://mirrors.kernel.org/gnu/emacs/emacs-26.3.tar.xz
 Source1  : https://mirrors.kernel.org/gnu/emacs/emacs-26.3.tar.xz.sig
@@ -78,17 +78,17 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1582226843
+export SOURCE_DATE_EPOCH=1589994931
 export GCC_IGNORE_WERROR=1
 export CFLAGS="$CFLAGS -fno-lto "
-export FCFLAGS="$CFLAGS -fno-lto "
-export FFLAGS="$CFLAGS -fno-lto "
+export FCFLAGS="$FFLAGS -fno-lto "
+export FFLAGS="$FFLAGS -fno-lto "
 export CXXFLAGS="$CXXFLAGS -fno-lto "
-%configure --disable-static --without-m17n-flt --without-libotf --without-xaw3d  --with-xpm=yes --with-gif=no --with-tiff=no --with-imagemagick
+%configure --disable-static --without-m17n-flt --without-libotf --without-xaw3d  --with-xpm=yes --with-gif=no --with-tiff=no --with-imagemagick --with-modules
 make  %{?_smp_mflags}
 
 %install
-export SOURCE_DATE_EPOCH=1582226843
+export SOURCE_DATE_EPOCH=1589994931
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/emacs-x11
 cp %{_builddir}/emacs-26.3/COPYING %{buildroot}/usr/share/package-licenses/emacs-x11/31a3d460bb3c7d98845187c716a30db81c44b615

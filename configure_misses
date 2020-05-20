@@ -17,6 +17,7 @@ Configure miss: IMAGEMAGICK
 Configure miss: whether GTK_TYPE_FILE_SELECTION is declared
 Configure miss: lgetfilecon in -lselinux
 Configure miss: LCMS2
+Configure miss: dlfunc
 Configure miss: maillock in -lmail
 Configure miss: maillock in -llockfile
 Configure miss: liblockfile.so
