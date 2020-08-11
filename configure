@@ -1,2 +1,9 @@
---without-m17n-flt --without-libotf --without-xaw3d  --with-xpm=yes --with-gif=no --with-tiff=no --with-imagemagick --with-modules
-
+--without-m17n-flt
+--without-libotf
+--without-xaw3d
+--with-xpm=yes
+--with-gif=no
+--with-tiff=no
+--with-imagemagick
+--with-modules
+--with-dumping=unexec

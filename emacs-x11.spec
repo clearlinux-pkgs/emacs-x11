@@ -6,7 +6,7 @@
 #
 Name     : emacs-x11
 Version  : 27.1
-Release  : 41
+Release  : 42
 URL      : https://mirrors.kernel.org/gnu/emacs/emacs-27.1.tar.xz
 Source0  : https://mirrors.kernel.org/gnu/emacs/emacs-27.1.tar.xz
 Source1  : https://mirrors.kernel.org/gnu/emacs/emacs-27.1.tar.xz.sig
@@ -80,17 +80,25 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1597122115
+export SOURCE_DATE_EPOCH=1597159954
 export GCC_IGNORE_WERROR=1
 export CFLAGS="$CFLAGS -fno-lto "
 export FCFLAGS="$FFLAGS -fno-lto "
 export FFLAGS="$FFLAGS -fno-lto "
 export CXXFLAGS="$CXXFLAGS -fno-lto "
-%configure --disable-static --without-m17n-flt --without-libotf --without-xaw3d  --with-xpm=yes --with-gif=no --with-tiff=no --with-imagemagick --with-modules
+%configure --disable-static --without-m17n-flt \
+--without-libotf \
+--without-xaw3d \
+--with-xpm=yes \
+--with-gif=no \
+--with-tiff=no \
+--with-imagemagick \
+--with-modules \
+--with-dumping=unexec
 make  %{?_smp_mflags}
 
 %install
-export SOURCE_DATE_EPOCH=1597122115
+export SOURCE_DATE_EPOCH=1597159954
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/emacs-x11
 cp %{_builddir}/emacs-27.1/COPYING %{buildroot}/usr/share/package-licenses/emacs-x11/31a3d460bb3c7d98845187c716a30db81c44b615
