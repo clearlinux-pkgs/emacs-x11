@@ -1,15 +1,20 @@
-#
-# This file contains additional build requirements that did not get picked up
-# automatically. One name per line, no whitespace.
-#
+# This file contains additional build requirements that did not get
+# picked up automatically. One name per line, no whitespace.
+ImageMagick-dev
 acl-dev
 alsa-lib-dev
+gmp-dev
+gnutls-dev
+gpm-dev
 gtk3-dev
+lcms2-dev
 libXfixes-dev
 libXinerama-dev
 libXrandr-dev
 libjpeg-turbo-dev
+librsvg-dev
 ncurses-dev
+pkgconfig(xpm)
+systemd-dev
 texinfo
-gnutls-dev
-ImageMagick-dev
+valgrind

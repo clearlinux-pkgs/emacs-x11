@@ -1,3 +1,8 @@
+rm -rf %{buildroot}/usr/libexec/emacs
+rm -rf %{buildroot}/usr/share/emacs
+rm -rf %{buildroot}/usr/share/icons
+rm -rf %{buildroot}/usr/share/info
+rm -rf %{buildroot}/usr/share/man
 emacsbin=$(realpath -e %{buildroot}/usr/bin/emacs)
 mv "$emacsbin" %{buildroot}/usr/bin/emacs-x11
 rm %{buildroot}/usr/bin/emacs
