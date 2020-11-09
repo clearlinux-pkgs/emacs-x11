@@ -6,7 +6,7 @@
 #
 Name     : emacs-x11
 Version  : 27.1
-Release  : 43
+Release  : 44
 URL      : https://mirrors.kernel.org/gnu/emacs/emacs-27.1.tar.xz
 Source0  : https://mirrors.kernel.org/gnu/emacs/emacs-27.1.tar.xz
 Source1  : https://mirrors.kernel.org/gnu/emacs/emacs-27.1.tar.xz.sig
