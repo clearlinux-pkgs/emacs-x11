@@ -1,5 +1,5 @@
-libMagickCore-7.Q16HDRI.so.7
-libMagickWand-7.Q16HDRI.so.7
+libMagickCore-7.Q16HDRI.so.9
+libMagickWand-7.Q16HDRI.so.9
 libX11.so.6
 libXft.so.2
 libXpm.so.4
@@ -23,6 +23,7 @@ libgobject-2.0.so.0
 libgpm.so.2
 libgtk-3.so.0
 libharfbuzz.so.0
+libjansson.so.4
 libjpeg.so.62
 liblcms2.so.2
 libm.so.6

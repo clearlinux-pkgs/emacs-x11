@@ -16,7 +16,6 @@ Configure miss: whether malloc is Doug Lea style
 Configure miss: main in -lXbsd
 Configure miss: whether X on GNU/Linux needs -b to link
 Configure miss: lgetfilecon in -lselinux
-Configure miss: jansson >= 2.7
 Configure miss: dlfunc
 Configure miss: maillock in -lmail
 Configure miss: maillock in -llockfile

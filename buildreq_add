@@ -18,3 +18,4 @@ pkgconfig(xpm)
 systemd-dev
 texinfo
 valgrind
+jansson-dev
