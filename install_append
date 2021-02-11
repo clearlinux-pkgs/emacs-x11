@@ -1,4 +1,6 @@
-rm -rf %{buildroot}/usr/libexec/emacs
+# pdmp files are required for emacs operation
+find %{buildroot}/usr/libexec/emacs -type f ! -name '*.pdmp' -delete
+find %{buildroot}/usr/libexec/emacs -type l -delete
 rm -rf %{buildroot}/usr/share/emacs
 rm -rf %{buildroot}/usr/share/icons
 rm -rf %{buildroot}/usr/share/info

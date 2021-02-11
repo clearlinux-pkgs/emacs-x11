@@ -6,7 +6,7 @@
 #
 Name     : emacs-x11
 Version  : 27.1
-Release  : 46
+Release  : 47
 URL      : https://mirrors.kernel.org/gnu/emacs/emacs-27.1.tar.xz
 Source0  : https://mirrors.kernel.org/gnu/emacs/emacs-27.1.tar.xz
 Source1  : https://mirrors.kernel.org/gnu/emacs/emacs-27.1.tar.xz.sig
@@ -15,6 +15,7 @@ Group    : Development/Tools
 License  : GPL-3.0
 Requires: emacs-x11-bin = %{version}-%{release}
 Requires: emacs-x11-data = %{version}-%{release}
+Requires: emacs-x11-libexec = %{version}-%{release}
 Requires: emacs-x11-license = %{version}-%{release}
 Requires: emacs = %{version}
 BuildRequires : ImageMagick-dev
@@ -40,6 +41,7 @@ BuildRequires : pkgconfig(xpm)
 BuildRequires : systemd-dev
 BuildRequires : texinfo
 BuildRequires : valgrind
+Patch1: 0001-Rename-the-pdump-file.patch
 
 %description
 See the end of the file for license conditions.
@@ -50,6 +52,7 @@ customizable, self-documenting real-time display editor.
 Summary: bin components for the emacs-x11 package.
 Group: Binaries
 Requires: emacs-x11-data = %{version}-%{release}
+Requires: emacs-x11-libexec = %{version}-%{release}
 Requires: emacs-x11-license = %{version}-%{release}
 
 %description bin
@@ -64,6 +67,15 @@ Group: Data
 data components for the emacs-x11 package.
 
 
+%package libexec
+Summary: libexec components for the emacs-x11 package.
+Group: Default
+Requires: emacs-x11-license = %{version}-%{release}
+
+%description libexec
+libexec components for the emacs-x11 package.
+
+
 %package license
 Summary: license components for the emacs-x11 package.
 Group: Default
@@ -75,13 +87,14 @@ license components for the emacs-x11 package.
 %prep
 %setup -q -n emacs-27.1
 cd %{_builddir}/emacs-27.1
+%patch1 -p1
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1612384641
+export SOURCE_DATE_EPOCH=1613009126
 export GCC_IGNORE_WERROR=1
 export CFLAGS="$CFLAGS -fno-lto "
 export FCFLAGS="$FFLAGS -fno-lto "
@@ -95,11 +108,12 @@ export CXXFLAGS="$CXXFLAGS -fno-lto "
 --with-tiff=no \
 --with-imagemagick \
 --with-modules \
---with-dumping=unexec
+--enable-link-time-optimization \
+--with-cairo
 make  %{?_smp_mflags}
 
 %install
-export SOURCE_DATE_EPOCH=1612384641
+export SOURCE_DATE_EPOCH=1613009126
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/emacs-x11
 cp %{_builddir}/emacs-27.1/COPYING %{buildroot}/usr/share/package-licenses/emacs-x11/31a3d460bb3c7d98845187c716a30db81c44b615
@@ -126,7 +140,9 @@ rm -f %{buildroot}/usr/share/metainfo/emacs.appdata.xml
 rm -f %{buildroot}/var/games/emacs/snake-scores
 rm -f %{buildroot}/var/games/emacs/tetris-scores
 ## install_append content
-rm -rf %{buildroot}/usr/libexec/emacs
+# pdmp files are required for emacs operation
+find %{buildroot}/usr/libexec/emacs -type f ! -name '*.pdmp' -delete
+find %{buildroot}/usr/libexec/emacs -type l -delete
 rm -rf %{buildroot}/usr/share/emacs
 rm -rf %{buildroot}/usr/share/icons
 rm -rf %{buildroot}/usr/share/info
@@ -149,6 +165,10 @@ ln -s emacs-x11 %{buildroot}/usr/bin/xemacs
 %files data
 %defattr(-,root,root,-)
 /usr/share/applications/emacs.desktop
+
+%files libexec
+%defattr(-,root,root,-)
+/usr/libexec/emacs/27.1/x86_64-generic-linux-gnu/emacs-x11.pdmp
 
 %files license
 %defattr(0644,root,root,0755)

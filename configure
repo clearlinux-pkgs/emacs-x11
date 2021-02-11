@@ -6,4 +6,5 @@
 --with-tiff=no
 --with-imagemagick
 --with-modules
---with-dumping=unexec
+--enable-link-time-optimization
+--with-cairo

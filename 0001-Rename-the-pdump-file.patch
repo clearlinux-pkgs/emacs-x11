@@ -1,0 +1,93 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Patrick McCarty <patrick.mccarty@intel.com>
+Date: Wed, 10 Feb 2021 23:21:30 +0000
+Subject: [PATCH] Rename the pdump file
+
+Because the binary is named `emacs-x11`, the pdump file needs to be
+renamed from `emacs` to `emacs-x11`. This change fixes operation of the
+`emacs` package as well, because it has been patched to run `emacs-x11`
+if installed.
+
+Signed-off-by: Patrick McCarty <patrick.mccarty@intel.com>
+---
+ Makefile.in     | 2 +-
+ lisp/loadup.el  | 4 ++--
+ src/Makefile.in | 4 ++--
+ src/emacs.c     | 6 +++---
+ 4 files changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/Makefile.in b/Makefile.in
+index 67e15cf..dfa224f 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -495,7 +495,7 @@ install-arch-dep: src install-arch-indep install-etcdoc install-$(NTDIR)
+ ifeq (${ns_self_contained},no)
+ 	${INSTALL_PROGRAM} $(INSTALL_STRIP) src/emacs${EXEEXT} "$(DESTDIR)${bindir}/$(EMACSFULL)"
+ ifeq (${DUMPING},pdumper)
+-	${INSTALL_DATA} src/emacs.pdmp "$(DESTDIR)${libexecdir}/emacs/${version}/${configuration}"/emacs.pdmp
++	${INSTALL_DATA} src/emacs-x11.pdmp "$(DESTDIR)${libexecdir}/emacs/${version}/${configuration}"/emacs-x11.pdmp
+ endif
+ 	-chmod 755 "$(DESTDIR)${bindir}/$(EMACSFULL)"
+ ifndef NO_BIN_LINK
+diff --git a/lisp/loadup.el b/lisp/loadup.el
+index 97525b2..4d01579 100644
+--- a/lisp/loadup.el
++++ b/lisp/loadup.el
+@@ -477,7 +477,7 @@ lost after dumping")))
+ (setq redisplay--inhibit-bidi nil)
+ 
+ (if dump-mode
+-    (let ((output (cond ((equal dump-mode "pdump") "emacs.pdmp")
++    (let ((output (cond ((equal dump-mode "pdump") "emacs-x11.pdmp")
+                         ((equal dump-mode "dump") "emacs")
+                         ((equal dump-mode "bootstrap") "emacs")
+                         ((equal dump-mode "pbootstrap") "bootstrap-emacs.pdmp")
+@@ -521,7 +521,7 @@ lost after dumping")))
+                               t)
+             (when (equal dump-mode "pdump")
+               (message "Adding name %s" (concat name ".pdmp"))
+-              (add-name-to-file (expand-file-name "emacs.pdmp"
++              (add-name-to-file (expand-file-name "emacs-x11.pdmp"
+                                                   invocation-directory)
+                                 (expand-file-name (concat name ".pdmp")
+                                                   invocation-directory)
+diff --git a/src/Makefile.in b/src/Makefile.in
+index ab63b92..2b13858 100644
+--- a/src/Makefile.in
++++ b/src/Makefile.in
+@@ -368,7 +368,7 @@ am__v_NO_PD_1 =
+ bootstrap_exe = ../src/bootstrap-emacs$(EXEEXT)
+ ifeq ($(DUMPING),pdumper)
+ bootstrap_pdmp := bootstrap-emacs.pdmp # Keep in sync with loadup.el
+-pdmp := emacs.pdmp
++pdmp := emacs-x11.pdmp
+ else
+ bootstrap_pdmp :=
+ pdmp :=
+@@ -692,7 +692,7 @@ ns-app: emacs$(EXEEXT) $(pdmp)
+ mostlyclean:
+ 	rm -f temacs$(EXEEXT) core ./*.core \#* ./*.o
+ 	rm -f dmpstruct.h
+-	rm -f emacs.pdmp
++	rm -f emacs-x11.pdmp
+ 	rm -f ../etc/DOC
+ 	rm -f bootstrap-emacs$(EXEEXT) $(bootstrap_pdmp)
+ 	rm -f emacs-$(version)$(EXEEXT)
+diff --git a/src/emacs.c b/src/emacs.c
+index 1dcf195..ccbd80e 100644
+--- a/src/emacs.c
++++ b/src/emacs.c
+@@ -865,10 +865,10 @@ load_pdump (int argc, char **argv)
+   path_exec = w32_relocate (path_exec);
+ #endif
+ 
+-  /* Look for "emacs.pdmp" in PATH_EXEC.  We hardcode "emacs" in
+-     "emacs.pdmp" so that the Emacs binary still works if the user
++  /* Look for "emacs-x11.pdmp" in PATH_EXEC.  We hardcode "emacs-x11" in
++     "emacs-x11.pdmp" so that the Emacs binary still works if the user
+      copies and renames it.  */
+-  const char *argv0_base = "emacs";
++  const char *argv0_base = "emacs-x11";
+   ptrdiff_t needed = (strlen (path_exec)
+                       + 1
+                       + strlen (argv0_base)

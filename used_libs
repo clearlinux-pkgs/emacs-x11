@@ -1,8 +1,6 @@
 libMagickCore-7.Q16HDRI.so.9
 libMagickWand-7.Q16HDRI.so.9
 libX11.so.6
-libXft.so.2
-libXpm.so.4
 libacl.so.1
 libanl.so.1
 libasound.so.2
