@@ -3,5 +3,4 @@
 buildreq-golang
 giflib-dev
 imagemagick-dev
-pkgconfig(gnutls)
 tiff-dev

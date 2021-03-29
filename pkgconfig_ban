@@ -1,8 +1,7 @@
-#
-# This file contains pkgconfig build requirements that get picked up but are 
-# undesirable. One name per line, no whitespace.
-#
+# This file contains pkgconfig build requirements that get picked up
+# but are undesirable. One entry per line, no whitespace.
 gconf-2.0
+glib
+gnutls
 libotf 
 m17n-flt
-glib

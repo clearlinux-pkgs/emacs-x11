@@ -7,6 +7,7 @@ gmp-dev
 gnutls-dev
 gpm-dev
 gtk3-dev
+jansson-dev
 lcms2-dev
 libXfixes-dev
 libXinerama-dev
@@ -14,8 +15,6 @@ libXrandr-dev
 libjpeg-turbo-dev
 librsvg-dev
 ncurses-dev
-pkgconfig(xpm)
 systemd-dev
 texinfo
 valgrind
-jansson-dev
