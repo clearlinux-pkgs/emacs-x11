@@ -6,7 +6,7 @@
 #
 Name     : emacs-x11
 Version  : 27.2
-Release  : 49
+Release  : 50
 URL      : https://mirrors.kernel.org/gnu/emacs/emacs-27.2.tar.xz
 Source0  : https://mirrors.kernel.org/gnu/emacs/emacs-27.2.tar.xz
 Source1  : https://mirrors.kernel.org/gnu/emacs/emacs-27.2.tar.xz.sig
@@ -42,6 +42,7 @@ BuildRequires : systemd-dev
 BuildRequires : texinfo
 BuildRequires : valgrind
 Patch1: 0001-Rename-the-pdump-file.patch
+Patch2: 0002-Port-alternate-signal-stack-to-upcoming-glibc-2.34.patch
 
 %description
 See the end of the file for license conditions.
@@ -88,13 +89,14 @@ license components for the emacs-x11 package.
 %setup -q -n emacs-27.2
 cd %{_builddir}/emacs-27.2
 %patch1 -p1
+%patch2 -p1
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1617041905
+export SOURCE_DATE_EPOCH=1634272500
 export GCC_IGNORE_WERROR=1
 export CFLAGS="$CFLAGS -fno-lto "
 export FCFLAGS="$FFLAGS -fno-lto "
@@ -113,7 +115,7 @@ export CXXFLAGS="$CXXFLAGS -fno-lto "
 make  %{?_smp_mflags}
 
 %install
-export SOURCE_DATE_EPOCH=1617041905
+export SOURCE_DATE_EPOCH=1634272500
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/emacs-x11
 cp %{_builddir}/emacs-27.2/COPYING %{buildroot}/usr/share/package-licenses/emacs-x11/31a3d460bb3c7d98845187c716a30db81c44b615
@@ -128,17 +130,17 @@ cp %{_builddir}/emacs-27.2/nt/COPYING %{buildroot}/usr/share/package-licenses/em
 cp %{_builddir}/emacs-27.2/src/COPYING %{buildroot}/usr/share/package-licenses/emacs-x11/31a3d460bb3c7d98845187c716a30db81c44b615
 %make_install
 ## Remove excluded files
-rm -f %{buildroot}/usr/bin/ctags
-rm -f %{buildroot}/usr/bin/ebrowse
-rm -f %{buildroot}/usr/bin/emacsclient
-rm -f %{buildroot}/usr/bin/etags
-rm -f %{buildroot}/usr/bin/grep-changelog
-rm -f %{buildroot}/usr/include/emacs-module.h
-rm -f %{buildroot}/usr/lib64/systemd/user/emacs.service
-rm -f %{buildroot}/usr/share/appdata/emacs.appdata.xml
-rm -f %{buildroot}/usr/share/metainfo/emacs.appdata.xml
-rm -f %{buildroot}/var/games/emacs/snake-scores
-rm -f %{buildroot}/var/games/emacs/tetris-scores
+rm -f %{buildroot}*/usr/bin/ctags
+rm -f %{buildroot}*/usr/bin/ebrowse
+rm -f %{buildroot}*/usr/bin/emacsclient
+rm -f %{buildroot}*/usr/bin/etags
+rm -f %{buildroot}*/usr/bin/grep-changelog
+rm -f %{buildroot}*/usr/include/emacs-module.h
+rm -f %{buildroot}*/usr/lib64/systemd/user/emacs.service
+rm -f %{buildroot}*/usr/share/appdata/emacs.appdata.xml
+rm -f %{buildroot}*/usr/share/metainfo/emacs.appdata.xml
+rm -f %{buildroot}*/var/games/emacs/snake-scores
+rm -f %{buildroot}*/var/games/emacs/tetris-scores
 ## install_append content
 # pdmp files are required for emacs operation
 find %{buildroot}/usr/libexec/emacs -type f ! -name '*.pdmp' -delete

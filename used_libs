@@ -1,13 +1,11 @@
-libMagickCore-7.Q16HDRI.so.9
-libMagickWand-7.Q16HDRI.so.9
+libMagickCore-7.Q16HDRI.so.10
+libMagickWand-7.Q16HDRI.so.10
 libX11.so.6
 libacl.so.1
-libanl.so.1
 libasound.so.2
 libc.so.6
 libcairo.so.2
 libdbus-1.so.3
-libdl.so.2
 libfontconfig.so.1
 libfreetype.so.6
 libgcc_s.so.1
@@ -27,9 +25,7 @@ liblcms2.so.2
 libm.so.6
 libpango-1.0.so.0
 libpng16.so.16
-libpthread.so.0
 librsvg-2.so.2
-librt.so.1
 libsystemd.so.0
 libtinfo.so.6
 libxml2.so.2
