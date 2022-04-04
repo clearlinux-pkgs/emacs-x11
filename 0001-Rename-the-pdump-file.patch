@@ -77,17 +77,12 @@ diff --git a/src/emacs.c b/src/emacs.c
 index 67220eb..329c58f 100644
 --- a/src/emacs.c
 +++ b/src/emacs.c
-@@ -866,10 +866,10 @@ load_pdump (int argc, char **argv)
-   path_exec = w32_relocate (path_exec);
+@@ -841,7 +841,7 @@
+ #ifdef NS_SELF_CONTAINED
+     "Emacs"
+ #else
+-    "emacs"
++    "emacs-x11"
  #endif
+     ;
  
--  /* Look for "emacs.pdmp" in PATH_EXEC.  We hardcode "emacs" in
--     "emacs.pdmp" so that the Emacs binary still works if the user
-+  /* Look for "emacs-x11.pdmp" in PATH_EXEC.  We hardcode "emacs-x11" in
-+     "emacs-x11.pdmp" so that the Emacs binary still works if the user
-      copies and renames it.  */
--  const char *argv0_base = "emacs";
-+  const char *argv0_base = "emacs-x11";
-   ptrdiff_t needed = (strlen (path_exec)
-                       + 1
-                       + strlen (argv0_base)

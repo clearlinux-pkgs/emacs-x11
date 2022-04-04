@@ -1,2 +1,2 @@
 0001-Rename-the-pdump-file.patch
-0002-Port-alternate-signal-stack-to-upcoming-glibc-2.34.patch
+#0002-Port-alternate-signal-stack-to-upcoming-glibc-2.34.patch
