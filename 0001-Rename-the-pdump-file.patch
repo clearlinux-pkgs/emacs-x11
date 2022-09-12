@@ -13,14 +13,14 @@ Signed-off-by: Patrick McCarty <patrick.mccarty@intel.com>
  Makefile.in     | 2 +-
  lisp/loadup.el  | 4 ++--
  src/Makefile.in | 4 ++--
- src/emacs.c     | 6 +++---
- 4 files changed, 8 insertions(+), 8 deletions(-)
+ src/emacs.c     | 2 +-
+ 4 files changed, 6 insertions(+), 6 deletions(-)
 
 diff --git a/Makefile.in b/Makefile.in
-index 3947987..2fbfc83 100644
+index c902b46..a0ca562 100644
 --- a/Makefile.in
 +++ b/Makefile.in
-@@ -495,7 +495,7 @@ install-arch-dep: src install-arch-indep install-etcdoc install-$(NTDIR)
+@@ -521,7 +521,7 @@ install-arch-dep: src install-arch-indep install-etcdoc install-$(NTDIR)
  ifeq (${ns_self_contained},no)
  	${INSTALL_PROGRAM} $(INSTALL_STRIP) src/emacs${EXEEXT} "$(DESTDIR)${bindir}/$(EMACSFULL)"
  ifeq (${DUMPING},pdumper)
@@ -30,11 +30,11 @@ index 3947987..2fbfc83 100644
  	-chmod 755 "$(DESTDIR)${bindir}/$(EMACSFULL)"
  ifndef NO_BIN_LINK
 diff --git a/lisp/loadup.el b/lisp/loadup.el
-index 121abda..54a0837 100644
+index f7b3644..df57a46 100644
 --- a/lisp/loadup.el
 +++ b/lisp/loadup.el
-@@ -477,7 +477,7 @@ lost after dumping")))
- (setq redisplay--inhibit-bidi nil)
+@@ -526,7 +526,7 @@ lost after dumping")))
+ 
  
  (if dump-mode
 -    (let ((output (cond ((equal dump-mode "pdump") "emacs.pdmp")
@@ -42,7 +42,7 @@ index 121abda..54a0837 100644
                          ((equal dump-mode "dump") "emacs")
                          ((equal dump-mode "bootstrap") "emacs")
                          ((equal dump-mode "pbootstrap") "bootstrap-emacs.pdmp")
-@@ -521,7 +521,7 @@ lost after dumping")))
+@@ -578,7 +578,7 @@ lost after dumping")))
                                t)
              (when (equal dump-mode "pdump")
                (message "Adding name %s" (concat name ".pdmp"))
@@ -52,10 +52,10 @@ index 121abda..54a0837 100644
                                  (expand-file-name (concat name ".pdmp")
                                                    invocation-directory)
 diff --git a/src/Makefile.in b/src/Makefile.in
-index 39fd708..5358823 100644
+index 29e1513..166c924 100644
 --- a/src/Makefile.in
 +++ b/src/Makefile.in
-@@ -372,7 +372,7 @@ am__v_NO_PD_1 =
+@@ -354,7 +354,7 @@ DO_CODESIGN=$(patsubst aarch64-apple-darwin%,yes,@configuration@)
  bootstrap_exe = ../src/bootstrap-emacs$(EXEEXT)
  ifeq ($(DUMPING),pdumper)
  bootstrap_pdmp := bootstrap-emacs.pdmp # Keep in sync with loadup.el
@@ -64,7 +64,7 @@ index 39fd708..5358823 100644
  else
  bootstrap_pdmp :=
  pdmp :=
-@@ -699,7 +699,7 @@ ns-app: emacs$(EXEEXT) $(pdmp)
+@@ -691,7 +691,7 @@ ns-app: emacs$(EXEEXT) $(pdmp)
  mostlyclean:
  	rm -f temacs$(EXEEXT) core ./*.core \#* ./*.o
  	rm -f dmpstruct.h
@@ -74,10 +74,10 @@ index 39fd708..5358823 100644
  	rm -f bootstrap-emacs$(EXEEXT) $(bootstrap_pdmp)
  	rm -f emacs-$(version)$(EXEEXT)
 diff --git a/src/emacs.c b/src/emacs.c
-index 67220eb..329c58f 100644
+index 0a90b09..73ba5e8 100644
 --- a/src/emacs.c
 +++ b/src/emacs.c
-@@ -841,7 +841,7 @@
+@@ -841,7 +841,7 @@ load_pdump (int argc, char **argv)
  #ifdef NS_SELF_CONTAINED
      "Emacs"
  #else
