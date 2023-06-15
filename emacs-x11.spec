@@ -6,7 +6,7 @@
 #
 Name     : emacs-x11
 Version  : 28.2
-Release  : 53
+Release  : 54
 URL      : https://mirrors.kernel.org/gnu/emacs/emacs-28.2.tar.xz
 Source0  : https://mirrors.kernel.org/gnu/emacs/emacs-28.2.tar.xz
 Source1  : https://mirrors.kernel.org/gnu/emacs/emacs-28.2.tar.xz.sig
