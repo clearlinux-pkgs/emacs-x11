@@ -1,6 +1,6 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Patrick McCarty <patrick.mccarty@intel.com>
-Date: Wed, 10 Feb 2021 23:21:30 +0000
+From 8aa4af6570b72a17827441b424248b9fb43cf543 Mon Sep 17 00:00:00 2001
+From: William Douglas <william.douglas@intel.com>
+Date: Thu, 29 Jun 2023 11:31:25 -0700
 Subject: [PATCH] Rename the pdump file
 
 Because the binary is named `emacs-x11`, the pdump file needs to be
@@ -8,7 +8,7 @@ renamed from `emacs` to `emacs-x11`. This change fixes operation of the
 `emacs` package as well, because it has been patched to run `emacs-x11`
 if installed.
 
-Signed-off-by: Patrick McCarty <patrick.mccarty@intel.com>
+Signed-off-by: William Douglas <william.douglas@intel.com>
 ---
  Makefile.in     | 2 +-
  lisp/loadup.el  | 4 ++--
@@ -17,23 +17,23 @@ Signed-off-by: Patrick McCarty <patrick.mccarty@intel.com>
  4 files changed, 6 insertions(+), 6 deletions(-)
 
 diff --git a/Makefile.in b/Makefile.in
-index c902b46..a0ca562 100644
+index f5fda0e..d1fff43 100644
 --- a/Makefile.in
 +++ b/Makefile.in
-@@ -521,7 +521,7 @@ install-arch-dep: src install-arch-indep install-etcdoc install-$(NTDIR)
- ifeq (${ns_self_contained},no)
- 	${INSTALL_PROGRAM} $(INSTALL_STRIP) src/emacs${EXEEXT} "$(DESTDIR)${bindir}/$(EMACSFULL)"
- ifeq (${DUMPING},pdumper)
--	${INSTALL_DATA} src/emacs.pdmp "$(DESTDIR)${libexecdir}/emacs/${version}/${configuration}"/emacs.pdmp
-+	${INSTALL_DATA} src/emacs-x11.pdmp "$(DESTDIR)${libexecdir}/emacs/${version}/${configuration}"/emacs-x11.pdmp
+@@ -622,7 +622,7 @@ ifeq (${DUMPING},pdumper)
+ ifeq (${HAVE_BE_APP},yes)
+ 	${INSTALL_DATA} src/Emacs.pdmp "$(DESTDIR)${libexecdir}/emacs/${version}/${configuration}"/Emacs.pdmp
+ endif
+-	${INSTALL_DATA} src/emacs.pdmp "$(DESTDIR)${libexecdir}/emacs/${version}/${configuration}"/emacs-${EMACS_PDMP}
++	${INSTALL_DATA} src/emacs-x11.pdmp "$(DESTDIR)${libexecdir}/emacs/${version}/${configuration}"/emacs-x11-${EMACS_PDMP}
  endif
  	-chmod 755 "$(DESTDIR)${bindir}/$(EMACSFULL)"
  ifndef NO_BIN_LINK
 diff --git a/lisp/loadup.el b/lisp/loadup.el
-index f7b3644..df57a46 100644
+index 1cc7034..f3d92c2 100644
 --- a/lisp/loadup.el
 +++ b/lisp/loadup.el
-@@ -526,7 +526,7 @@ lost after dumping")))
+@@ -547,7 +547,7 @@ lost after dumping")))
  
  
  (if dump-mode
@@ -42,7 +42,7 @@ index f7b3644..df57a46 100644
                          ((equal dump-mode "dump") "emacs")
                          ((equal dump-mode "bootstrap") "emacs")
                          ((equal dump-mode "pbootstrap") "bootstrap-emacs.pdmp")
-@@ -578,7 +578,7 @@ lost after dumping")))
+@@ -600,7 +600,7 @@ lost after dumping")))
                                t)
              (when (equal dump-mode "pdump")
                (message "Adding name %s" (concat name ".pdmp"))
@@ -52,10 +52,10 @@ index f7b3644..df57a46 100644
                                  (expand-file-name (concat name ".pdmp")
                                                    invocation-directory)
 diff --git a/src/Makefile.in b/src/Makefile.in
-index 29e1513..166c924 100644
+index c29c375..f2db7b6 100644
 --- a/src/Makefile.in
 +++ b/src/Makefile.in
-@@ -354,7 +354,7 @@ DO_CODESIGN=$(patsubst aarch64-apple-darwin%,yes,@configuration@)
+@@ -385,7 +385,7 @@ DO_CODESIGN=$(patsubst aarch64-apple-darwin%,yes,@configuration@)
  bootstrap_exe = ../src/bootstrap-emacs$(EXEEXT)
  ifeq ($(DUMPING),pdumper)
  bootstrap_pdmp := bootstrap-emacs.pdmp # Keep in sync with loadup.el
@@ -64,7 +64,7 @@ index 29e1513..166c924 100644
  else
  bootstrap_pdmp :=
  pdmp :=
-@@ -691,7 +691,7 @@ ns-app: emacs$(EXEEXT) $(pdmp)
+@@ -749,7 +749,7 @@ ns-app: emacs$(EXEEXT) $(pdmp)
  mostlyclean:
  	rm -f temacs$(EXEEXT) core ./*.core \#* ./*.o
  	rm -f dmpstruct.h
@@ -74,10 +74,10 @@ index 29e1513..166c924 100644
  	rm -f bootstrap-emacs$(EXEEXT) $(bootstrap_pdmp)
  	rm -f emacs-$(version)$(EXEEXT)
 diff --git a/src/emacs.c b/src/emacs.c
-index 0a90b09..73ba5e8 100644
+index e63b092..5ddba05 100644
 --- a/src/emacs.c
 +++ b/src/emacs.c
-@@ -841,7 +841,7 @@ load_pdump (int argc, char **argv)
+@@ -871,7 +871,7 @@ load_pdump (int argc, char **argv)
  #ifdef NS_SELF_CONTAINED
      "Emacs"
  #else
@@ -86,3 +86,6 @@ index 0a90b09..73ba5e8 100644
  #endif
      ;
  
+-- 
+2.41.0
+
