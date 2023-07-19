@@ -7,7 +7,7 @@
 #
 Name     : emacs-x11
 Version  : 29.0.92
-Release  : 56
+Release  : 57
 URL      : https://alpha.gnu.org/gnu/emacs/pretest/emacs-29.0.92.tar.xz
 Source0  : https://alpha.gnu.org/gnu/emacs/pretest/emacs-29.0.92.tar.xz
 Source1  : https://alpha.gnu.org/gnu/emacs/pretest/emacs-29.0.92.tar.xz.sig
@@ -103,7 +103,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1688064117
+export SOURCE_DATE_EPOCH=1689798688
 export GCC_IGNORE_WERROR=1
 export CFLAGS="$CFLAGS -fdebug-types-section -femit-struct-debug-baseonly -fno-lto -g1 -gno-column-info -gno-variable-location-views -gz=zstd "
 export FCFLAGS="$FFLAGS -fdebug-types-section -femit-struct-debug-baseonly -fno-lto -g1 -gno-column-info -gno-variable-location-views -gz=zstd "
@@ -141,7 +141,7 @@ export LDFLAGS="$LDFLAGS -m64 -march=x86-64-v3"
 make  %{?_smp_mflags}
 popd
 %install
-export SOURCE_DATE_EPOCH=1688064117
+export SOURCE_DATE_EPOCH=1689798688
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/emacs-x11
 cp %{_builddir}/emacs-%{version}/COPYING %{buildroot}/usr/share/package-licenses/emacs-x11/31a3d460bb3c7d98845187c716a30db81c44b615 || :
