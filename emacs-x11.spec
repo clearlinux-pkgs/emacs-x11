@@ -6,11 +6,11 @@
 # Source0 file verified with key 0xE78DAE0F3115E06B (eliz@gnu.org)
 #
 Name     : emacs-x11
-Version  : 29.0.92
-Release  : 57
-URL      : https://alpha.gnu.org/gnu/emacs/pretest/emacs-29.0.92.tar.xz
-Source0  : https://alpha.gnu.org/gnu/emacs/pretest/emacs-29.0.92.tar.xz
-Source1  : https://alpha.gnu.org/gnu/emacs/pretest/emacs-29.0.92.tar.xz.sig
+Version  : 29.1
+Release  : 58
+URL      : https://ftpmirror.gnu.org/emacs/emacs-29.1.tar.xz
+Source0  : https://ftpmirror.gnu.org/emacs/emacs-29.1.tar.xz
+Source1  : https://ftpmirror.gnu.org/emacs/emacs-29.1.tar.xz.sig
 Summary  : No detailed summary available
 Group    : Development/Tools
 License  : GPL-3.0
@@ -51,7 +51,7 @@ Patch1: 0001-Rename-the-pdump-file.patch
 
 %description
 See the end of the file for license conditions.
-This directory tree holds version 29.0.92 of GNU Emacs, the extensible,
+This directory tree holds version 29.1 of GNU Emacs, the extensible,
 customizable, self-documenting real-time display editor.
 
 %package bin
@@ -91,11 +91,11 @@ license components for the emacs-x11 package.
 
 
 %prep
-%setup -q -n emacs-29.0.92
-cd %{_builddir}/emacs-29.0.92
+%setup -q -n emacs-29.1
+cd %{_builddir}/emacs-29.1
 %patch -P 1 -p1
 pushd ..
-cp -a emacs-29.0.92 buildavx2
+cp -a emacs-29.1 buildavx2
 popd
 
 %build
@@ -103,7 +103,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1689798688
+export SOURCE_DATE_EPOCH=1690848136
 export GCC_IGNORE_WERROR=1
 export CFLAGS="$CFLAGS -fdebug-types-section -femit-struct-debug-baseonly -fno-lto -g1 -gno-column-info -gno-variable-location-views -gz=zstd "
 export FCFLAGS="$FFLAGS -fdebug-types-section -femit-struct-debug-baseonly -fno-lto -g1 -gno-column-info -gno-variable-location-views -gz=zstd "
@@ -141,7 +141,7 @@ export LDFLAGS="$LDFLAGS -m64 -march=x86-64-v3"
 make  %{?_smp_mflags}
 popd
 %install
-export SOURCE_DATE_EPOCH=1689798688
+export SOURCE_DATE_EPOCH=1690848136
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/emacs-x11
 cp %{_builddir}/emacs-%{version}/COPYING %{buildroot}/usr/share/package-licenses/emacs-x11/31a3d460bb3c7d98845187c716a30db81c44b615 || :
@@ -192,7 +192,7 @@ ln -s emacs-x11 %{buildroot}/usr/bin/xemacs
 
 %files bin
 %defattr(-,root,root,-)
-/V3/usr/bin/emacs-29.0.92
+/V3/usr/bin/emacs-29.1
 /usr/bin/emacs-x11
 /usr/bin/xemacs
 
@@ -205,9 +205,9 @@ ln -s emacs-x11 %{buildroot}/usr/bin/xemacs
 
 %files libexec
 %defattr(-,root,root,-)
-/V3/usr/libexec/emacs/29.0.92/x86_64-generic-linux-gnu/hexl
-/V3/usr/libexec/emacs/29.0.92/x86_64-generic-linux-gnu/movemail
-/usr/libexec/emacs/29.0.92/x86_64-generic-linux-gnu/emacs-x11-.pdmp
+/V3/usr/libexec/emacs/29.1/x86_64-generic-linux-gnu/hexl
+/V3/usr/libexec/emacs/29.1/x86_64-generic-linux-gnu/movemail
+/usr/libexec/emacs/29.1/x86_64-generic-linux-gnu/emacs-x11-.pdmp
 
 %files license
 %defattr(0644,root,root,0755)
