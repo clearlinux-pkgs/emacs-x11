@@ -7,7 +7,7 @@
 #
 Name     : emacs-x11
 Version  : 29.1
-Release  : 64
+Release  : 65
 URL      : https://ftpmirror.gnu.org/emacs/emacs-29.1.tar.xz
 Source0  : https://ftpmirror.gnu.org/emacs/emacs-29.1.tar.xz
 Source1  : https://ftpmirror.gnu.org/emacs/emacs-29.1.tar.xz.sig
@@ -16,9 +16,9 @@ Group    : Development/Tools
 License  : GPL-3.0
 Requires: emacs-x11-bin = %{version}-%{release}
 Requires: emacs-x11-data = %{version}-%{release}
-Requires: emacs-x11-libexec = %{version}-%{release}
 Requires: emacs-x11-license = %{version}-%{release}
 Requires: emacs = %{version}
+Requires: emacs-x11-extras = %{version}
 BuildRequires : ImageMagick-dev
 BuildRequires : acl-dev
 BuildRequires : alsa-lib-dev
@@ -58,7 +58,6 @@ customizable, self-documenting real-time display editor.
 Summary: bin components for the emacs-x11 package.
 Group: Binaries
 Requires: emacs-x11-data = %{version}-%{release}
-Requires: emacs-x11-libexec = %{version}-%{release}
 Requires: emacs-x11-license = %{version}-%{release}
 
 %description bin
@@ -73,13 +72,12 @@ Group: Data
 data components for the emacs-x11 package.
 
 
-%package libexec
-Summary: libexec components for the emacs-x11 package.
+%package extras
+Summary: extras components for the emacs-x11 package.
 Group: Default
-Requires: emacs-x11-license = %{version}-%{release}
 
-%description libexec
-libexec components for the emacs-x11 package.
+%description extras
+extras components for the emacs-x11 package.
 
 
 %package license
@@ -100,7 +98,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1692292340
+export SOURCE_DATE_EPOCH=1692297391
 export GCC_IGNORE_WERROR=1
 export CFLAGS="$CFLAGS -fdebug-types-section -femit-struct-debug-baseonly -fno-lto -g1 -gno-column-info -gno-variable-location-views -gz=zstd "
 export FCFLAGS="$FFLAGS -fdebug-types-section -femit-struct-debug-baseonly -fno-lto -g1 -gno-column-info -gno-variable-location-views -gz=zstd "
@@ -120,7 +118,7 @@ export CXXFLAGS="$CXXFLAGS -fdebug-types-section -femit-struct-debug-baseonly -f
 make  %{?_smp_mflags}
 
 %install
-export SOURCE_DATE_EPOCH=1692292340
+export SOURCE_DATE_EPOCH=1692297391
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/emacs-x11
 cp %{_builddir}/emacs-%{version}/COPYING %{buildroot}/usr/share/package-licenses/emacs-x11/31a3d460bb3c7d98845187c716a30db81c44b615 || :
@@ -1696,9 +1694,9 @@ ln -s emacs-x11 %{buildroot}/usr/bin/xemacs
 /usr/share/applications/emacsclient-mail.desktop
 /usr/share/applications/emacsclient.desktop
 
-%files libexec
+%files extras
 %defattr(-,root,root,-)
-/usr/libexec/emacs/29.1/x86_64-generic-linux-gnu/emacs-x11-7e0bd173dfe5b004d99a62f462babd0cabf7786735ebf68d14a44d8abc74c88e.pdmp
+/usr/libexec/emacs/29.1/x86_64-generic-linux-gnu/emacs-x11-*
 
 %files license
 %defattr(0644,root,root,0755)
