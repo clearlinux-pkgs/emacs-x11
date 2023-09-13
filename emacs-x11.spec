@@ -7,7 +7,7 @@
 #
 Name     : emacs-x11
 Version  : 29.1
-Release  : 65
+Release  : 66
 URL      : https://ftpmirror.gnu.org/emacs/emacs-29.1.tar.xz
 Source0  : https://ftpmirror.gnu.org/emacs/emacs-29.1.tar.xz
 Source1  : https://ftpmirror.gnu.org/emacs/emacs-29.1.tar.xz.sig
