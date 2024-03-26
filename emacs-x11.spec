@@ -9,7 +9,7 @@
 #
 Name     : emacs-x11
 Version  : 29.3
-Release  : 68
+Release  : 69
 URL      : https://ftpmirror.gnu.org/emacs/emacs-29.3.tar.xz
 Source0  : https://ftpmirror.gnu.org/emacs/emacs-29.3.tar.xz
 Source1  : https://ftpmirror.gnu.org/emacs/emacs-29.3.tar.xz.sig
@@ -114,7 +114,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1711474872
+export SOURCE_DATE_EPOCH=1711476038
 export GCC_IGNORE_WERROR=1
 CLEAR_INTERMEDIATE_CFLAGS="$CLEAR_INTERMEDIATE_CFLAGS -fdebug-types-section -femit-struct-debug-baseonly -fno-lto -g1 -gno-column-info -gno-variable-location-views -gz=zstd "
 CLEAR_INTERMEDIATE_FCFLAGS="$CLEAR_INTERMEDIATE_FFLAGS -fdebug-types-section -femit-struct-debug-baseonly -fno-lto -g1 -gno-column-info -gno-variable-location-views -gz=zstd "
@@ -173,7 +173,7 @@ FFLAGS="$CLEAR_INTERMEDIATE_FFLAGS"
 FCFLAGS="$CLEAR_INTERMEDIATE_FCFLAGS"
 ASFLAGS="$CLEAR_INTERMEDIATE_ASFLAGS"
 LDFLAGS="$CLEAR_INTERMEDIATE_LDFLAGS"
-export SOURCE_DATE_EPOCH=1711474872
+export SOURCE_DATE_EPOCH=1711476038
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/emacs-x11
 cp %{_builddir}/emacs-%{version}/COPYING %{buildroot}/usr/share/package-licenses/emacs-x11/31a3d460bb3c7d98845187c716a30db81c44b615 || :
@@ -3275,7 +3275,7 @@ ln -s emacs-x11 %{buildroot}/usr/bin/xemacs
 
 %files extras
 %defattr(-,root,root,-)
-/usr/libexec/emacs/29.*/x86_64-generic-linux-gnu/emacs-x11-*
+/usr/libexec/emacs/*/x86_64-generic-linux-gnu/emacs-x11-*
 
 %files libexec
 %defattr(-,root,root,-)
