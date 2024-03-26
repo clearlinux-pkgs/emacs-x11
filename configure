@@ -8,4 +8,3 @@
 --with-modules
 --enable-link-time-optimization
 --with-cairo
---with-native-compilation=aot
