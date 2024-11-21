@@ -9,7 +9,7 @@
 #
 Name     : emacs-x11
 Version  : 29.4
-Release  : 80
+Release  : 81
 URL      : https://ftpmirror.gnu.org/emacs/emacs-29.4.tar.xz
 Source0  : https://ftpmirror.gnu.org/emacs/emacs-29.4.tar.xz
 Source1  : https://ftpmirror.gnu.org/emacs/emacs-29.4.tar.xz.sig
@@ -108,7 +108,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1731468051
+export SOURCE_DATE_EPOCH=1732218674
 export GCC_IGNORE_WERROR=1
 CLEAR_INTERMEDIATE_CFLAGS="$CLEAR_INTERMEDIATE_CFLAGS -fdebug-types-section -femit-struct-debug-baseonly -fno-lto -g1 -gno-column-info -gno-variable-location-views -gz=zstd "
 CLEAR_INTERMEDIATE_FCFLAGS="$CLEAR_INTERMEDIATE_FFLAGS -fdebug-types-section -femit-struct-debug-baseonly -fno-lto -g1 -gno-column-info -gno-variable-location-views -gz=zstd "
@@ -145,7 +145,7 @@ FFLAGS="$CLEAR_INTERMEDIATE_FFLAGS"
 FCFLAGS="$CLEAR_INTERMEDIATE_FCFLAGS"
 ASFLAGS="$CLEAR_INTERMEDIATE_ASFLAGS"
 LDFLAGS="$CLEAR_INTERMEDIATE_LDFLAGS"
-export SOURCE_DATE_EPOCH=1731468051
+export SOURCE_DATE_EPOCH=1732218674
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/emacs-x11
 cp %{_builddir}/emacs-%{version}/COPYING %{buildroot}/usr/share/package-licenses/emacs-x11/31a3d460bb3c7d98845187c716a30db81c44b615 || :
@@ -184,9 +184,10 @@ rm -rf %{buildroot}*/usr/share/info
 rm -rf %{buildroot}*/usr/share/man
 emacsbin=$(realpath -e %{buildroot}/usr/bin/emacs)
 mv "$emacsbin" %{buildroot}/usr/bin/emacs-x11
-pdmp_file="$(basename %{buildroot}/usr/libexec/emacs/29.4/x86_64-generic-linux-gnu/emacs-*.pdmp)"
+pdmp_file="$(basename %{buildroot}/usr/libexec/emacs/%version/x86_64-generic-linux-gnu/emacs-*.pdmp)"
 fingerprint="${pdmp_file#emacs-}"
-mv %{buildroot}/usr/libexec/emacs/29.4/x86_64-generic-linux-gnu/emacs-*.pdmp %{buildroot}/usr/libexec/emacs/29.4/x86_64-generic-linux-gnu/emacs-x11-"${fingerprint}"
+mv %{buildroot}/usr/libexec/emacs/%version/x86_64-generic-linux-gnu/emacs-*.pdmp %{buildroot}/usr/libexec/emacs/%version/x86_64-generic-linux-gnu/emacs-x11-"${fingerprint}"
+ln -s emacs-x11-"${fingerprint}" %{buildroot}/usr/libexec/emacs/%version/x86_64-generic-linux-gnu/emacs-x11.pdmp
 rm %{buildroot}*/usr/bin/emacs
 sed -i 's/Exec=emacs/Exec=emacs-x11/' %{buildroot}/usr/share/applications/emacs.desktop
 ln -s emacs-x11 %{buildroot}/usr/bin/xemacs
@@ -210,6 +211,7 @@ ln -s emacs-x11 %{buildroot}/usr/bin/xemacs
 %files libexec
 %defattr(-,root,root,-)
 /usr/libexec/emacs/29.4/x86_64-generic-linux-gnu/emacs-x11-29.4.pdmp
+/usr/libexec/emacs/29.4/x86_64-generic-linux-gnu/emacs-x11.pdmp
 
 %files license
 %defattr(0644,root,root,0755)
