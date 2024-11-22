@@ -17,4 +17,5 @@ librsvg-dev
 ncurses-dev
 systemd-dev
 texinfo
+tree-sitter-dev
 valgrind

@@ -29,5 +29,6 @@ libpng16.so.16
 librsvg-2.so.2
 libsqlite3.so.0
 libsystemd.so.0
+libtree-sitter.so.0.24
 libxml2.so.2
 libz.so.1
