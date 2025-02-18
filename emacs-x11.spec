@@ -9,7 +9,7 @@
 #
 Name     : emacs-x11
 Version  : 29.4
-Release  : 83
+Release  : 84
 URL      : https://ftpmirror.gnu.org/emacs/emacs-29.4.tar.xz
 Source0  : https://ftpmirror.gnu.org/emacs/emacs-29.4.tar.xz
 Source1  : https://ftpmirror.gnu.org/emacs/emacs-29.4.tar.xz.sig
